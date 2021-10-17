@@ -254,10 +254,16 @@ float Ray::HitDistance(const void* vertexData, unsigned vertexStride, unsigned v
 
     while (index + 2 < vertexCount)
     {
-        const Vector3& v0 = *((const Vector3*)(&vertices[index * vertexStride]));
-        const Vector3& v1 = *((const Vector3*)(&vertices[(index + 1) * vertexStride]));
-        const Vector3& v2 = *((const Vector3*)(&vertices[(index + 2) * vertexStride]));
+        const Vector3& v00 = *((const Vector3*)(&vertices[index * vertexStride]));
+        const Vector3& v11 = *((const Vector3*)(&vertices[(index + 1) * vertexStride]));
+        const Vector3& v22 = *((const Vector3*)(&vertices[(index + 2) * vertexStride]));
+        Vector3 v0 = hitTransform_ * v00;
+        Vector3 v1 = hitTransform_ * v11;
+        Vector3 v2 = hitTransform_ * v22;
         float distance = HitDistance(v0, v1, v2, outNormal, outBary);
+        float backFaceDistance = HitDistance(v2, v1, v0, outNormal, outBary);
+        if (backFaceDistance < distance)
+            distance = backFaceDistance;
         if (distance < nearest)
         {
             nearestIdx = index;
@@ -301,10 +307,16 @@ float Ray::HitDistance(const void* vertexData, unsigned vertexStride, const void
 
         while (indices < indicesEnd)
         {
-            const Vector3& v0 = *((const Vector3*)(&vertices[indices[0] * vertexStride]));
-            const Vector3& v1 = *((const Vector3*)(&vertices[indices[1] * vertexStride]));
-            const Vector3& v2 = *((const Vector3*)(&vertices[indices[2] * vertexStride]));
+            const Vector3& v00 = *((const Vector3*)(&vertices[indices[0] * vertexStride]));
+            const Vector3& v11 = *((const Vector3*)(&vertices[indices[1] * vertexStride]));
+            const Vector3& v22 = *((const Vector3*)(&vertices[indices[2] * vertexStride]));
+            Vector3 v0 = hitTransform_ * v00;
+            Vector3 v1 = hitTransform_ * v11;
+            Vector3 v2 = hitTransform_ * v22;
             float distance = HitDistance(v0, v1, v2, outNormal, outBary);
+            float backFaceDistance = HitDistance(v2, v1, v0, outNormal, outBary);
+            if (backFaceDistance < distance)
+                distance = backFaceDistance;
             if (distance < nearest)
             {
                 nearestIndices = indices;
@@ -337,10 +349,16 @@ float Ray::HitDistance(const void* vertexData, unsigned vertexStride, const void
 
         while (indices < indicesEnd)
         {
-            const Vector3& v0 = *((const Vector3*)(&vertices[indices[0] * vertexStride]));
-            const Vector3& v1 = *((const Vector3*)(&vertices[indices[1] * vertexStride]));
-            const Vector3& v2 = *((const Vector3*)(&vertices[indices[2] * vertexStride]));
+            const Vector3& v00 = *((const Vector3*)(&vertices[indices[0] * vertexStride]));
+            const Vector3& v11 = *((const Vector3*)(&vertices[indices[1] * vertexStride]));
+            const Vector3& v22 = *((const Vector3*)(&vertices[indices[2] * vertexStride]));
+            Vector3 v0 = hitTransform_ * v00;
+            Vector3 v1 = hitTransform_ * v11;
+            Vector3 v2 = hitTransform_ * v22;
             float distance = HitDistance(v0, v1, v2, outNormal, outBary);
+            float backFaceDistance = HitDistance(v2, v1, v0, outNormal, outBary);
+            if (backFaceDistance < distance)
+                distance = backFaceDistance;
             if (distance < nearest)
             {
                 nearestIndices = indices;
@@ -377,9 +395,12 @@ bool Ray::InsideGeometry(const void* vertexData, unsigned vertexSize, unsigned v
 
     while (index + 2 < vertexCount)
     {
-        const Vector3& v0 = *((const Vector3*)(&vertices[index * vertexSize]));
-        const Vector3& v1 = *((const Vector3*)(&vertices[(index + 1) * vertexSize]));
-        const Vector3& v2 = *((const Vector3*)(&vertices[(index + 2) * vertexSize]));
+        const Vector3& v00 = *((const Vector3*)(&vertices[index * vertexSize]));
+        const Vector3& v11 = *((const Vector3*)(&vertices[(index + 1) * vertexSize]));
+        const Vector3& v22 = *((const Vector3*)(&vertices[(index + 2) * vertexSize]));
+        Vector3 v0 = hitTransform_ * v00;
+        Vector3 v1 = hitTransform_ * v11;
+        Vector3 v2 = hitTransform_ * v22;
         float frontFaceDistance = HitDistance(v0, v1, v2);
         float backFaceDistance = HitDistance(v2, v1, v0);
         currentFrontFace = Min(frontFaceDistance > 0.0f ? frontFaceDistance : M_INFINITY, currentFrontFace);
@@ -415,9 +436,12 @@ bool Ray::InsideGeometry(const void* vertexData, unsigned vertexSize, const void
 
         while (indices < indicesEnd)
         {
-            const Vector3& v0 = *((const Vector3*)(&vertices[indices[0] * vertexSize]));
-            const Vector3& v1 = *((const Vector3*)(&vertices[indices[1] * vertexSize]));
-            const Vector3& v2 = *((const Vector3*)(&vertices[indices[2] * vertexSize]));
+            const Vector3& v00 = *((const Vector3*)(&vertices[indices[0] * vertexSize]));
+            const Vector3& v11 = *((const Vector3*)(&vertices[indices[1] * vertexSize]));
+            const Vector3& v22 = *((const Vector3*)(&vertices[indices[2] * vertexSize]));
+            Vector3 v0 = hitTransform_ * v00;
+            Vector3 v1 = hitTransform_ * v11;
+            Vector3 v2 = hitTransform_ * v22;
             float frontFaceDistance = HitDistance(v0, v1, v2);
             float backFaceDistance = HitDistance(v2, v1, v0);
             currentFrontFace = Min(frontFaceDistance > 0.0f ? frontFaceDistance : M_INFINITY, currentFrontFace);
@@ -435,9 +459,12 @@ bool Ray::InsideGeometry(const void* vertexData, unsigned vertexSize, const void
 
         while (indices < indicesEnd)
         {
-            const Vector3& v0 = *((const Vector3*)(&vertices[indices[0] * vertexSize]));
-            const Vector3& v1 = *((const Vector3*)(&vertices[indices[1] * vertexSize]));
-            const Vector3& v2 = *((const Vector3*)(&vertices[indices[2] * vertexSize]));
+            const Vector3& v00 = *((const Vector3*)(&vertices[indices[0] * vertexSize]));
+            const Vector3& v11 = *((const Vector3*)(&vertices[indices[1] * vertexSize]));
+            const Vector3& v22 = *((const Vector3*)(&vertices[indices[2] * vertexSize]));
+            Vector3 v0 = hitTransform_ * v00;
+            Vector3 v1 = hitTransform_ * v11;
+            Vector3 v2 = hitTransform_ * v22;
             float frontFaceDistance = HitDistance(v0, v1, v2);
             float backFaceDistance = HitDistance(v2, v1, v0);
             currentFrontFace = Min(frontFaceDistance > 0.0f ? frontFaceDistance : M_INFINITY, currentFrontFace);

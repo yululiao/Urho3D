@@ -1,1 +1,1 @@
-Scripts/NinjaSnowWar.as
+LuaScripts/06_SkeletalAnimation.lua

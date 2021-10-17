@@ -64,6 +64,7 @@ namespace Urho3D
 
 void Graphics::SetExternalWindow(void* window)
 {
+	SDL_SetHint(SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP, "0");
     if (!window_)
         externalWindow_ = window;
     else

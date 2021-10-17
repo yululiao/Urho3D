@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/Urho3dEditor">
+        <file>images/camera.png</file>
+        <file>images/dir.png</file>
+        <file>images/file.png</file>
+        <file>images/hand.png</file>
+        <file>images/icon_backward_16px.png</file>
+        <file>images/icon_forward_16px.png</file>
+        <file>images/icon_pause_16px.png</file>
+        <file>images/icon_play_16px.png</file>
+        <file>images/icon_stop_16px.png</file>
+        <file>images/move.png</file>
+        <file>images/redo.png</file>
+        <file>images/rotate.png</file>
+        <file>images/save.png</file>
+        <file>images/scale.png</file>
+        <file>images/setting.png</file>
+        <file>images/Triangle_16px_down.png</file>
+        <file>images/Triangle_16px_right.png</file>
+        <file>images/undo.png</file>
+        <file>images/warning_32x32.png</file>
+    </qresource>
+</RCC>

@@ -111,6 +111,7 @@ public:
     Vector3 origin_;
     /// Ray direction.
     Vector3 direction_;
+    Matrix3x4 hitTransform_;
 };
 
 }

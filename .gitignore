@@ -121,3 +121,6 @@ Thumbs.db
 # Doxygen mess from absence of 'dot' dependency
 CMakeDoxyFile.in
 CMakeDoxygenDefaults.cmake
+
+pc/msbuild
+pc/mseditorbuild

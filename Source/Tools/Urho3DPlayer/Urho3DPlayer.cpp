@@ -132,6 +132,7 @@ void Urho3DPlayer::Setup()
     {
         // Use the script file name as the base name for the log file
         engineParameters_[EP_LOG_NAME] = filesystem->GetAppPreferencesDir("urho3d", "logs") + GetFileNameAndExtension(scriptFileName_) + ".log";
+        engineParameters_[EP_FULL_SCREEN] = false;
     }
 #else
     // On Web platform setup a default windowed resolution similar to the executable samples
