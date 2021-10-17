@@ -1,19 +1,20 @@
 ﻿#pragma once
-#include <QObject>
+#include <string>
+#include <map>
+#include <QString>
 
-class translator:public QObject
+class translator
 {
-	Q_OBJECT
 public:
 	
-	translator()
-	{
-	}
-	virtual QString translate(const char* str);
-	virtual QString translate(const std::string& str);
-	static void set_translator(translator* trans);
-	static QString dytr(const char* str);
-	static QString dytr(const std::string& str);
+    translator(){}
+    ~translator(){}
+    static translator* getInstance();
+    QString dytr(const char* str);
+    QString dytr(const std::string& str);
+    void setLocation(const std::string& location);
 private:
 	static translator* _translator;
+    std::string _location;
+    std::map<std::string,std::string> _str_map;
 };

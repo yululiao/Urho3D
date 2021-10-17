@@ -124,3 +124,4 @@ CMakeDoxygenDefaults.cmake
 
 pc/msbuild
 pc/mseditorbuild
+CMakeLists.txt.user

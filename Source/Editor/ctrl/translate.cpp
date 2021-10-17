@@ -1,27 +1,42 @@
 ﻿#include "translate.h"
 
 translator* translator::_translator = nullptr;
-QString translator::translate(const char* str)
+
+translator* translator::getInstance()
 {
-	return "";
+    if(_translator == nullptr)
+    {
+        _translator = new translator();
+    }
+
+    return _translator;
 }
 
-QString translator::translate(const std::string& str)
+void translator::setLocation(const std::string& location)
 {
-	return "";
-}
-
-void translator::set_translator(translator* trans)
-{
-	_translator = trans;
+    _location = location;
+    //todo
+    //load translation file and set the _str_map
 }
 
 QString translator::dytr(const char* str)
 {
-	return _translator->translate(str);
+    if (_str_map.find(std::string(str)) != _str_map.end()){
+         return QString(_str_map[std::string(str)].c_str());
+    }
+    else {
+       return  QString(str);
+    }
 }
 
 QString translator::dytr(const std::string& str)
 {
-	return _translator->translate(str);
+    if (_str_map.find(std::string(str)) != _str_map.end()){
+         return QString(_str_map[str].c_str());
+    }
+    else {
+       return  QString(str.c_str());
+    }
 }
+
+

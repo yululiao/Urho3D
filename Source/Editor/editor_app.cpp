@@ -17,7 +17,7 @@
 #include "ctrl/gizmo/TransformCtrl.h"
 #include "ctrl/utils.h"
 #include "ctrl/scene_ctrl.h"
-
+#include "ctrl/asset_mgr.h"
 
 
 namespace urho3d
@@ -86,7 +86,7 @@ void editor_app::run_frame()
 
 void editor_app::resize_window(int w, int h)
 {
-	auto* graphics = GetSubsystem<Graphics>();
+    //auto* graphics = GetSubsystem<Graphics>();
 	//graphics->SetMode(w, h);
 }
 

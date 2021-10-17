@@ -1,5 +1,6 @@
 #include "res_tree.h"
 #include "ctrl/work_space.h"
+#include "ctrl/asset_mgr.h"
 #include "ctrl/utils.h"
 
 
@@ -12,7 +13,7 @@ res_tree::res_tree(QWidget* p)
 {
 	
 	_model = new QFileSystemModel(p);
-	std::string root = work_space::get_instance()->get_workspace();
+    std::string root = asset_mgr::get_instance()->get_asset_path();
 	_model->setRootPath(root.c_str());
 	_model->setReadOnly(false);
 	this->setModel(_model);
