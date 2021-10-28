@@ -49,10 +49,10 @@ void main_window::showEvent(QShowEvent *event)
 	if (!_is_init)
 	{
 		QDesktopWidget* desktopWidget = QApplication::desktop();
-		QRect clientRect = desktopWidget->availableGeometry();
-		_dock_node_tree->setMaximumWidth(clientRect.width()* 0.18);
-		_dock_res_tree->setMaximumWidth(clientRect.width()* 0.18);
-		_dock_inspector->setMaximumWidth(clientRect.width()* 0.18);
+        QRect clientRect = desktopWidget->availableGeometry();
+        _dock_node_tree->setMaximumWidth(static_cast<int>(clientRect.width()* 0.18));
+        _dock_res_tree->setMaximumWidth(static_cast<int>(clientRect.width()* 0.18));
+        _dock_inspector->setMaximumWidth(static_cast<int>(clientRect.width()* 0.18));
 		_is_init = true;
 	}
 	}

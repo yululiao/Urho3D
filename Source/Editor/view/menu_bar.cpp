@@ -36,7 +36,7 @@ QAction* menu_bar::add_menu(const std::string& path)
 	std::vector<std::string> strs = Utils::splite_str(path,"/");
 	std::string tmp_path = "";
 	QMenu* last_menu = nullptr;
-	for (int i = 0; i < strs.size() - 1; i++)
+    for (size_t i = 0; i < strs.size() - 1; i++)
 	{
 		tmp_path = tmp_path + strs[i];
 		if (_menu_map.find(tmp_path) == _menu_map.end())

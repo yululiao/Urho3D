@@ -51,7 +51,7 @@ private:
 	void* _window_ptr = nullptr;
 public:
 	CameraCtrl* _cam_ctrl = nullptr;
-	//SharedPtr<TransformCtrl> _gizmoCtrl = nullptr;
+   // SharedPtr<TransformCtrl> _gizmoCtrl = nullptr;
 	TransformCtrl* _gizmoCtrl = nullptr;
 	std::string _curent_tool;
 };

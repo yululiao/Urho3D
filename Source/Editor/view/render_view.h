@@ -13,7 +13,7 @@ class render_view :public QWidget
 	Q_OBJECT
 public:
 	render_view(QWidget* p);
-	~render_view();
+    ~render_view() override;
 	void on_set_cursor(event_data* data);
 public slots:
 	void on_timer();
@@ -24,6 +24,7 @@ protected:
 	void mouseReleaseEvent(QMouseEvent *event) override;
 	void mouseMoveEvent(QMouseEvent *event) override;
 	void wheelEvent(QWheelEvent *event) override;
+    void dragEnterEvent(QDragEnterEvent *event) override;
 	QTimer* _timer = nullptr;
 	bool _is_init = false;
 	bool _is_mouse_pressed = false;

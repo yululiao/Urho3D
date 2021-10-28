@@ -36,6 +36,7 @@ SOURCES += \
     ../../Source/Editor/editor_app.cpp \
     ../../Source/Editor/main.cpp \
     ../../Source/Editor/model/proj_history.cpp \
+    ../../Source/Editor/model/res_model.cpp \
     ../../Source/Editor/view/inspector.cpp \
     ../../Source/Editor/view/main_window.cpp \
     ../../Source/Editor/view/menu_bar.cpp \
@@ -71,6 +72,7 @@ HEADERS += \
     ../../Source/Editor/ctrl/work_space.h \
     ../../Source/Editor/editor_app.h \
     ../../Source/Editor/model/proj_history.h \
+    ../../Source/Editor/model/res_model.h \
     ../../Source/Editor/view/inspector.h \
     ../../Source/Editor/view/main_window.h \
     ../../Source/Editor/view/menu_bar.h \
