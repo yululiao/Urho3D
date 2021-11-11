@@ -25,6 +25,7 @@ protected:
 	void mouseMoveEvent(QMouseEvent *event) override;
 	void wheelEvent(QWheelEvent *event) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
+    void dropEvent(QDropEvent *event) override;
 	QTimer* _timer = nullptr;
 	bool _is_init = false;
 	bool _is_mouse_pressed = false;

@@ -25,14 +25,17 @@ public:
 	static scene_ctrl* get_inatance();
 	static Context* _ctx;
 	void create_scene();
+    void create_models();
+    void create_grids();
 	void update();
 	Node* select(float x, float y);
+    void addModel(const std::string& path);
 protected:
 	
 private:
 	scene_ctrl(Context* ctx);
 	static scene_ctrl* _instance;
-	SharedPtr<Node> _modelNode = nullptr;
+    SharedPtr<Node> _modelNode = nullptr;
 
 public:
 	SharedPtr<Scene> _scene;

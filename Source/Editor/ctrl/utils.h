@@ -73,20 +73,20 @@ public:
 		{
 			return true;
 		}
-		dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //ÉèÖÃ¹ıÂË
-		QFileInfoList fileList = dir.entryInfoList(); // »ñÈ¡ËùÓĞµÄÎÄ¼şĞÅÏ¢
+		dir.setFilter(QDir::AllEntries | QDir::NoDotAndDotDot); //è®¾ç½®è¿‡æ»¤
+		QFileInfoList fileList = dir.entryInfoList(); // è·å–æ‰€æœ‰çš„æ–‡ä»¶ä¿¡æ¯
 		foreach(QFileInfo file, fileList)
-		{ //±éÀúÎÄ¼şĞÅÏ¢
+		{ //éå†æ–‡ä»¶ä¿¡æ¯
 			if (file.isFile())
-			{ // ÊÇÎÄ¼ş£¬É¾³ı
+			{ // æ˜¯æ–‡ä»¶ï¼Œåˆ é™¤
 				file.dir().remove(file.fileName());
 			}
 			else
-			{ // µİ¹éÉ¾³ı
+			{ // é€’å½’åˆ é™¤
 				delete_dir(qstr2str(file.absoluteFilePath()));
 			}
 		}
-		return dir.rmpath(dir.absolutePath()); // É¾³ıÎÄ¼ş¼Ğ
+		return dir.rmpath(dir.absolutePath()); // åˆ é™¤æ–‡ä»¶å¤¹
 	}
 
 	static bool create_file(const std::string& fullpath)
@@ -294,6 +294,13 @@ public:
 
 	}
 
+    static std::string get_file_path(const std::string& fullpath)
+    {
+        QString qstr = Utils::str2qstr(fullpath);
+        QFileInfo info(qstr);
+        return info.path().toStdString();
+    }
+
 	static std::string get_file_name(const std::string& fullpath)
 	{
 		QString qstr = Utils::str2qstr(fullpath);
@@ -301,11 +308,12 @@ public:
 
 		return Utils::qstr2str(info.fileName());
 	}
+
 	static std::string get_file_ext(const std::string& fullpath)
 	{
 		QString qstr = Utils::str2qstr(fullpath);
 		QFileInfo info(qstr);
-		return Utils::qstr2str("." + info.suffix());
+        return Utils::qstr2str(QString("." + info.suffix()).toLower());
 	}
 	static std::string get_base_name(const std::string& fullpath)
 	{
@@ -342,10 +350,10 @@ public:
 		outfile.close();
 	}
 	/// <summary>
-	/// Ö´ĞĞÒ»¸öÃüÁîĞĞ
+	/// æ‰§è¡Œä¸€ä¸ªå‘½ä»¤è¡Œ
 	/// </summary>
-	/// <param name="cmd">ÃüÁîĞĞ</param>
-	/// <param name="pRetMsg">Ö´ĞĞ·µ»ØÖµ</param>
+	/// <param name="cmd">å‘½ä»¤è¡Œ</param>
+	/// <param name="pRetMsg">æ‰§è¡Œè¿”å›å€¼</param>
 	/// <param name="msg_len"></param>
 	/// <returns></returns>
 	static int _system(const char* cmd, char* pRetMsg, int msg_len)
@@ -406,6 +414,11 @@ public:
 		dis = out.begin()->first;
 		return result;
 	}
+
+    static bool str_contains(const std::string& str,const std::string& c)
+    {
+        return QString(str.c_str()).contains(c.c_str());
+    }
 	static void intersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out)
 	{
 		StaticModel* stmodel = pnode->GetComponent<StaticModel>();

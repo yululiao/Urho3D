@@ -16,6 +16,9 @@ public:
     void import_assets(const std::string& path);
     void import_fbx(const std::string& fbxPath);
     std::string get_asset_path();
+
+    std::string pathToRelative(const std::string& fulPath);
+    std::string pathToFull(const std::string& rpath);
 protected:
 
 private:

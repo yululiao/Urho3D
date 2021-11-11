@@ -67,7 +67,13 @@ void editor_app::setup()
 	// The first entry is an empty path which will be substituted with program/bin directory -- this entry is for binary when it is still in build tree
 	// The second and third entries are possible relative paths from the installed program/bin directory to the asset directory -- these entries are for binary when it is in the Urho3D SDK installation location
 	if (!_engineParameters.Contains(EP_RESOURCE_PREFIX_PATHS))
-		_engineParameters[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
+    {
+        //_engineParameters[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
+        std::string assetsPath = "Data;CoreData;"+ work_space::get_instance()->get_workspace();
+        _engineParameters[EP_RESOURCE_PATHS] =  assetsPath.c_str();
+
+    }
+
 }
 
 void editor_app::start()

@@ -168,14 +168,31 @@ void render_view::dragEnterEvent(QDragEnterEvent *event)
     }
     QString path = QString::fromLocal8Bit(mimeData->data("DragAssetToScene"));
      QFileInfo info(path);
-     QString ext_str = info.suffix();
+     QString ext_str = info.suffix().toLower();
      QString extFilter = "prefab.ptc.fbx";//可以将这些文件拖到场景里
      if(extFilter.split(".").contains(ext_str))
      {
-        //todo
-        //int todo = 10;
+        //scene_ctrl::get_inatance()->addModel(path.toStdString());
+         event->acceptProposedAction();
      }
 
+}
+
+void render_view::dropEvent(QDropEvent *event)
+{
+    auto mimeData = event->mimeData();
+    if (!mimeData->hasFormat("DragAssetToScene"))//名字和res_tree里的一致
+    {
+        return;
+    }
+    QString path = QString::fromLocal8Bit(mimeData->data("DragAssetToScene"));
+     QFileInfo info(path);
+     QString ext_str = info.suffix().toLower();
+     QString extFilter = "prefab.ptc.fbx";//可以将这些文件拖到场景里
+     if(ext_str == "fbx" && !(info.baseName().contains("@")))
+     {
+        scene_ctrl::get_inatance()->addModel(path.toStdString());
+     }
 }
 
 

@@ -132,6 +132,15 @@ void res_tree::OnRemoveItem()
 
 void res_tree::OnImportAssets()
 {
+     QModelIndexList indexList = this->selectedIndexes();
+     for(QModelIndex var:indexList)
+     {
+         if (_model->fileInfo(var).isDir())
+         {
+             QString path = QDir::toNativeSeparators(_model->fileInfo(var).absoluteFilePath());
+             asset_mgr::get_instance()->import_assets(path.toStdString());
+         }
+     }
 
 }
 
