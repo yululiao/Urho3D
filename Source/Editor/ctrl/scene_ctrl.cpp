@@ -104,6 +104,7 @@ namespace editor
         std::string rpath = asset_mgr::get_instance()->pathToRelative(mdl_path);
 
         Node* modelNode = _scene_root->CreateChild(name.c_str());
+        modelNode->SetScale(Vector3(0.01,0.01,0.01));
         //modelNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
         //modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
@@ -111,12 +112,42 @@ namespace editor
         //modelObject->SetModel(cache->GetResource<Model>("Models/001_Mesh.mdl"));
         Model* model = cache->GetResource<Model>(rpath.c_str());
         modelObject->SetModel(model);
-        Material* model_mat = cache->GetResource<Material>("assets/models/001/tex/001.xml");
-        modelObject->SetMaterial(model_mat);
+        //Material* model_mat = cache->GetResource<Material>("assets/models/001/tex/001.xml");
+        //modelObject->SetMaterial(model_mat);
     }
 
-    void scene_ctrl::create_grids()
+    void scene_ctrl::update_grids()
     {
+        _grid_lines.clear();
+        if(_grid_root.Null())
+        {
+            _grid_root = _scene->CreateChild("GridRoot");
+        }
+        int line_count = 20;
+        float line_dis = 1;
+        //横向
+        float min = -(line_count/2.0/line_dis);
+        float max = (line_count/2.0/line_dis);
+        for(int i=0;i<=line_count;i++)
+        {
+            float z = min + line_dis * i;
+            std::vector<Vector3> linePos;
+            linePos.push_back(Vector3(min,0,z));
+            linePos.push_back(Vector3(max,0,z));
+            SharedPtr<Node> lineNode = geometry_util::create_line(context_, linePos, 0x999999);
+            _grid_root->AddChild(lineNode);
+
+        }
+        //纵向
+        for(int i=0;i<=line_count;i++)
+        {
+            float x = min + line_dis * i;
+            std::vector<Vector3> linePos;
+            linePos.push_back(Vector3(x,0,min));
+            linePos.push_back(Vector3(x,0,max));
+            SharedPtr<Node> lineNode = geometry_util::create_line(context_, linePos,0x999999);
+            _grid_root->AddChild(lineNode);
+        }
 
     }
 
@@ -165,7 +196,7 @@ namespace editor
 		SharedPtr<Viewport> viewport(new Viewport(context_, _scene, _cameraNode->GetComponent<Camera>()));
 		renderer->SetViewport(0, viewport);
 
-        create_grids();
+        update_grids();
 	}
 
 	void scene_ctrl::update()

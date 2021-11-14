@@ -1,5 +1,5 @@
 #pragma once
-
+#include "vector"
 #include "Urho3D/Core/Context.h"
 
 
@@ -26,7 +26,7 @@ public:
 	static Context* _ctx;
 	void create_scene();
     void create_models();
-    void create_grids();
+    void update_grids();
 	void update();
 	Node* select(float x, float y);
     void addModel(const std::string& path);
@@ -41,7 +41,9 @@ public:
 	SharedPtr<Scene> _scene;
 	SharedPtr<Node> _scene_root = nullptr;
 	/// Camera scene node.
-	SharedPtr<Node> _cameraNode;
+    SharedPtr<Node> _cameraNode = nullptr;
+    SharedPtr<Node> _grid_root = nullptr;
+    std::vector<SharedPtr<Node>> _grid_lines;
 
 
 };

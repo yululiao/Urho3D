@@ -22,6 +22,10 @@ res_tree::res_tree(QWidget* p)
     workSpace = work_space::get_instance()->get_workspace().c_str();
     _model->setRootPath(assetRoot);
 	_model->setReadOnly(false);
+    QStringList nameFilter;
+    nameFilter << "*.fbx"<<"*.png"<<"*.tga"<<"*.jpg"<<"*.tif"<<"*.txt"<<"*.json"<<"*.prefab"<<".scene";
+    _model->setNameFilterDisables(false);
+   _model->setNameFilters(nameFilter);
     createContexMenus();
     this->setContextMenuPolicy(Qt::CustomContextMenu);
     this->setEditTriggers(QAbstractItemView::SelectedClicked);

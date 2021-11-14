@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    ../../Source/Editor/ctrl/AssetImporter.cpp \
     ../../Source/Editor/ctrl/asset_mgr.cpp \
     ../../Source/Editor/ctrl/camera_ctrl.cpp \
     ../../Source/Editor/ctrl/edit_mgr.cpp \
@@ -35,6 +36,7 @@ SOURCES += \
     ../../Source/Editor/ctrl/work_space.cpp \
     ../../Source/Editor/editor_app.cpp \
     ../../Source/Editor/main.cpp \
+    ../../Source/Editor/model/NodeTreeModel.cpp \
     ../../Source/Editor/model/proj_history.cpp \
     ../../Source/Editor/model/res_model.cpp \
     ../../Source/Editor/view/inspector.cpp \
@@ -48,6 +50,7 @@ SOURCES += \
     ../../Source/Editor/view/tool_bar.cpp
 
 HEADERS += \
+    ../../Source/Editor/ctrl/AssetImporter.h \
     ../../Source/Editor/ctrl/FastDelegate.h \
     ../../Source/Editor/ctrl/asset_mgr.h \
     ../../Source/Editor/ctrl/camera_ctrl.h \
@@ -71,6 +74,7 @@ HEADERS += \
     ../../Source/Editor/ctrl/utils.h \
     ../../Source/Editor/ctrl/work_space.h \
     ../../Source/Editor/editor_app.h \
+    ../../Source/Editor/model/NodeTreeModel.h \
     ../../Source/Editor/model/proj_history.h \
     ../../Source/Editor/model/res_model.h \
     ../../Source/Editor/view/inspector.h \
@@ -124,3 +128,10 @@ unix|win32: LIBS += -lwinspool
 unix|win32: LIBS += -lshell32
 unix|win32: LIBS += -lcomdlg32
 unix|win32: LIBS += -ladvapi32
+
+win32:CONFIG(release, debug|release): LIBS += -L$$PWD/../msbuild/lib/ -lAssimp_
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/../msbuild/lib/ -lAssimp_d
+else:unix: LIBS += -L$$PWD/../msbuild/lib/ -lAssimp_
+
+INCLUDEPATH += $$PWD/../../Source/ThirdParty/Assimp/include
+DEPENDPATH += $$PWD/../../Source/ThirdParty/Assimp/include

@@ -3,6 +3,7 @@
 #include "work_space.h"
 #include "utils.h"
 #include <QProcess>
+#include "ctrl/AssetImporter.h"
 
 namespace urho3d
 {
@@ -64,7 +65,7 @@ void asset_mgr::import_fbx(const std::string& fbxPath)
 {
     std::string base = Utils::get_base_name(fbxPath);
     std::string fpath = Utils::get_file_path(fbxPath);
-    std::string cmd = "tool/AssetImporter";
+    //std::string cmd = "tool/AssetImporter";
     std::string args;
     if(Utils::str_contains(base,"@"))//动画
     {
@@ -78,8 +79,9 @@ void asset_mgr::import_fbx(const std::string& fbxPath)
     }
     //char msg[128] = { 0 };
     //Utils::_system(cmd.c_str(),msg,sizeof(msg));
-    QProcess process;
-    process.startDetached(cmd.c_str(),QString(args.c_str()).split(" "));
+    //QProcess process;
+   //process.startDetached(cmd.c_str(),QString(args.c_str()).split(" "));
+    assimp_import_fbx(args.c_str());
 }
 
 
