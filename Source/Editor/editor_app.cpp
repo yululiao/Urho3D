@@ -1,3 +1,4 @@
+#include <QAction>
 #include "editor_app.h"
 #include "view/styles/dark_style.h"
 #include "view/start_view.h"
@@ -18,6 +19,9 @@
 #include "ctrl/utils.h"
 #include "ctrl/scene_ctrl.h"
 #include "ctrl/asset_mgr.h"
+
+#include "ctrl/EditorLuaBinding.h"
+#include <Urho3D/LuaScript/LuaScript.h>
 
 
 namespace urho3d
@@ -78,7 +82,12 @@ void editor_app::setup()
 
 void editor_app::start()
 {
+    auto* luaScript = new LuaScript(context_);
+    EditorLuaBinding::LuaBinding(luaScript->GetState());
+    context_->RegisterSubsystem(luaScript);
+    luaScript->ExecuteFile("assets/scripts/main.lua");
 	scene_ctrl::get_inatance()->create_scene();
+
 	_cam_ctrl = new CameraCtrl(scene_ctrl::get_inatance()->_cameraNode);
 }
 
@@ -168,6 +177,13 @@ void editor_app::set_cur_tool(const std::string& name)
 		if(_gizmoCtrl)
 			_gizmoCtrl->detach();
 	}
+}
+
+EditorMenu* editor_app::AddMenu(const String path) 
+{ 
+	QAction* act = _main_window->GetMenuBar()->add_menu(path.CString());
+    EditorMenu* menu = new EditorMenu(_context,act);
+    return menu;
 }
 
 }

@@ -1,0 +1,4 @@
+$pfile "view/ui/EditorMenu.pkg"
+
+$using namespace urho3d::editor;
+

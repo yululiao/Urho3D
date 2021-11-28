@@ -1,0 +1,10 @@
+$#include "Urho3D/Core/Context.h"
+$#include "Urho3D/Core/Main.h"
+$#include "LuaScript/LuaFile.h"
+$#include "LuaScript/LuaScriptInstance.h"
+$#include "view/ui/EditorMenu.h"
+
+class EditorMenu:public Object
+{
+	
+};

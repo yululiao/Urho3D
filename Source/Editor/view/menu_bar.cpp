@@ -1,4 +1,4 @@
-#include <QMessageBox>
+﻿#include <QMessageBox>
 #include "menu_bar.h"
 #include "ctrl/utils.h"
 

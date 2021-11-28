@@ -18,6 +18,8 @@ public:
 	main_window(QWidget* p);
 	~main_window();
 	void create_views();
+    menu_bar* GetMenuBar() { return _menu_bar; }
+
 protected:
 	virtual void showEvent(QShowEvent *event) override;
 	virtual void resizeEvent(QResizeEvent *event) override;

@@ -1,0 +1,17 @@
+$#include "Urho3D/Core/Context.h"
+$#include "Urho3D/Core/Main.h"
+$#include "Urho3D/Engine/Engine.h"
+$#include "ctrl/camera_ctrl.h"
+$#include "view/ui/EditorMenu.h"
+$#include "LuaScript/LuaFile.h"
+$#include "LuaScript/LuaScriptInstance.h"
+$#include "view/ui/EditorMenu.h"
+$#include "editor_app.h"
+
+$using namespace urho3d::editor;
+
+class editor_app :public Object
+{
+ static editor_app* get_instance();
+ EditorMenu* AddMenu(const String path);
+};

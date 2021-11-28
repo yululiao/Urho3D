@@ -1,0 +1,289 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="forms">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="translation">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="src\model">
+      <UniqueIdentifier>{ace97fe2-950c-4bb6-ad3a-1bade78a5af9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view">
+      <UniqueIdentifier>{c4cec8ce-12d6-4738-9d45-307fcdd9290e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ctrl">
+      <UniqueIdentifier>{26d14338-8688-4ec6-a081-6562dcbc74cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ctrl\gizmo">
+      <UniqueIdentifier>{119cefa2-cce3-48bd-bcc7-36f99c881568}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view\dialogs">
+      <UniqueIdentifier>{c94aa092-a346-4912-ab6c-2a327118dccf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view\styles">
+      <UniqueIdentifier>{ebbcea0c-aff2-43fd-abbb-a3c5da2beac2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view\ui">
+      <UniqueIdentifier>{e5fea7b0-b980-441b-a986-36e092e2d8aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\luaapi">
+      <UniqueIdentifier>{ef53fafb-91db-4bc8-afd2-e0860063a280}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\luaapi\gen">
+      <UniqueIdentifier>{1d7be759-5819-4b95-b624-03b32896ec92}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\..\..\Source\Editor\forms\start.ui">
+      <Filter>forms</Filter>
+    </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\..\..\Source\Editor\qtres\Urho3dEditor.qrc">
+      <Filter>res</Filter>
+    </QtRcc>
+    <QtRcc Include="..\..\..\Source\Editor\qtres\styles\darkstyle.qrc">
+      <Filter>res</Filter>
+    </QtRcc>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Editor\model\NodeTreeModel.cpp">
+      <Filter>src\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\model\proj_history.cpp">
+      <Filter>src\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\model\res_model.cpp">
+      <Filter>src\model</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\styles\dark_style.cpp">
+      <Filter>src\view\styles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspector.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\main_window.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\menu_bar.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\node_tree.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\render_view.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\res_tree.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\start_view.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\tool_bar.cpp">
+      <Filter>src\view</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\GizmoUtils.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\RotateGizmo.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\ScaleGizmo.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TransformCtrl.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TransformGizmo.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TranslateGizmo.cpp">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\asset_mgr.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\AssetImporter.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\camera_ctrl.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\edit_mgr.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\event_emitter.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\file_system_watcher.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\geometry_util.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\global_event.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\history_mgr.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\scene_ctrl.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\translate.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\work_space.cpp">
+      <Filter>src\ctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\editor_app.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\ui\EditorMenu.cpp">
+      <Filter>src\view\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.cpp">
+      <Filter>src\luaapi</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\AppLuaAPI.cpp">
+      <Filter>src\luaapi\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorUiLuaAPI.cpp">
+      <Filter>src\luaapi\gen</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Editor\model\NodeTreeModel.h">
+      <Filter>src\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\model\proj_history.h">
+      <Filter>src\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\model\res_model.h">
+      <Filter>src\model</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspector.h">
+      <Filter>src\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\main_window.h">
+      <Filter>src\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\node_tree.h">
+      <Filter>src\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\res_tree.h">
+      <Filter>src\view</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\GizmoUtils.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\RotateGizmo.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\ScaleGizmo.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TransformCtrl.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TransformGizmo.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TranslateGizmo.h">
+      <Filter>src\ctrl\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\asset_mgr.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\AssetImporter.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\camera_ctrl.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\edit_command.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\edit_mgr.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\editor_delegate.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\event_data.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\event_emitter.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\FastDelegate.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\file_system_watcher.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\geometry_util.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\global_event.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\history_mgr.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\scene_ctrl.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\translate.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\utils.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\work_space.h">
+      <Filter>src\ctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\editor_app.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\ui\EditorMenu.h">
+      <Filter>src\view\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.h">
+      <Filter>src\luaapi</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="..\..\..\Source\Editor\view\styles\dark_style.h">
+      <Filter>src\view\styles</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\Source\Editor\view\menu_bar.h">
+      <Filter>src\view</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\Source\Editor\view\render_view.h">
+      <Filter>src\view</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\Source\Editor\view\start_view.h">
+      <Filter>src\view</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\Source\Editor\view\tool_bar.h">
+      <Filter>src\view</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>

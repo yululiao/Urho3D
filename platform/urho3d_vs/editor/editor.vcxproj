@@ -1,0 +1,190 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="16.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="..\..\..\Source\Editor\forms\start.ui" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="..\..\..\Source\Editor\qtres\styles\darkstyle.qrc" />
+    <QtRcc Include="..\..\..\Source\Editor\qtres\Urho3dEditor.qrc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\AssetImporter.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\asset_mgr.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\camera_ctrl.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\edit_mgr.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\event_emitter.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\file_system_watcher.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\geometry_util.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\GizmoUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\RotateGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\ScaleGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TransformCtrl.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TransformGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\gizmo\TranslateGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\global_event.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\history_mgr.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\scene_ctrl.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\translate.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\ctrl\work_space.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\editor_app.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\AppLuaAPI.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorUiLuaAPI.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\main.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\model\NodeTreeModel.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\model\proj_history.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\model\res_model.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\main_window.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\menu_bar.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\node_tree.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\render_view.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\res_tree.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\start_view.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\styles\dark_style.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\tool_bar.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\ui\EditorMenu.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\AssetImporter.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\asset_mgr.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\camera_ctrl.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\editor_delegate.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\edit_command.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\edit_mgr.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\event_data.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\event_emitter.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\FastDelegate.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\file_system_watcher.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\geometry_util.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\GizmoUtils.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\RotateGizmo.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\ScaleGizmo.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TransformCtrl.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TransformGizmo.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\gizmo\TranslateGizmo.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\global_event.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\history_mgr.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\scene_ctrl.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\translate.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\utils.h" />
+    <ClInclude Include="..\..\..\Source\Editor\ctrl\work_space.h" />
+    <ClInclude Include="..\..\..\Source\Editor\editor_app.h" />
+    <ClInclude Include="..\..\..\Source\Editor\model\NodeTreeModel.h" />
+    <ClInclude Include="..\..\..\Source\Editor\model\proj_history.h" />
+    <ClInclude Include="..\..\..\Source\Editor\model\res_model.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\main_window.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\node_tree.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\res_tree.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\ui\EditorMenu.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\tool_bar.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\start_view.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\render_view.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\menu_bar.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\styles\dark_style.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{714C9B8D-21F0-4547-BA27-0C0D3FE7B19E}</ProjectGuid>
+    <Keyword>QtVS_v304</Keyword>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
+    <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt_defaults.props')">
+    <Import Project="$(QtMsBuild)\qt_defaults.props" />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
+    <QtInstall>5.14_x64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+    <QtBuildConfig>debug</QtBuildConfig>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
+    <QtInstall>5.14_x64</QtInstall>
+    <QtModules>core;gui;widgets</QtModules>
+    <QtBuildConfig>release</QtBuildConfig>
+  </PropertyGroup>
+  <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
+    <Message Importance="High" Text="QtMsBuild: could not locate qt.targets, qt.props; project may not build correctly." />
+  </Target>
+  <ImportGroup Label="ExtensionSettings" />
+  <ImportGroup Label="Shared" />
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(QtMsBuild)\Qt.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutDir>$(ProjectDir)..\out\$(Platform)-$(Configuration)\bin\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Link>
+      <AdditionalLibraryDirectories>$(OutDir)..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Urho3D_d.lib;Assimp_d.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;setupapi.lib;version.lib;uuid.lib;ws2_32.lib;iphlpapi.lib;dbghelp.lib;opengl32.lib;kernel32.lib;winspool.lib;shell32.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\Source\Editor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>TOLUA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
+    <ClCompile>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <Optimization>MaxSpeed</Optimization>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
+    <Import Project="$(QtMsBuild)\qt.targets" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

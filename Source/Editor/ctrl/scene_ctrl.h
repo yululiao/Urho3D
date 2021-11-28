@@ -1,6 +1,7 @@
 #pragma once
 #include "vector"
-#include "Urho3D/Core/Context.h"
+#include <string>
+#include "Urho3D/Core/Context.h" 
 
 
 using namespace Urho3D;
@@ -30,6 +31,7 @@ public:
 	void update();
 	Node* select(float x, float y);
     void addModel(const std::string& path);
+    Node* getRoot(){return _scene_root;}
 protected:
 	
 private:

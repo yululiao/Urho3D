@@ -19,6 +19,7 @@
 #include "ctrl/geometry_util.h"
 #include "ctrl/utils.h"
 #include "ctrl/asset_mgr.h"
+#include "ctrl/global_event.h"
 
 namespace urho3d
 {
@@ -97,6 +98,7 @@ namespace editor
 
     void scene_ctrl::addModel(const std::string &path)
     {
+        global_event::get_instance()->emit_event(eGlobalEventType::BeginInsertNode);
          auto* cache = GetSubsystem<ResourceCache>();
         std::string name = Utils::get_base_name(path);
         //加载fbx对应的mdl
@@ -114,6 +116,8 @@ namespace editor
         modelObject->SetModel(model);
         //Material* model_mat = cache->GetResource<Material>("assets/models/001/tex/001.xml");
         //modelObject->SetMaterial(model_mat);
+        //global_event::get_instance()->emit_event(eGlobalEventType::AddNodeToScene);
+        global_event::get_instance()->emit_event(eGlobalEventType::EndInsertNode);
     }
 
     void scene_ctrl::update_grids()
@@ -197,6 +201,8 @@ namespace editor
 		renderer->SetViewport(0, viewport);
 
         update_grids();
+        global_event::get_instance()->emit_event(eGlobalEventType::CreateScene);
+
 	}
 
 	void scene_ctrl::update()

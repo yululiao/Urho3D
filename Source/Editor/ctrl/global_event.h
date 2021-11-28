@@ -19,7 +19,12 @@ struct eGlobalEventType
 		AfterUndoRedo,
 		AfterSave,
 		UpdateInspector,
-		SetCursor
+        SetCursor,
+        CreateScene,
+        AddNodeToScene,
+        BeginInsertNode,
+        EndInsertNode
+
 	};
 };
 
