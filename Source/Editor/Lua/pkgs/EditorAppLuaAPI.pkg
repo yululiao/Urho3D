@@ -8,8 +8,6 @@ $#include "LuaScript/LuaScriptInstance.h"
 $#include "view/ui/EditorMenu.h"
 $#include "editor_app.h"
 
-$using namespace urho3d::editor;
-
 class editor_app :public Object
 {
  static editor_app* get_instance();

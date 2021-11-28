@@ -1,0 +1,3 @@
+$pfile "EditorAppLuaAPI.pkg"
+
+$using namespace urho3d::editor;

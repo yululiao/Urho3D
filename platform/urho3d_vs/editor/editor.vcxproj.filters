@@ -161,10 +161,10 @@
     <ClCompile Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.cpp">
       <Filter>src\luaapi</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\AppLuaAPI.cpp">
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorCtrlLuaAPI.cpp">
       <Filter>src\luaapi\gen</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorUiLuaAPI.cpp">
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorViewLuaAPI.cpp">
       <Filter>src\luaapi\gen</Filter>
     </ClCompile>
   </ItemGroup>

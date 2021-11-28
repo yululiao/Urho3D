@@ -38,8 +38,8 @@
     <ClCompile Include="..\..\..\Source\Editor\ctrl\translate.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\ctrl\work_space.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\editor_app.cpp" />
-    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\AppLuaAPI.cpp" />
-    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorUiLuaAPI.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorCtrlLuaAPI.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorViewLuaAPI.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\main.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\model\NodeTreeModel.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\model\proj_history.cpp" />
