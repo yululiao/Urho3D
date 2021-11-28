@@ -122,6 +122,8 @@ Thumbs.db
 CMakeDoxyFile.in
 CMakeDoxygenDefaults.cmake
 
-pc/msbuild
-pc/mseditorbuild
+platform/urho3d_vs/out
+platform/urho3d_vs/editor/x64
+platform/urho3d_vs/editor/x86
 CMakeLists.txt.user
+CMakeSettings.json
