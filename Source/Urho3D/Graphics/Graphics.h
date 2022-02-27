@@ -148,6 +148,8 @@ public:
 
     /// Set external window handle. Only effective before setting the initial screen mode.
     void SetExternalWindow(void* window);
+    void SetWindowHide(bool hide);
+    bool GetWindowHide() { return windowHide_; }
     /// Set window title.
     /// @property
     void SetWindowTitle(const String& windowTitle);
@@ -769,6 +771,7 @@ private:
     WeakPtr<Image> windowIcon_;
     /// External window, null if not in use (default.)
     void* externalWindow_{};
+    bool windowHide_{false};
     /// Most recently applied window mode. It may not represent actual window state
     /// if window was resized by user or Graphics::SetScreenMode was explicitly called.
     WindowModeParams primaryWindowMode_;

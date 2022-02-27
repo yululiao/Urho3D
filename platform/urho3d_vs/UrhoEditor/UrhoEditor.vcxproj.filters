@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="res">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="src\gen">
+      <UniqueIdentifier>{45ed8dcb-5b0b-4b7a-8ef4-cc0a866a850e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\gizmo">
+      <UniqueIdentifier>{c079cca5-87e2-4a8a-b1c9-08f45052541e}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\GLSdlWindow.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\EditorApp.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\SceneCtrl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ImguiUpdater.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\pkgs\gen\EditorLuaAPI.cpp">
+      <Filter>src\gen</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\MainMenu.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.cpp">
+      <Filter>src\gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\CameraCtrl.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetMgr.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\GLSdlWindow.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\EditorApp.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\SceneCtrl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ImguiUpdater.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\MainMenu.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.h">
+      <Filter>src\gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\CameraCtrl.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetMgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\UrhoEditor\pkgs\EditorLuaAPI.pkg">
+      <Filter>src\gen</Filter>
+    </None>
+    <None Include="..\..\..\Source\UrhoEditor\pkgs\genluabinding.py">
+      <Filter>src\gen</Filter>
+    </None>
+  </ItemGroup>
+</Project>

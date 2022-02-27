@@ -77,7 +77,7 @@ void HistoryItem::onItemClicked()
 	QString proj_name = _label->text();
 	_historyMgr->delete_history(proj_name.toStdString().c_str());
 	_historyMgr->add_project(proj_name.toStdString().c_str());
-    editor_app::get_instance()->open_work_space(Utils::qstr2str(_label->text()));
+    EditorApp::get_instance()->open_work_space(Utils::qstr2str(_label->text()));
 	_historyMgr->save();
 }
 
@@ -115,7 +115,7 @@ void start_view::on_open_project()
     QString select = QFileDialog::getExistingDirectory();
     if (select == "")
         return;
-    editor_app::get_instance()->open_work_space(Utils::qstr2str(select));
+    EditorApp::get_instance()->open_work_space(Utils::qstr2str(select));
 
 	_history_mgr->delete_history(select.toStdString().c_str());
 	_history_mgr->add_project(select.toStdString().c_str());

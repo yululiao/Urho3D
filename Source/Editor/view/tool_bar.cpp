@@ -8,7 +8,7 @@ namespace editor
 tool_bar::tool_bar(QMainWindow* p)
 {
 	_main_window = p;
-	_app = editor_app::get_instance();
+	_app = EditorApp::get_instance();
 	create_toolbar();
 }
 tool_bar::~tool_bar()

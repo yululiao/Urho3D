@@ -1,0 +1,12 @@
+$#include "Graphics/GeoUtils.h"
+
+class GeoUtils
+{
+static Node* create_plane(Context* ctx, float w, float h);
+static Node* create_cube(Context* ctx, float fRadius);
+static Node* create_torus(Context* ctx, float majorRadius, float minorRadius, int numMajor, int numMinor,float angle);
+static Node* create_sphere(Context* ctx, float fRadius, int iSlices, int iStacks);
+static Node* create_disk(Context* ctx, float innerRadius, float outerRadius, int nSlices, int nStacks);
+static Node* create_cylinder(Context* ctx, float baseRadius, float topRadius, float fLength, int numSlices,int numStacks);
+static Node* create_line(Context* ctx, std::vector<Vector3> vPos, unsigned color);
+};

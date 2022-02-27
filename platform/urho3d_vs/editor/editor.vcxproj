@@ -45,9 +45,17 @@
     <ClCompile Include="..\..\..\Source\Editor\model\proj_history.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\model\res_model.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\inspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompModelInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\MatInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\NodeInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompTransformInspector.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\main_window.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\menu_bar.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\node_tree.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\CustomGLWidget.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\ImguiDemo.cpp" />
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\ImguiWidget.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\render_view.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\res_tree.cpp" />
     <ClCompile Include="..\..\..\Source\Editor\view\start_view.cpp" />
@@ -85,8 +93,16 @@
     <ClInclude Include="..\..\..\Source\Editor\model\proj_history.h" />
     <ClInclude Include="..\..\..\Source\Editor\model\res_model.h" />
     <ClInclude Include="..\..\..\Source\Editor\view\inspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompInspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompModelInspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\MatInspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\NodeInspector.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompTransformInspector.h" />
     <ClInclude Include="..\..\..\Source\Editor\view\main_window.h" />
     <ClInclude Include="..\..\..\Source\Editor\view\node_tree.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\qtimgui\CustomGLWidget.h" />
+    <ClInclude Include="..\..\..\Source\Editor\view\qtimgui\ImguiDemo.h" />
+    <QtMoc Include="..\..\..\Source\Editor\view\qtimgui\ImguiWidget.h" />
     <ClInclude Include="..\..\..\Source\Editor\view\res_tree.h" />
     <ClInclude Include="..\..\..\Source\Editor\view\ui\EditorMenu.h" />
     <QtMoc Include="..\..\..\Source\Editor\view\tool_bar.h" />
@@ -147,11 +163,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
-      <AdditionalLibraryDirectories>$(OutDir)..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Urho3D_d.lib;Assimp_d.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;setupapi.lib;version.lib;uuid.lib;ws2_32.lib;iphlpapi.lib;dbghelp.lib;opengl32.lib;kernel32.lib;winspool.lib;shell32.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)$(Platform)\$(Configuration)\;$(OutDir)..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Urho3D_d.lib;imgui.lib;Assimp_d.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;setupapi.lib;version.lib;uuid.lib;ws2_32.lib;iphlpapi.lib;dbghelp.lib;opengl32.lib;kernel32.lib;winspool.lib;shell32.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(ProjectDir)..\..\..\Source\Editor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Urho3D\Source\ThirdParty\imgui;$(ProjectDir)..\..\..\Source\Editor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>TOLUA_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>

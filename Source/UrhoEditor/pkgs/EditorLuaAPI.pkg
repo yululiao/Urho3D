@@ -1,0 +1,34 @@
+$#include "LuaScript/LuaFile.h"
+$#include "LuaScript/LuaScriptInstance.h"
+$#include "ImguiUpdater.h"
+$#include "EditorApp.h"
+$#include "AssetMgr.h"
+
+class ImguiUpdater : public Object
+{
+	
+};
+class MenuBarUpdater : public Object
+{
+	
+};
+
+class EditorApp:public Object
+{
+ static EditorApp* getInstance();
+ ImguiUpdater* getUiUpdater();
+ MenuBarUpdater* getManuBarUpdater();
+ void setCurTool(const String& name);
+ Node* getRootNode();
+ Scene* getScene();
+ String getWorkSpace();
+ String getAssetRoot();
+};
+
+class AssetMgr : public Object
+{
+static AssetMgr* getInstance();
+String getTextFile(const String& path);
+int getImguiTex(const String& path);
+
+};

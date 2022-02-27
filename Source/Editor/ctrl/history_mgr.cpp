@@ -12,7 +12,7 @@ namespace editor
 {
 history_mgr::history_mgr()
 {
-	_history_data = new proj_history(editor_app::get_instance()->get_context());
+	_history_data = new proj_history(EditorApp::get_instance()->get_context());
 	open();
 }
 
@@ -48,7 +48,7 @@ void history_mgr::save()
 {
 	JSONValue json;
 	_history_data->SaveJSON(json);
-	JSONFile j_file(editor_app::get_instance()->get_context());
+	JSONFile j_file(EditorApp::get_instance()->get_context());
 	j_file.GetRoot() = json;
 
 	String j_str = j_file.ToString();
@@ -63,7 +63,7 @@ void history_mgr::save()
 void history_mgr::open()
 {
 
-	JSONFile j_file(editor_app::get_instance()->get_context());
+	JSONFile j_file(EditorApp::get_instance()->get_context());
 	//将文件读入到ostringstream对象buf中
 	std::ifstream ifile(_history_file.CString());
 	std::ostringstream buf;

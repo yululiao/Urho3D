@@ -146,7 +146,7 @@ namespace urho3d
 			}
 			//handles
 			GizmogeoInfo* handleInfo = new GizmogeoInfo();
-			SharedPtr<Node> circle = geometry_util::create_line(context_,linePoints,circleColor);
+			SharedPtr<Node> circle = GeoUtils::create_line(context_,linePoints,circleColor);
 			handleInfo->geo = circle;
 			std::vector<GizmogeoInfo*> handleInfoList;
 			handleInfoList.push_back(handleInfo);
@@ -155,7 +155,7 @@ namespace urho3d
 			if (axisName == "XYZE" /*|| axisName == "E"*/) //no picker
 				return;
 			GizmogeoInfo* pickinfo = new GizmogeoInfo();
-			pickinfo->geo = geometry_util::create_torus(context_,pickRadius, 0.08, tubularSegments, radialSegments,pickArc);
+			pickinfo->geo = GeoUtils::create_torus(context_,pickRadius, 0.08, tubularSegments, radialSegments,pickArc);
 			GizmoUtils::set_default_mat(pickinfo->geo);
 			GizmoUtils::set_geo_color(pickinfo->geo,0x00000000 + circleColor);
 			pickinfo->rot = pickAngles;

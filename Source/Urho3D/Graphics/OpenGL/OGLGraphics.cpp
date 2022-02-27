@@ -407,6 +407,8 @@ bool Graphics::SetScreenMode(int width, int height, const ScreenModeParams& para
             flags |= SDL_WINDOW_BORDERLESS;
         if (newParams.resizable_)
             flags |= SDL_WINDOW_RESIZABLE;
+        if (windowHide_)
+            flags |= SDL_WINDOW_HIDDEN;
 
 #ifndef __EMSCRIPTEN__
         if (newParams.highDPI_)
@@ -596,7 +598,7 @@ bool Graphics::BeginFrame()
 {
     if (!IsInitialized() || IsDeviceLost())
         return false;
-
+    SDL_GL_MakeCurrent(window_,impl_->context_);
     // If using an external window, check it for size changes, and reset screen mode if necessary
     if (externalWindow_)
     {
@@ -2440,7 +2442,6 @@ void Graphics::Restore()
     if (!impl_->context_)
     {
         impl_->context_ = SDL_GL_CreateContext(window_);
-
 #ifndef GL_ES_VERSION_2_0
         // If we're trying to use OpenGL 3, but context creation fails, retry with 2
         if (!forceGL2_ && !impl_->context_)

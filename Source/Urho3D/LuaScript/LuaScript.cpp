@@ -77,6 +77,8 @@ extern int tolua_Urho2DLuaAPI_open(lua_State*);
 #endif
 extern int tolua_LuaScriptLuaAPI_open(lua_State*);
 
+extern void LoadImguiBindings(lua_State* gLuaState);
+
 namespace Urho3D
 {
 
@@ -129,6 +131,7 @@ LuaScript::LuaScript(Context* context) :
     tolua_Urho2DLuaAPI_open(luaState_);
 #endif
     tolua_LuaScriptLuaAPI_open(luaState_);
+    LoadImguiBindings(luaState_);
 
     SetContext(luaState_, context_);
 

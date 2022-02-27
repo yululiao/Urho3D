@@ -9,7 +9,7 @@ namespace Urho3D
 	class Vector2;
 	class Vector3;
 	class Vector4;
-	class geometry_util
+	class GeoUtils
 	{
 	public:
 		static bool close_enough(const float fCandidate, const float fCompare, const float fEpsilon)

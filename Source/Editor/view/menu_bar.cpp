@@ -24,6 +24,8 @@ void menu_bar::create_menus()
 	connect(act_open,&QAction::triggered,this,&menu_bar::on_open_file);
 	QAction* act_save = add_menu("files/save");
 	connect(act_save, &QAction::triggered, this, &menu_bar::on_save_proj);
+    QAction* act_imgui = add_menu("test/imgui");
+    connect(act_imgui, &QAction::triggered, this, &menu_bar::on_test_imgui);
 }
 QAction* menu_bar::add_menu(const std::string& path)
 {
@@ -68,7 +70,28 @@ void menu_bar::on_open_file()
 
 void menu_bar::on_save_proj()
 {
-	QMessageBox::warning(nullptr, "warning", "on_save");
+	QMessageBox::warning(nullptr, "warning", "on_save"); }
+
+void menu_bar::on_test_imgui() 
+{
+    if (_imguiW != nullptr)
+    {
+        _imguiW->show();
+        return;
+    }
+    _imguiW = new ImguiDemo(nullptr);
+    _imguiW->resize(1280, 720);
+    _imguiW->show();
+
+	/*if (_imguiW1 != nullptr)
+    {
+        _imguiW1->show();
+        return;
+    }
+    _imguiW1 = new ImguiDemo1(nullptr);
+    _imguiW1->resize(1280, 720);
+    _imguiW1->show();*/
+    
 }
 
 }

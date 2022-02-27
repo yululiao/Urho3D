@@ -16,16 +16,16 @@ namespace editor
 class start_view;
 class main_window;
 class TransformCtrl;
-class editor_app :public Object
+class EditorApp :public Object
 {
-	URHO3D_OBJECT(editor_app, Object);
+	URHO3D_OBJECT(EditorApp, Object);
 public:
-	editor_app(Context* context);
-	~editor_app();
+	EditorApp(Context* context);
+	~EditorApp();
 	void run();
 	void open_work_space(const std::string& path);
 	Context* get_context() { return _context; }
-    static editor_app* get_instance();
+    static EditorApp* get_instance();
 	void create_engine(void* win_ptr);
 	void run_frame();
 	void resize_window(int w,int h);
@@ -39,7 +39,7 @@ protected:
 	void setup();
 	void start();
 private:
-    static editor_app* _instance;
+    static EditorApp* _instance;
 	start_view* _start_ui = nullptr;
 	main_window* _main_window = nullptr;
 	/// Urho3D engine.

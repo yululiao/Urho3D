@@ -44,6 +44,12 @@
     <Filter Include="src\luaapi\gen">
       <UniqueIdentifier>{1d7be759-5819-4b95-b624-03b32896ec92}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\view\inspectors">
+      <UniqueIdentifier>{1657f8d5-09ef-4754-8d9a-191d9bcc00b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\view\qtimgui">
+      <UniqueIdentifier>{e0b19075-15c9-486f-9bc6-8519bc12cab5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="..\..\..\Source\Editor\forms\start.ui">
@@ -167,6 +173,30 @@
     <ClCompile Include="..\..\..\Source\Editor\Lua\pkgs\gen\EditorViewLuaAPI.cpp">
       <Filter>src\luaapi\gen</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\NodeInspector.cpp">
+      <Filter>src\view\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\MatInspector.cpp">
+      <Filter>src\view\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompModelInspector.cpp">
+      <Filter>src\view\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompTransformInspector.cpp">
+      <Filter>src\view\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\inspectors\CompInspector.cpp">
+      <Filter>src\view\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\ImguiDemo.cpp">
+      <Filter>src\view\qtimgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\ImguiWidget.cpp">
+      <Filter>src\view\qtimgui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\Editor\view\qtimgui\CustomGLWidget.cpp">
+      <Filter>src\view\qtimgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Editor\model\NodeTreeModel.h">
@@ -268,6 +298,27 @@
     <ClInclude Include="..\..\..\Source\Editor\ctrl\EditorLuaBinding.h">
       <Filter>src\luaapi</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\NodeInspector.h">
+      <Filter>src\view\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\MatInspector.h">
+      <Filter>src\view\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompModelInspector.h">
+      <Filter>src\view\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompTransformInspector.h">
+      <Filter>src\view\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\inspectors\CompInspector.h">
+      <Filter>src\view\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\qtimgui\ImguiDemo.h">
+      <Filter>src\view\qtimgui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Editor\view\qtimgui\CustomGLWidget.h">
+      <Filter>src\view\qtimgui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="..\..\..\Source\Editor\view\styles\dark_style.h">
@@ -284,6 +335,9 @@
     </QtMoc>
     <QtMoc Include="..\..\..\Source\Editor\view\tool_bar.h">
       <Filter>src\view</Filter>
+    </QtMoc>
+    <QtMoc Include="..\..\..\Source\Editor\view\qtimgui\ImguiWidget.h">
+      <Filter>src\view\qtimgui</Filter>
     </QtMoc>
   </ItemGroup>
 </Project>

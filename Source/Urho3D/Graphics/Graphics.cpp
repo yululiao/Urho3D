@@ -71,6 +71,11 @@ void Graphics::SetExternalWindow(void* window)
         URHO3D_LOGERROR("Window already opened, can not set external window");
 }
 
+void Graphics::SetWindowHide(bool hide)
+{ 
+    windowHide_ = hide; 
+}
+
 void Graphics::SetWindowTitle(const String& windowTitle)
 {
     windowTitle_ = windowTitle;

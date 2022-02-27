@@ -71,7 +71,7 @@ namespace urho3d
 				planeName = "XY";
 			}
 			GizmogeoInfo* axisArrowGizmo = new GizmogeoInfo();
-			axisArrowGizmo->geo = geometry_util::create_cylinder(context_,0.05,0,0.2,12,1);
+			axisArrowGizmo->geo = GeoUtils::create_cylinder(context_,0.05,0,0.2,12,1);
 			GizmoUtils::set_default_mat(axisArrowGizmo->geo);
 			GizmoUtils::set_geo_color(axisArrowGizmo->geo,0xff000000 + axisColor);
 			//axisArrowGizmo->geo->set_color(axisColor);
@@ -79,7 +79,7 @@ namespace urho3d
 			axisArrowGizmo->rot = axisAngle;;
 			GizmogeoInfo* axisLineGizmo = new GizmogeoInfo();
 			//auto xline = new lines_3d();
-			SharedPtr<Node> xline = geometry_util::create_line(context_,linePoints,axisColor);
+			SharedPtr<Node> xline = GeoUtils::create_line(context_,linePoints,axisColor);
 			//xline->set_vertices(linePoints);
 			//xline->set_color(axisColor);
 			axisLineGizmo->geo = xline;
@@ -89,7 +89,7 @@ namespace urho3d
 			handleGizmos[axisName] = xGizmos;
 			
 			GizmogeoInfo *planeGizmo = new GizmogeoInfo();
-			planeGizmo->geo = geometry_util::create_plane(context_,0.29,0.29);
+			planeGizmo->geo = GeoUtils::create_plane(context_,0.29,0.29);
 			//planeGizmo->geo->set_color(axisColor);
 			//planeGizmo->geo->get_material()->set_blend_mode(blend_mode::NORMAL);
 			//planeGizmo->geo->set_alpha(0.8 * 255);
@@ -103,7 +103,7 @@ namespace urho3d
 			
 
 			GizmogeoInfo* axisPickGizmo = new GizmogeoInfo();
-			axisPickGizmo->geo = geometry_util::create_cylinder(context_,0,0.15,0.6,4,1);
+			axisPickGizmo->geo = GeoUtils::create_cylinder(context_,0,0.15,0.6,4,1);
 			//axisPickGizmo->geo->set_visible(false);
 			//axisPickGizmo->geo->set_color(axisColor);
 			//axisPickGizmo->geo->get_material()->set_blend_mode(blend_mode::NORMAL);
@@ -117,7 +117,7 @@ namespace urho3d
 			pickerGizmos[axisName] = xPickGizmo;
 
 			GizmogeoInfo* planePickGizmo = new GizmogeoInfo();
-			planePickGizmo->geo = geometry_util::create_plane(context_,0.4,0.4);
+			planePickGizmo->geo = GeoUtils::create_plane(context_,0.4,0.4);
 			/*planePickGizmo->geo->set_color(axisColor);
 			planePickGizmo->geo->get_material()->set_blend_mode(blend_mode::NORMAL);
 			planePickGizmo->geo->set_alpha(0*255);*/

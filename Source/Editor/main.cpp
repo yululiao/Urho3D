@@ -4,7 +4,7 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    urho3d::editor::editor_app::get_instance()->run();
+    urho3d::editor::EditorApp::get_instance()->run();
     return a.exec();
 	/*while (true)
 	{

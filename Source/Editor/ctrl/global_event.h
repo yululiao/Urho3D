@@ -23,8 +23,7 @@ struct eGlobalEventType
         CreateScene,
         AddNodeToScene,
         BeginInsertNode,
-        EndInsertNode
-
+        EndInsertNode,
 	};
 };
 

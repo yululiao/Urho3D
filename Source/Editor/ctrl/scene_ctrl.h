@@ -18,15 +18,16 @@ namespace urho3d
 {
 namespace editor
 {
-class scene_ctrl :public Object
+class SceneCtrl :public Object
 {
-	URHO3D_OBJECT(scene_ctrl, Object);
+	URHO3D_OBJECT(SceneCtrl, Object);
 public:
-	~scene_ctrl();
-	static scene_ctrl* get_inatance();
+	~SceneCtrl();
+	static SceneCtrl* get_inatance();
 	static Context* _ctx;
 	void create_scene();
     void create_models();
+    void deleteNode(Urho3D::Node* node);
     void update_grids();
 	void update();
 	Node* select(float x, float y);
@@ -35,8 +36,8 @@ public:
 protected:
 	
 private:
-	scene_ctrl(Context* ctx);
-	static scene_ctrl* _instance;
+	SceneCtrl(Context* ctx);
+	static SceneCtrl* _instance;
     SharedPtr<Node> _modelNode = nullptr;
 
 public:

@@ -13,15 +13,19 @@ namespace editor
 
 NodeThreeModel::NodeThreeModel(QObject* parent)
 {
-    global_event::get_instance()->register_event(eGlobalEventType::BeginInsertNode,MakeDelegate(this,&NodeThreeModel::onBeginInsertNode));
-    global_event::get_instance()->register_event(eGlobalEventType::EndInsertNode,MakeDelegate(this,&NodeThreeModel::onEndInsertNode));
-
+    global_event::get_instance()->register_event(eGlobalEventType::BeginInsertNode,
+                                                 MakeDelegate(this, &NodeThreeModel::onBeginInsertNode));
+    global_event::get_instance()->register_event(eGlobalEventType::EndInsertNode,
+                                                 MakeDelegate(this, &NodeThreeModel::onEndInsertNode));
 }
 NodeThreeModel::~NodeThreeModel()
 {
-    global_event::get_instance()->remove_event(eGlobalEventType::BeginInsertNode,MakeDelegate(this,&NodeThreeModel::onBeginInsertNode));
-    global_event::get_instance()->remove_event(eGlobalEventType::EndInsertNode,MakeDelegate(this,&NodeThreeModel::onEndInsertNode));
+    global_event::get_instance()->remove_event(eGlobalEventType::BeginInsertNode,
+                                               MakeDelegate(this, &NodeThreeModel::onBeginInsertNode));
+    global_event::get_instance()->remove_event(eGlobalEventType::EndInsertNode,
+                                               MakeDelegate(this, &NodeThreeModel::onEndInsertNode));
 }
+
 void NodeThreeModel::SetRootNode(Node* node)
 {
     _rootNode = node;
@@ -160,14 +164,20 @@ Node* NodeThreeModel::nodeFromIndex(const QModelIndex &index) const
 
 void NodeThreeModel::onBeginInsertNode(event_data* data)
 {
-    int count = scene_ctrl::get_inatance()->getRoot()->GetChildren().Size();
-    beginInsertRows(QModelIndex(),count,count);
+    int count = SceneCtrl::get_inatance()->getRoot()->GetChildren().Size();
+    beginInsertRows(QModelIndex(), count, count);
 }
 
+void NodeThreeModel::onEndInsertNode(event_data* data) 
+{ 
+    endInsertRows(); 
+}
 
-void NodeThreeModel::onEndInsertNode(event_data* data)
-{
-    endInsertRows();
+void NodeThreeModel::remove(const QModelIndex& index) 
+{ 
+    beginRemoveRows(parent(index), index.row(), index.row());
+    nodeFromIndex(index)->Remove();
+    endRemoveRows();
 }
 
 

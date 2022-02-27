@@ -19,9 +19,9 @@
 
 namespace Urho3D
 {
-	Context* geometry_util::_ctx = NULL;
+	Context* GeoUtils::_ctx = NULL;
 
-	SharedPtr<Node> geometry_util::create_line(Context* ctx, std::vector<Vector3> vPos,unsigned color)
+	SharedPtr<Node> GeoUtils::create_line(Context* ctx, std::vector<Vector3> vPos,unsigned color)
 	{
 		_ctx = ctx;
 		int vCount = vPos.size();
@@ -106,7 +106,7 @@ namespace Urho3D
 
 	}
 
-	SharedPtr<Node> geometry_util::create_model(std::vector<Vector3>& vPos, std::vector<Vector3>& vNormal, std::vector<Vector2>& vTex)
+	SharedPtr<Node> GeoUtils::create_model(std::vector<Vector3>& vPos, std::vector<Vector3>& vNormal, std::vector<Vector2>& vTex)
 	{
 		int vCount = vPos.size();
 		bool largeIndices = vCount > 65535;
@@ -191,7 +191,7 @@ namespace Urho3D
 
 	}
 
-	SharedPtr<Node> geometry_util::create_plane(Context* ctx, float w, float h)
+	SharedPtr<Node> GeoUtils::create_plane(Context* ctx, float w, float h)
 	{
 		_ctx = ctx;
 		std::vector<Vector3> ori_pos;
@@ -240,7 +240,7 @@ namespace Urho3D
 
 	}
 
-	SharedPtr<Node> geometry_util::create_torus(Context* ctx,float majorRadius, float minorRadius, int numMajor, int numMinor,float angle)
+	SharedPtr<Node> GeoUtils::create_torus(Context* ctx,float majorRadius, float minorRadius, int numMajor, int numMinor,float angle)
 	{
 		_ctx = ctx;
 		/*double majorStep = 2.0f*M3D_PI / numMajor;
@@ -347,7 +347,7 @@ namespace Urho3D
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	// Make a sphere
-	SharedPtr<Node> geometry_util::create_sphere(Context* ctx, float fRadius, int iSlices, int iStacks)
+	SharedPtr<Node> GeoUtils::create_sphere(Context* ctx, float fRadius, int iSlices, int iStacks)
 	{
 		_ctx = ctx;
 		std::vector<Vector3> posList;
@@ -472,7 +472,7 @@ namespace Urho3D
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////
-	SharedPtr<Node> geometry_util::create_disk(Context* ctx ,float innerRadius, float outerRadius, int nSlices, int nStacks)
+	SharedPtr<Node> GeoUtils::create_disk(Context* ctx ,float innerRadius, float outerRadius, int nSlices, int nStacks)
 	{
 		_ctx = ctx;
 		std::vector<Vector3> posList;
@@ -584,7 +584,7 @@ namespace Urho3D
 	}
 
 	//// Draw a cylinder. Much like gluCylinder
-	SharedPtr<Node> geometry_util::create_cylinder(Context* ctx, float baseRadius, float topRadius,
+	SharedPtr<Node> GeoUtils::create_cylinder(Context* ctx, float baseRadius, float topRadius,
 		float fLength, int numSlices, int numStacks)
 	{
 		_ctx = ctx;
@@ -750,7 +750,7 @@ namespace Urho3D
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	// Make a cube, centered at the origin, and with a specified "radius"
-	SharedPtr<Node> geometry_util::create_cube(Context* ctx ,float fRadius)
+	SharedPtr<Node> GeoUtils::create_cube(Context* ctx ,float fRadius)
 	{
 		_ctx = ctx;
 		std::vector<Vector3> posList;

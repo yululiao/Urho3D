@@ -28,28 +28,28 @@ namespace urho3d
 {
 namespace editor
 {
-editor_app* editor_app::_instance = nullptr;
-editor_app::editor_app(Context* context)
+EditorApp* EditorApp::_instance = nullptr;
+EditorApp::EditorApp(Context* context)
 	:Object(context)
 {
 	QApplication::setStyle(new DarkStyle());
 	_context = context;
-	scene_ctrl::_ctx = _context;
+	SceneCtrl::_ctx = _context;
 }
 
-editor_app::~editor_app() 
+EditorApp::~EditorApp() 
 {
 
 }
 
-void editor_app::create_engine(void* win_ptr)
+void EditorApp::create_engine(void* win_ptr)
 {
 	_window_ptr = win_ptr;
 	_engineParameters = Engine::ParseParameters(GetArguments());
 	// Create the Engine, but do not initialize it yet. Subsystems except Graphics & Renderer are registered at this point
 	_engine = new Engine(_context);
 	// Subscribe to log messages so that can show errors if ErrorExit() is called with empty message
-	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(editor_app, HandleLogMessage));
+	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, HandleLogMessage));
 	setup();
 	if (!_engine->Initialize(_engineParameters))
 	{
@@ -58,7 +58,7 @@ void editor_app::create_engine(void* win_ptr)
 	start();
 }
 
-void editor_app::setup()
+void EditorApp::setup()
 {
 	_engineParameters[EP_EXTERNAL_WINDOW] = _window_ptr;
 	//_engineParameters[EP_WINDOW_TITLE] = GetTypeName();
@@ -80,32 +80,32 @@ void editor_app::setup()
 
 }
 
-void editor_app::start()
+void EditorApp::start()
 {
     auto* luaScript = new LuaScript(context_);
     EditorLuaBinding::LuaBinding(luaScript->GetState());
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("assets/scripts/main.lua");
-	scene_ctrl::get_inatance()->create_scene();
+	SceneCtrl::get_inatance()->create_scene();
 
-	_cam_ctrl = new CameraCtrl(scene_ctrl::get_inatance()->_cameraNode);
+	_cam_ctrl = new CameraCtrl(SceneCtrl::get_inatance()->_cameraNode);
 }
 
-void editor_app::run_frame()
+void EditorApp::run_frame()
 {
-	scene_ctrl::get_inatance()->update();
+	SceneCtrl::get_inatance()->update();
 	_engine->RunFrame();
 	if (_gizmoCtrl)
 		_gizmoCtrl->update();
 }
 
-void editor_app::resize_window(int w, int h)
+void EditorApp::resize_window(int w, int h)
 {
     //auto* graphics = GetSubsystem<Graphics>();
 	//graphics->SetMode(w, h);
 }
 
-void editor_app::HandleLogMessage(StringHash eventType, VariantMap& eventData)
+void EditorApp::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 {
 	using namespace LogMessage;
 
@@ -120,13 +120,13 @@ void editor_app::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 	}
 }
 
-void editor_app::run() 
+void EditorApp::run() 
 {
 	_start_ui = new start_view();
 	_start_ui->show();
 }
 
-void editor_app::open_work_space(const std::string& path)
+void EditorApp::open_work_space(const std::string& path)
 {
 	work_space::get_instance()->set_workspace(path);
 	std::string title = "urho3d   " + path + "*";
@@ -138,26 +138,26 @@ void editor_app::open_work_space(const std::string& path)
 	_main_window->showMaximized();
 }
 
-editor_app* editor_app::get_instance()
+EditorApp* EditorApp::get_instance()
 {
 	if (_instance == nullptr)
 	{
 
-		_instance = new editor_app(new Context());
+		_instance = new EditorApp(new Context());
 	}
 	return _instance;
 }
 
 
 
-void editor_app::set_cur_tool(const std::string& name)
+void EditorApp::set_cur_tool(const std::string& name)
 {
-    if (_gizmoCtrl==NULL && scene_ctrl::get_inatance()->_scene)
+    if (_gizmoCtrl==NULL && SceneCtrl::get_inatance()->_scene)
 	{
-		Node* gizmoRoot = scene_ctrl::get_inatance()->_scene->CreateChild("gizmoRoot");
+		Node* gizmoRoot = SceneCtrl::get_inatance()->_scene->CreateChild("gizmoRoot");
 		_gizmoCtrl = new TransformCtrl(context_, TransformCtrl::eMode::eTranslate, gizmoRoot);
-		_gizmoCtrl->setScene(scene_ctrl::get_inatance()->_scene);
-		_gizmoCtrl->setCameraNode(scene_ctrl::get_inatance()->_cameraNode);
+		_gizmoCtrl->setScene(SceneCtrl::get_inatance()->_scene);
+		_gizmoCtrl->setCameraNode(SceneCtrl::get_inatance()->_cameraNode);
 	}
 	_curent_tool = name;
 	if (name == "move")
@@ -179,7 +179,7 @@ void editor_app::set_cur_tool(const std::string& name)
 	}
 }
 
-EditorMenu* editor_app::AddMenu(const String path) 
+EditorMenu* EditorApp::AddMenu(const String path) 
 { 
 	QAction* act = _main_window->GetMenuBar()->add_menu(path.CString());
     EditorMenu* menu = new EditorMenu(_context,act);

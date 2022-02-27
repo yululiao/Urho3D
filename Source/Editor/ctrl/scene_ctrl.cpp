@@ -25,29 +25,29 @@ namespace urho3d
 {
 namespace editor
 {
-	scene_ctrl* scene_ctrl::_instance = nullptr;
-	Context* scene_ctrl::_ctx = nullptr;
-	scene_ctrl* scene_ctrl::get_inatance()
+	SceneCtrl* SceneCtrl::_instance = nullptr;
+	Context* SceneCtrl::_ctx = nullptr;
+	SceneCtrl* SceneCtrl::get_inatance()
 	{
 		if (_instance == nullptr)
 		{
-			_instance = new scene_ctrl(_ctx);
+			_instance = new SceneCtrl(_ctx);
 		}
 		return _instance;
 	}
 
-	scene_ctrl::scene_ctrl(Context* ctx)
+	SceneCtrl::SceneCtrl(Context* ctx)
 		:Object(ctx)
 	{
 
 	}
 
-	scene_ctrl::~scene_ctrl()
+	SceneCtrl::~SceneCtrl()
 	{
 
 	}
 
-    void scene_ctrl::create_models()
+    void SceneCtrl::create_models()
     {
         auto* cache = GetSubsystem<ResourceCache>();
 
@@ -60,7 +60,7 @@ namespace editor
         planeObject->SetMaterial(cache->GetResource<Material>("Materials/StoneTiled.xml"));
         //planeObject->GetMaterial()->SetFillMode(FillMode::FILL_WIREFRAME);
 
-        SharedPtr<Node> geoNode = geometry_util::create_sphere(context_, 1, 30, 30);
+        SharedPtr<Node> geoNode = GeoUtils::create_sphere(context_, 1, 30, 30);
         geoNode->SetName("geoNode");
         //geoNode->SetScale(Vector3(0.1f, 0.1f, 0.1f));
         geoNode->SetPosition(Vector3(2.0f, 1.0f, 15.0f));
@@ -96,16 +96,22 @@ namespace editor
 
     }
 
-    void scene_ctrl::addModel(const std::string &path)
+    void SceneCtrl::deleteNode(Urho3D::Node* node) 
+    { 
+        node->Remove();
+    }
+
+    void SceneCtrl::addModel(const std::string &path)
     {
         global_event::get_instance()->emit_event(eGlobalEventType::BeginInsertNode);
-         auto* cache = GetSubsystem<ResourceCache>();
+        auto* cache = GetSubsystem<ResourceCache>();
         std::string name = Utils::get_base_name(path);
         //加载fbx对应的mdl
         std::string mdl_path = Utils::get_file_path(path) + "/" + name + ".mdl";
         std::string rpath = asset_mgr::get_instance()->pathToRelative(mdl_path);
 
         Node* modelNode = _scene_root->CreateChild(name.c_str());
+        
         modelNode->SetScale(Vector3(0.01,0.01,0.01));
         //modelNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
         //modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
@@ -120,7 +126,7 @@ namespace editor
         global_event::get_instance()->emit_event(eGlobalEventType::EndInsertNode);
     }
 
-    void scene_ctrl::update_grids()
+    void SceneCtrl::update_grids()
     {
         _grid_lines.clear();
         if(_grid_root.Null())
@@ -138,7 +144,7 @@ namespace editor
             std::vector<Vector3> linePos;
             linePos.push_back(Vector3(min,0,z));
             linePos.push_back(Vector3(max,0,z));
-            SharedPtr<Node> lineNode = geometry_util::create_line(context_, linePos, 0x999999);
+            SharedPtr<Node> lineNode = GeoUtils::create_line(context_, linePos, 0x999999);
             _grid_root->AddChild(lineNode);
 
         }
@@ -149,13 +155,13 @@ namespace editor
             std::vector<Vector3> linePos;
             linePos.push_back(Vector3(x,0,min));
             linePos.push_back(Vector3(x,0,max));
-            SharedPtr<Node> lineNode = geometry_util::create_line(context_, linePos,0x999999);
+            SharedPtr<Node> lineNode = GeoUtils::create_line(context_, linePos,0x999999);
             _grid_root->AddChild(lineNode);
         }
 
     }
 
-	void scene_ctrl::create_scene()
+	void SceneCtrl::create_scene()
 	{
 		_scene = new Scene(context_);
 
@@ -205,7 +211,7 @@ namespace editor
 
 	}
 
-	void scene_ctrl::update()
+	void SceneCtrl::update()
 	{
 		/*auto* model = _modelNode->GetComponent<AnimatedModel>(true);
 		if (model->GetNumAnimationStates())
@@ -215,7 +221,7 @@ namespace editor
 		}*/
 	}
 
-	Node* scene_ctrl::select(float x, float y)
+	Node* SceneCtrl::select(float x, float y)
 	{
 		Node* hit = nullptr;
 		Ray world_ray = _cameraNode->GetComponent<Camera>()->GetScreenRay(x, y);

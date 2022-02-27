@@ -21,7 +21,7 @@ render_view::render_view(QWidget* p)
 	_timer = new QTimer();
 	current_cursor = "Normal";
     this->setAcceptDrops(true);
-	_app = editor_app::get_instance();
+	_app = EditorApp::get_instance();
 	global_event::get_instance()->register_event(eGlobalEventType::SetCursor, MakeDelegate(this, &render_view::on_set_cursor));
 }
 render_view::~render_view()
@@ -108,7 +108,7 @@ void render_view::mouseReleaseEvent(QMouseEvent *event)
 	{
 		if (!_is_mouse_moved)
 		{
-			Node* hitNode = scene_ctrl::get_inatance()->select(event->x() / (float)this->width(), event->y() / (float)this->height());
+			Node* hitNode = SceneCtrl::get_inatance()->select(event->x() / (float)this->width(), event->y() / (float)this->height());
 			if (hitNode)
 			{
 				_app->_gizmoCtrl->attach(hitNode);
@@ -191,7 +191,7 @@ void render_view::dropEvent(QDropEvent *event)
      QString extFilter = "prefab.ptc.fbx";//可以将这些文件拖到场景里
      if(ext_str == "fbx" && !(info.baseName().contains("@")))
      {
-        scene_ctrl::get_inatance()->addModel(path.toStdString());
+        SceneCtrl::get_inatance()->addModel(path.toStdString());
      }
 }
 

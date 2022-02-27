@@ -5,6 +5,8 @@
 #include <QMainWindow>
 #include <map>
 #include "ctrl/editor_delegate.h"
+#include "view/qtimgui/ImguiDemo.h"
+#include "view/qtimgui/ImguiDemo1.h"
 
 namespace urho3d
 {
@@ -21,6 +23,7 @@ public:
 public slots:
 	void on_open_file();
 	void on_save_proj();
+    void on_test_imgui();
 protected:
 	void create_menus();
 private:
@@ -28,6 +31,9 @@ private:
 	QMenuBar* _menu_bar = nullptr;
 	std::map<std::string, QMenu*> _menu_map;
 	std::map<std::string, QAction*> _action_map;
+    ImguiDemo* _imguiW = nullptr;
+    ImguiDemo1* _imguiW1 = nullptr;
+
 };
 }
 

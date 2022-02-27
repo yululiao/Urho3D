@@ -6,7 +6,7 @@ namespace urho3d
 {
 namespace editor
 {
-class editor_app;
+class EditorApp;
 class tool_bar : public QObject
 {
 	Q_OBJECT;
@@ -25,7 +25,7 @@ protected:
 	void create_toolbar();
 	void hilight_tool(QAction* tool);
 private:
-	editor_app* _app;
+	EditorApp* _app;
 	QMainWindow* _main_window = nullptr;
 	QToolBar* _toolbar = nullptr;
 	QAction* _action_save = nullptr;

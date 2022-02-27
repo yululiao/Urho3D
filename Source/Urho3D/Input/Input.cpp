@@ -413,9 +413,10 @@ void Input::Update()
     bool mouseMoved = false;
     if (mouseMove_ != IntVector2::ZERO)
         mouseMoved = true;
-
+   if (graphics_->GetWindowHide())
+       return;
     ResetInputAccumulation();
-
+    
     SDL_Event evt;
     while (SDL_PollEvent(&evt))
         HandleSDLEvent(&evt);

@@ -32,13 +32,16 @@ public:
     QStringList mimeTypes() const Q_DECL_OVERRIDE;
     QMimeData *mimeData(const QModelIndexList &indexes) const Q_DECL_OVERRIDE;
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex & parent) override;
-
+    void remove(const QModelIndex& index);
+    //void insertNode(const QModelIndex& index,int row);
     void Reset();
     Node* getRoot();
     Node* nodeFromIndex(const QModelIndex &index) const;
+
 protected:
     void onBeginInsertNode(event_data* data);
     void onEndInsertNode(event_data* data);
+
 private:
     Node* _rootNode = nullptr;
 };

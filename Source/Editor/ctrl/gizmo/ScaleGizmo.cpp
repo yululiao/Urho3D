@@ -99,7 +99,7 @@ namespace urho3d
 			}
 			//handles
 			GizmogeoInfo* axisBoxInfo = new GizmogeoInfo();
-			axisBoxInfo->geo = geometry_util::create_cube(context_,0.05);
+			axisBoxInfo->geo = GeoUtils::create_cube(context_,0.05);
 			//axisBoxInfo->geo->set_color(axisColor);
 			GizmoUtils::set_default_mat(axisBoxInfo->geo);
 			GizmoUtils::set_geo_color(axisBoxInfo->geo,0xff000000 + axisColor);
@@ -110,7 +110,7 @@ namespace urho3d
 			{
 				GizmogeoInfo* axisLineInfo = new GizmogeoInfo();
 				//auto xline = new lines_3d();
-				SharedPtr<Node> xline = geometry_util::create_line(context_,linePoints,axisColor);
+				SharedPtr<Node> xline = GeoUtils::create_line(context_,linePoints,axisColor);
 				//xline->set_vertices(linePoints);
 				//xline->set_color(axisColor);
 				axisLineInfo->geo = xline;
@@ -122,11 +122,11 @@ namespace urho3d
 			GizmogeoInfo* axisPickInfo = new GizmogeoInfo();
 			if (axisName != "XYZ")
 			{
-				axisPickInfo->geo = geometry_util::create_cylinder(context_,0, 0.15, 0.6, 4, 1);
+				axisPickInfo->geo = GeoUtils::create_cylinder(context_,0, 0.15, 0.6, 4, 1);
 			}
 			else
 			{
-				axisPickInfo->geo = geometry_util::create_cube(context_,0.3);
+				axisPickInfo->geo = GeoUtils::create_cube(context_,0.3);
 			}
 			//axisPickInfo->geo->set_color(axisColor);
 			//axisPickInfo->geo->get_material()->set_blend_mode(blend_mode::NORMAL);

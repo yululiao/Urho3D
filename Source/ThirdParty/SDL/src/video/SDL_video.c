@@ -3537,11 +3537,11 @@ SDL_GL_MakeCurrent(SDL_Window * window, SDL_GLContext ctx)
 {
     int retval;
 
-    if (window == SDL_GL_GetCurrentWindow() &&
-        ctx == SDL_GL_GetCurrentContext()) {
-        /* We're already current. */
-        return 0;
-    }
+    //if (window == SDL_GL_GetCurrentWindow() &&
+    //    ctx == SDL_GL_GetCurrentContext()) {
+    //    /* We're already current. */
+    //    return 0;
+    //}
 
     if (!ctx) {
         window = NULL;

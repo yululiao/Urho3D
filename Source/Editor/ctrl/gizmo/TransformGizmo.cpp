@@ -25,7 +25,7 @@ namespace urho3d
 
 		void TransformGizmo::init()
 		{
-			Context* ctx = editor_app::get_instance()->get_context();
+			Context* ctx = EditorApp::get_instance()->get_context();
 			this->handles = new Node(ctx);
 			this->pickers = new Node(ctx);
 			this->planes = new Node(ctx);
@@ -34,10 +34,10 @@ namespace urho3d
 			this->AddChild(pickers);
 			this->AddChild(planes);
 
-			planesMap["XY"] = geometry_util::create_plane(ctx,5, 5);
-			planesMap["YZ"] = geometry_util::create_plane(ctx,5, 5);
-		    planesMap["XZ"] = geometry_util::create_plane(ctx,5, 5);
-			planesMap["XYZE"] = geometry_util::create_plane(ctx,5, 5);
+			planesMap["XY"] = GeoUtils::create_plane(ctx,5, 5);
+			planesMap["YZ"] = GeoUtils::create_plane(ctx,5, 5);
+		    planesMap["XZ"] = GeoUtils::create_plane(ctx,5, 5);
+			planesMap["XYZE"] = GeoUtils::create_plane(ctx,5, 5);
 			this->activePlane = planesMap["XYZE"];
 			planesMap["YZ"]->Yaw(90);
 			planesMap["XZ"]->Pitch(-90);
@@ -56,7 +56,7 @@ namespace urho3d
 
 		void TransformGizmo::setupGizmos(std::map<std::string, std::vector<GizmogeoInfo*>> gizmoMap, Node * parent)
 		{
-			Context* ctx = editor_app::get_instance()->get_context();
+			Context* ctx = EditorApp::get_instance()->get_context();
 			for (auto it = gizmoMap.begin(); it != gizmoMap.end(); it++)
 			{
 				for (int i = 0; i < it->second.size(); ++i)

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetMgr.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\CameraCtrl.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\EditorApp.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\GLSdlWindow.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ImguiUpdater.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\main.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\MainMenu.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\pkgs\gen\EditorLuaAPI.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\SceneCtrl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetMgr.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\CameraCtrl.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\EditorApp.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\GLSdlWindow.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ImguiUpdater.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\MainMenu.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\SceneCtrl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Source\UrhoEditor\pkgs\EditorLuaAPI.pkg" />
+    <None Include="..\..\..\Source\UrhoEditor\pkgs\genluabinding.py" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{a3f0859c-5c58-4e82-94a7-96bb582c18b4}</ProjectGuid>
+    <RootNamespace>UrhoEditor</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(ProjectDir)..\out\$(Platform)-$(Configuration)\bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>D:\Urho3D\Source\ThirdParty\imgui;D:\Urho3D\Source\UrhoEditor\lib\glfw\include;D:\Urho3D\Source\UrhoEditor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Urho3D\Source\UrhoEditor\lib\glfw\lib\x64;$(SolutionDir)$(Platform)\$(Configuration)\;$(OutDir)..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Urho3D_d.lib;imgui.lib;glfw3.lib;Assimp_d.lib;user32.lib;gdi32.lib;winmm.lib;imm32.lib;ole32.lib;oleaut32.lib;setupapi.lib;version.lib;uuid.lib;ws2_32.lib;iphlpapi.lib;dbghelp.lib;opengl32.lib;kernel32.lib;winspool.lib;shell32.lib;comdlg32.lib;advapi32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
