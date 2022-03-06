@@ -4,27 +4,46 @@ local NodeTree = require "EditorLua/view/NodeTree"
 local ResTree = require "EditorLua/view/ResTree"
 local ResPreview = require "EditorLua/view/ResPreview"
 local Inspector = require "EditorLua/view/Inspector"
+local StartView = require"EditorLua/view/StartView"
+local Json = require"json"
 
 local EditorLuaApp = {}
-EditorLuaApp.workSpace = "D:/Urho3D/platform/projects/test"
-EditorLuaApp.assetRoot = EditorLuaApp.workSpace.."/assets"
+
 local app = EditorApp.getInstance(EditorApp)
+local assetMgr = AssetMgr.getInstance(AssetMgr)
+
+-- local historyFile = "res/editor_historys.json"
+-- local json_str = assetMgr:getTextFile(historyFile)
+-- local json_obj = Json.decode(json_str)
+
 local uiUpdater = app:getUiUpdater()
 local menuUpdater = app:getManuBarUpdater()
 MenuBar.app = EditorLuaApp
 ResTree.app = EditorLuaApp
+StartView.app = EditorLuaApp
+ToolBar.app = EditorLuaApp
+ToolBar.assetMgr = assetMgr
+StartView.assetMgr = assetMgr
+
+local isStartView = true;
 
 function onUiUpdate()
-    ToolBar:Update()
-    NodeTree:Update()
-    ResTree:Update()
-    ResPreview:Update()
-    Inspector:Update()
+    if isStartView then
+        StartView:Update()
+    else
+        ToolBar:Update()
+        NodeTree:Update()
+        ResTree:Update()
+        ResPreview:Update()
+        Inspector:Update()
+    end
     -- body
 end
 
 function onUpdateMenuBar()
-    MenuBar:update()
+    if isStartView == false then
+        MenuBar:update()
+    end
     -- body
 end
 
@@ -43,17 +62,31 @@ function EditorLuaApp.ShowResPreview()
     ResPreview:Show(true)
 end
 function EditorLuaApp.ShowSceneView()
+    app:showSceneView(true)
    print("showSceneView")
 end
 function EditorLuaApp.ShowInspector()
     Inspector:Show(true)
  end
 
+ function EditorLuaApp.DialogGetPath()
+    local path = app:dialogSelectPath()
+    return path
+end
+
+function EditorLuaApp.StartGame(path)
+    app:openWorkSpace(path)
+    EditorLuaApp.workSpace = app:getWorkSpace()
+    EditorLuaApp.assetRoot = EditorLuaApp.workSpace.."/assets"
+    isStartView = false
+    app:startGame()
+end
 
 function EditorLuaApp.Run()
     MenuBar:init()
     SubscribeToEvent(uiUpdater, "imguiUpdate", "onUiUpdate")
     SubscribeToEvent(menuUpdater, "menuBarUpdate", "onUpdateMenuBar")
 end
+
 
 return EditorLuaApp

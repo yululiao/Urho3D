@@ -243,6 +243,40 @@ static int tolua_EditorLuaAPI_EditorApp_getScene00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: openWorkSpace of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_openWorkSpace00
+static int tolua_EditorLuaAPI_EditorApp_openWorkSpace00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isurho3dstring(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+  const String path = ((const String)  tolua_tourho3dstring(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'openWorkSpace'", NULL);
+#endif
+ {
+  self->openWorkSpace(path);
+ tolua_pushurho3dstring(tolua_S,(const char*)path);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'openWorkSpace'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* method: getWorkSpace of class  EditorApp */
 #ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_getWorkSpace00
 static int tolua_EditorLuaAPI_EditorApp_getWorkSpace00(lua_State* tolua_S)
@@ -302,6 +336,165 @@ static int tolua_EditorLuaAPI_EditorApp_getAssetRoot00(lua_State* tolua_S)
 #ifndef TOLUA_RELEASE
  tolua_lerror:
  tolua_error(tolua_S,"#ferror in function 'getAssetRoot'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: showSceneView of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_showSceneView00
+static int tolua_EditorLuaAPI_EditorApp_showSceneView00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isboolean(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+  bool show = ((bool)  tolua_toboolean(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'showSceneView'", NULL);
+#endif
+ {
+  self->showSceneView(show);
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'showSceneView'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: startGame of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_startGame00
+static int tolua_EditorLuaAPI_EditorApp_startGame00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'startGame'", NULL);
+#endif
+ {
+  self->startGame();
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'startGame'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: dialogSelectPath of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_dialogSelectPath00
+static int tolua_EditorLuaAPI_EditorApp_dialogSelectPath00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'dialogSelectPath'", NULL);
+#endif
+ {
+  String tolua_ret = (String)  self->dialogSelectPath();
+ tolua_pushurho3dstring(tolua_S,(const char*)tolua_ret);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'dialogSelectPath'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: dialogOpenFile of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_dialogOpenFile00
+static int tolua_EditorLuaAPI_EditorApp_dialogOpenFile00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'dialogOpenFile'", NULL);
+#endif
+ {
+  String tolua_ret = (String)  self->dialogOpenFile();
+ tolua_pushurho3dstring(tolua_S,(const char*)tolua_ret);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'dialogOpenFile'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: dialogSaveFile of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_dialogSaveFile00
+static int tolua_EditorLuaAPI_EditorApp_dialogSaveFile00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'dialogSaveFile'", NULL);
+#endif
+ {
+  self->dialogSaveFile();
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'dialogSaveFile'.",&tolua_err);
  return 0;
 #endif
 }
@@ -426,8 +619,14 @@ TOLUA_API int tolua_EditorLuaAPI_open (lua_State* tolua_S)
   tolua_function(tolua_S,"setCurTool",tolua_EditorLuaAPI_EditorApp_setCurTool00);
   tolua_function(tolua_S,"getRootNode",tolua_EditorLuaAPI_EditorApp_getRootNode00);
   tolua_function(tolua_S,"getScene",tolua_EditorLuaAPI_EditorApp_getScene00);
+  tolua_function(tolua_S,"openWorkSpace",tolua_EditorLuaAPI_EditorApp_openWorkSpace00);
   tolua_function(tolua_S,"getWorkSpace",tolua_EditorLuaAPI_EditorApp_getWorkSpace00);
   tolua_function(tolua_S,"getAssetRoot",tolua_EditorLuaAPI_EditorApp_getAssetRoot00);
+  tolua_function(tolua_S,"showSceneView",tolua_EditorLuaAPI_EditorApp_showSceneView00);
+  tolua_function(tolua_S,"startGame",tolua_EditorLuaAPI_EditorApp_startGame00);
+  tolua_function(tolua_S,"dialogSelectPath",tolua_EditorLuaAPI_EditorApp_dialogSelectPath00);
+  tolua_function(tolua_S,"dialogOpenFile",tolua_EditorLuaAPI_EditorApp_dialogOpenFile00);
+  tolua_function(tolua_S,"dialogSaveFile",tolua_EditorLuaAPI_EditorApp_dialogSaveFile00);
  tolua_endmodule(tolua_S);
  tolua_cclass(tolua_S,"AssetMgr","AssetMgr","Object",NULL);
  tolua_beginmodule(tolua_S,"AssetMgr");

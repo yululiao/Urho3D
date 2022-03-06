@@ -21,8 +21,14 @@ class EditorApp:public Object
  void setCurTool(const String& name);
  Node* getRootNode();
  Scene* getScene();
+ void openWorkSpace(const String& path);
  String getWorkSpace();
  String getAssetRoot();
+ void showSceneView(bool show);
+ void startGame();
+ String dialogSelectPath();
+ String dialogOpenFile();
+ void dialogSaveFile();
 };
 
 class AssetMgr : public Object

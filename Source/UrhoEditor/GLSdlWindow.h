@@ -11,12 +11,13 @@
 class UIWindow
 {
 public:
+    virtual ~UIWindow(){};
     virtual void update() = 0;
-    void Show();
-    void Hide();
-SharedPtr<MenuBarUpdater> _menuBarUpdater = nullptr;
+    void Show() { showing = true; }
+    void Hide() { showing = false; }
+    SharedPtr<MenuBarUpdater> _menuBarUpdater = nullptr;
 protected:
-    bool showing;
+    bool showing = true;
     std::string title;
     ImVec2 winSize;
     Vector2 curMousePos;
@@ -32,7 +33,7 @@ public:
 		title = ptitle;
         winSize = ImVec2(400,300);
 	}
-    ~renderWindow();
+    virtual ~renderWindow();
     void update() override;
     void genGpuTex();
     void delteGpuTex();
@@ -52,7 +53,7 @@ class DockerContainer :public UIWindow
 {
 public:
     DockerContainer() {}
-    ~DockerContainer() {}
+    virtual ~DockerContainer() {}
     void update() override;
 };
 
@@ -85,6 +86,11 @@ public:
         windows.push_back(std::move(newWindow));
     }
 
+    void maxSize();
+    GLFWwindow* getGlfwWindow() 
+    {
+        return window;
+    }
 private:
     std::vector<std::unique_ptr<UIWindow>> windows;
 	int width, height;
@@ -93,7 +99,6 @@ private:
     bool done = false;
    
 };
-
 
 
 

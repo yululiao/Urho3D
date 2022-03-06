@@ -31,6 +31,9 @@
     <ClInclude Include="..\..\..\Source\ThirdParty\imgui\imgui_impl_opengl3_loader.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\ThirdParty\imgui\ImGuiFileBrowser.h">
+      <Filter>src</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\Source\ThirdParty\imgui\imgui.cpp">
@@ -49,6 +52,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\ThirdParty\imgui\imgui_impl_opengl3.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\ThirdParty\imgui\ImGuiFileBrowser.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>

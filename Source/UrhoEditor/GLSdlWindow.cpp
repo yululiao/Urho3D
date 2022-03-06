@@ -26,7 +26,7 @@ UMainWindow::UMainWindow(int width, int height) : width{ width }, height{ height
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
 
-    window = glfwCreateWindow(width, height, "ImGuiUI", NULL, NULL);
+    window = glfwCreateWindow(width, height, "Urho3D", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -40,11 +40,13 @@ UMainWindow::UMainWindow(int width, int height) : width{ width }, height{ height
 #endif // GLFW_EXPOSE_NATIVE_WIN32
     //menuBar = new WinMainMenu(hwnd);
     glfwMakeContextCurrent(window);
-    glfwMaximizeWindow(window);
+    //glfwMaximizeWindow(window);
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 410";
     ImGui_ImplOpenGL3_Init(glsl_version);
-    // glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetWindowSize(window,800,600);
+    glfwSetWindowPos(window,300,200);
+    //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 UMainWindow::~UMainWindow() 
 {
@@ -89,8 +91,6 @@ void UMainWindow::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
-    
-   
 }
 
 void UMainWindow::imguiUpdate()
@@ -107,6 +107,11 @@ void UMainWindow::imguiUpdate()
     _imguiUpdater->update();
     // ImGui::End();
     ImGui::Render();
+}
+
+void UMainWindow::maxSize() 
+{ 
+    glfwMaximizeWindow(window);
 }
 
 renderWindow::~renderWindow() 
@@ -253,6 +258,11 @@ void renderWindow::genGpuTex()
     {
         glGenTextures(1, &rttTexID);
     }
+    else
+    {
+        delteGpuTex();
+        glGenTextures(1, &rttTexID);
+    }
     glBindTexture(GL_TEXTURE_2D, rttTexID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -323,3 +333,4 @@ void DockerContainer::update()
 
     ImGui::End();
 }
+

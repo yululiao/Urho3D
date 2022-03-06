@@ -16,7 +16,7 @@ public:
 	EditorApp(Context* context);
 	~EditorApp();
 	void run();
-	void openWorkSpace(const std::string& path);
+	void openWorkSpace(const String& path);
 	Context* getContext() { return _context; }
     static EditorApp* getInstance();
 	void createEngine(void* win_ptr);
@@ -30,6 +30,11 @@ public:
     Scene* getScene();
     String getWorkSpace(); //{ return _work_space; }
     String getAssetRoot(); //{ return _work_space + "/assets"; }
+    void showSceneView(bool show);
+    void startGame();
+    String dialogSelectPath();
+    String dialogOpenFile();
+    void dialogSaveFile();
 protected:
 	void handleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -45,6 +50,8 @@ private:
 	String _startupErrors;
 	void* _window_ptr = nullptr;
     String _work_space;
+    renderWindow* _sceneView = nullptr;
+    bool _gameStarted = false;
 
 public:
 	CameraCtrl* cam_ctrl_ = nullptr;

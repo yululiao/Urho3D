@@ -139,7 +139,7 @@ namespace Urho3D
             rttData = new char[constRttSize.x_* constRttSize.y_*3];
         }
         renderTexture->GetData(0,rttData);
-       // renderTexture->GetImage()->SavePNG("test.png");
+       //renderTexture->GetImage()->SavePNG("test.png");
     }
 
     void SceneCtrl::OnResizeView(int w, int h) 

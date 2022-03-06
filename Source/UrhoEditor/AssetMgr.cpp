@@ -30,7 +30,6 @@ AssetMgr* AssetMgr::getInstance()
 
 String AssetMgr::getTextFile(const String& path)
 {
-    return String();
     std::ifstream ifile(path.CString());
     std::ostringstream buf;
     char ch;
@@ -43,26 +42,31 @@ String AssetMgr::getTextFile(const String& path)
 int AssetMgr::getImguiTex(const String& path)
 {
     GLuint texID = 0;
-    Image* img = nullptr;
+    
     if (_texMap.find(path) == _texMap.end())
     {
-        img = new Image(EditorApp::getInstance()->getContext());
-        File texFile(EditorApp::getInstance()->getContext(), path);
-        img->BeginLoad(texFile);
+        Image* img = new Image(EditorApp::getInstance()->getContext());
+        File file(EditorApp::getInstance()->getContext(), path);
+        img->BeginLoad(file);
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img->GetWidth(), img->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE,
+        GLint format = GL_RGBA;
+        if (img->GetComponents() < 4)
+            format = GL_RGB;
+        glTexImage2D(GL_TEXTURE_2D, 0, format, img->GetWidth(), img->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
                      img->GetData());
         ImguiTexInfo* info = new ImguiTexInfo(this->GetContext());
+        info->id = texID;
+        info->img = img;
         _texMap[path] = info;//缓存纹理
     }
     else
     {
-        texID = _texMap[path]->id;
+        texID = _texMap[path]->id;//直接从缓存中取出
     }
     
     return texID;

@@ -12,6 +12,7 @@
 #include "SceneCtrl.h"
 //#include "glfw/glfw3native.h"
 #include "EditorLuaBinding.h"
+#include "ImGuiFileBrowser.h"
 
 EditorApp* EditorApp::_instance = nullptr;
 EditorApp::EditorApp(Context* context)
@@ -40,6 +41,8 @@ void EditorApp::createEngine(void* win_ptr)
 		return;
 	}
 	start();
+    cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
+    setCurTool("camera");
 }
 
 void EditorApp::setup()
@@ -93,6 +96,26 @@ void EditorApp::resizeWwindow(int w, int h)
 	//graphics->SetMode(w, h);
 }
 
+imgui_addons::ImGuiFileBrowser file_dialog;
+String EditorApp::dialogSelectPath() 
+{
+    String result;
+    ImGui::OpenPopup("Select Path");
+     //if (file_dialog.showFileDialog("Open File", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN,ImVec2(200, 200),".rar,.zip,.7z"))
+    if (file_dialog.showFileDialog("Select Path",imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(200, 200)))
+    {
+        std::string selected_file = file_dialog.selected_fn;
+        std::string path = file_dialog.selected_path;
+        result = path.c_str();
+    }
+    return result;
+    
+}
+
+String EditorApp::dialogOpenFile() { return String(); }
+
+void EditorApp::dialogSaveFile() {}
+
 void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 {
 	using namespace LogMessage;
@@ -108,6 +131,14 @@ void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 	}
 }
 
+void EditorApp::startGame() 
+{ 
+    _gameStarted = true;
+    _sceneView = new renderWindow("renderWindow");
+    mainWindow->AddWindow(std::unique_ptr<renderWindow>(_sceneView));
+    mainWindow->maxSize();
+};
+
 void EditorApp::run() 
 {
 	/*_start_ui = new start_view();
@@ -116,25 +147,27 @@ void EditorApp::run()
     mainWindow = new UMainWindow(800,600);
     mainWindow->createUiUpdaer(_context);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
-    //mainWindow->AddWindow(std::unique_ptr<exampleWindow>(new exampleWindow("MianWindow")));
     mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
-    mainWindow->AddWindow(std::unique_ptr<renderWindow>(new renderWindow("renderWindow")));
+    //StartWindow* startWin = new StartWindow("Urho3D");
+    //startWin->mainWindow = mainWindow;
+    //mainWindow->AddWindow(std::unique_ptr<StartWindow>(startWin));
     createEngine(nullptr);
-    cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
-    setCurTool("camera");
     while (!mainWindow->shouldClose())
     {
         mainWindow->Update();
-        runFrame();
+        if (_gameStarted)
+        {
+            runFrame();
+        }
     }
     //return 0;
 }
 
-void EditorApp::openWorkSpace(const std::string& path)
+void EditorApp::openWorkSpace(const String& path)
 {
-	_work_space = path.c_str();
+	_work_space = path;
 	//work_space::get_instance()->set_workspace(path);
-	std::string title = "urho3d   " + path + "*";
+	//std::string title = "urho3d   " + path + "*";
 	//render_view* render_v = new render_view(nullptr);
 	//render_v->show();
 
@@ -155,7 +188,8 @@ EditorApp* EditorApp::getInstance()
 
 ImguiUpdater* EditorApp::getUiUpdater() 
 { 
-	return mainWindow->_imguiUpdater; }
+	return mainWindow->_imguiUpdater;
+}
 
 MenuBarUpdater* EditorApp::getManuBarUpdater() 
 { 
@@ -208,6 +242,14 @@ String EditorApp::getWorkSpace()
 }
 
 String EditorApp::getAssetRoot() { return String(); }
+
+void EditorApp::showSceneView(bool show) 
+{ 
+    if (show)
+        _sceneView->Show();
+    else
+        _sceneView->Hide();
+}
 
 //EditorMenu* editor_app::AddMenu(const String path) 
 //{ 
