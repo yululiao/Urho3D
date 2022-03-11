@@ -1,0 +1,241 @@
+1.虚函数实现，虚函数表，前四个字节存放一个指针，只想虚函数表
+
+2.多态，父类指针指向子类实例，调用函数时，执行子类函数
+
+3.STL vector，allocator，map，unorder_map(哈希表)
+map:优点，内存占用小，有序，单次查询时间稳定
+unorder_map:内存占用大，扩容效率低 查询快，无序，最坏情况下(key值全冲突)，单次查询可能很慢
+字符串“abc”求hash值的递归算法：
+str = "abc";
+int hash= 0;
+int base = 26;
+
+for(int i=0;i<=str.len();i++)
+{
+ hash = hash * base + (s[i] - 'a')
+}
+4.红黑树原理  unorder_map扩展因子是多少 0.75，扩容是如何实现的,size* 0.75 == capacity时扩容
+红黑树为了解决排序二叉树在特殊插入境况下退化成数组的情况
+红黑树是一个平衡排序二叉树，平衡树，左子树和右子树的深度差不超过1
+
+广度遍历(前中后序)：左子树右子树，用栈辅助 先进后出，遍历结果有序
+深度遍历：深度小的节点一定在前，用队列辅助 先进先出
+
+
+5.计算机大小端
+高位存高地址，低位存低地址  叫小端存储
+高位存在低地址，低位存在高地地址 叫大端存储
+大部分操作系统都是小端存储，网络传输用大端存储，和机器无关，
+不同的机器进行网络传输时自行转换到大端
+
+6.堆和栈的区别，局部变量存储在堆区，堆区内存小，new对象存储在栈区，栈区内存大
+
+7.c++内存布局：
+代码段：存放可执行文件操作指令
+数据段：存放已初始化的全局变量，静态变量
+bss段：未初始化全局变量
+堆区：动态分配的内存段，大小不固定，动态扩张，new对象存在堆区
+栈区：存放局部变量，栈的容量是固定的，一般比较小，windows是2M，Linux是8M
+
+8.如何解决内存碎片问题
+
+9.核心战斗系统实现方案，常用的设计模式(行为树，状态机)
+行为树：
+组合节点：
+  顺序节点
+  并行节点
+  选择节点，任何一个执行成功则返回
+修饰节点:
+  逆变节点( 子节点取反返回给父节点)
+  成功节点(无论子节点结果如何，总是返回true)
+  重复节点(重复循环执行子节点)
+叶子节点:
+ action,执行具体的逻辑
+行为树的数据通信方式采用黑板的方式
+
+状态机：
+
+10.状态同步和帧同步，预表现，回滚，补帧，快照，如何解决一致性
+
+状态同步需要解决：
+客户端预测，服务端延迟补偿，客户端接到消息时的插值
+
+帧同步需要解决：
+定点数，预测回滚，战斗数据序列化(做成自动化生成的)，操作包的压缩优化，自己写碰撞系统，逻辑和表现分离，
+冗余udp，udp包的ack，udp的乱序，udp拆包粘包，udp的非阻塞模式(接受1个消息时放入队列中，不阻塞下一个消息的接收)，
+服务端剔除udp重复包和剔除同一帧的操作，日志上传，不同步的检测工具
+
+11.tolua原理,lua弱引用，lua gc
+
+12.unity资源管理，热更策略
+
+13.大地形管理，开放世界地图策略，AOI(十字链表法)，LOD，LightMap，静态动态和批
+
+14.shader
+向量点乘：v1*v2 = |v1|*|v2|*cos(a) 向量叉乘结果是垂直于两向量所在平面的向量
+3x3矩阵和4x4矩阵区别 3x3矩阵只能表示旋转和缩放 4x4矩阵又叫齐次矩阵，可以表示旋转缩放移动
+非等比缩放后法线处理：
+矩阵的左乘和右乘
+
+15.光照计算中为什么需要模型空间法线乘以世界矩阵的逆转置得到世界空间法线，什么情况下不需要？
+
+16.背面剔除和裁剪各自发生在哪个空间下？相机空间
+
+17.光栅化的方法，画线的方法
+
+18.SAT分离轴知道嘛？如何判断可旋转的2矩形是否相交？凸多边形相交判断？
+
+19.法线贴图如何实现的，法线贴图作用
+高模法线转到法线空间存到法线贴图，转到法线空间是局部空间，xyz分别是tbn,t是该顶点切线，n是该顶点切线，b是tn叉乘结果
+法线转回法线空间取得作为顶点法线计算光照
+
+20.pbr原理，是否适用于手游
+
+21.阴影原理，shadow map
+pass1:以灯光作为相机计算vp，渲染投射阴影的对象，生成一张深度图 shadowtex
+pass2：渲染接收阴影的对象，vec4 scpos= pos * mpv ,其中scpos= 的x,y作为纹理坐标，
+color shdowcolor = texture2d(shadowtex,scpos.xy)
+
+22.渲染管线流程，MVP每个矩阵的处理位置和空间概念
+顶点着色
+图元装配
+剪切
+光栅化
+片元着色
+逐片元操作，深度测试模板测试
+深度测试在最后，如果深度测试测试失败，那前面几步的计算就浪费了
+由此衍生出early_z和延迟渲染技术
+
+23.ZTest和模板测试发生在什么阶段,
+24.earlyZ
+正常的深度测试发生在片元着色后，有些硬件做了优化，可以在光栅化时进行深度测试
+不要使用alpha test 或者texkll(clip discard)，不要修改深度，只允许使用光栅化插值后的深度，违背这些规则会使GPU Early Z优化失效
+25.G Buffer知道嘛？延迟渲染优缺点，为什么
+26.MSAA发生在什么阶段。什么是hdr
+27.C# List对应C++什么
+
+28.杂项
+
+Unity内存优化，性能优化，降低drawcall，合并批次
+
+遇到问题怎么解决，GPU，CPU，帧数过高怎么办？
+
+由a~z组成的字符串，设计压缩算法，哈夫曼编码
+
+c++crash：空指针 野指针 栈溢出 数组越界 内存爆 内存分配失败 死循环 
+
+overdraw问题怎么解决，不透明物体从近到远排序，深度测试总是通过，避免颜色和深度写入
+
+先渲染不透明物体，再渲染半透明物体，半透明对象从远到近排序，半透明物体不写深度
+
+这就是为什么我们的法线在进行非等比缩放时要进行的先求逆再转置的原因了。
+
+字节对齐原因：
+比如32位的Intel处理器通过总线访问(包括读和写)内存数据。每个总线周期从偶地址开始访问32位内存数据，
+内存数据以字节为单位存放。如果一个32位的数据没有存放在4字节整除的内存地址处，那么处理器就需要2个总线周期对其进行访问，
+显然访问效率下降很多
+
+骨骼动画，骨骼矩阵传入方式：ejoy2d就是这么干的
+1.
+const int BONE_COUNT = 70;
+uniform vec4 bone_matrix[BONE_COUNT * 3];
+
+uniform 数量有限制，所以上面BONE_COUNT 设置为70，用下面的接口可以获取uniform最大数量
+//本机获取出来是 1024  1024/
+//opengl es 2.0规定最少256，256/3 = 85，上面骨骼数量定为70的原因，感觉很容易超啊
+glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS, &max_v_uniforms);
+glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS, &max_f_uniforms);
+
+ejoy2d里小兵不超过50根骨骼
+boss不超过80根骨骼
+
+2.通过浮点纹理的方式传入：tree.js就是这么干的,个人认为这种方式更好
+这样的方式效率相对低一些，获取骨骼数据的时候需要做纹理采样
+但是可以支持更多的骨骼数量
+
+判断一个数x是否是2的n次幂,2的n次幂-1刚好低位全变1
+如：100 -1 = 011
+
+(x- 1 & x) == 0 
+
+二叉树前中后序遍历
+
+pbr光照模型：
+pbr 光照模型，基本上和Blinn-Phong模型思路大致一样，高光计算部分采用微表面模型，
+高光部分计算公式：
+l：入射光线反方向，v：视线方向 r:反射光线 n:法线 h :l + v  roughness:粗超度(0~1)
+vec3 specular = fresnel(vh) *Distribution(n,h,roughness)*Visibility(n,l,v,roughness) +
+
+菲涅尔反射项：绝对光滑表面光的反射
+fresnel(vh) = specular + (vec3(1.0, 1.0, 1.0) - specular) * pow(1.0 - VdotH, 5.0);
+法向分布项:趋近与总体法向N的微面的分布越多，D值越高
+Distribution(n,h,roughness)
+{
+float rough2 = roughness * roughness;
+float tmp =  (NdotH * rough2 - NdotH) * NdotH + 1.0;
+return rough2 / (tmp * tmp);
+}
+
+阴影遮挡项：微面从入射光l和视线v双向上都可见的几率,（双向无遮挡的几率）
+Visibility(n,l,v,roughness)
+{
+    return NdotL * NdotV / max(1e-7, max(NdotL, NdotV));
+}
+另外的公式
+float SmithGGXSchlickVisibility(float NdotL, float NdotV, float roughness)
+{
+        float rough2 = roughness * roughness;
+        float lambdaV = NdotL  * sqrt((-NdotV * rough2 + NdotV) * NdotV + rough2);   
+        float lambdaL = NdotV  * sqrt((-NdotL * rough2 + NdotL) * NdotL + rough2);
+    
+        return 0.5 / (lambdaV + lambdaL);
+}
+在复制构造函数里面调用 memset(this,0,n)会导致内存泄漏
+
+c++多线程锁的类型：
+1.互斥锁 mutex 申请锁时，如果得不到，则立刻放弃cpu权限，下一个时钟周期再获取锁
+2.自旋锁 申请锁时，如果得不到锁不会放弃cpu权限，会不断循环申请知道得到权限，
+对于占用锁时间很短的锁来说减少了cpu上下文切换，性能有大幅提升
+3.条件锁 当达到某个条件时获得锁权限
+4.读写锁 针对读写优化，可以允许多个线程同时读，写则互斥
+
+int const* a; *a 是const  *a = 10;被禁止
+int * const a; a是const a = b;被禁止
+
+c++ move语义：
+std::string str = "Hello";
+std::vector<std::string> v;
+//调用常规的拷贝构造函数，新建字符数组，拷贝数据
+v.push_back(str);
+std::cout << "After copy, str is \"" << str << "\"\n";
+//调用移动构造函数，掏空str，掏空后，最好不要使用str
+v.push_back(std::move(str));//复用，内存
+
+移动构造函数：
+class A
+{
+ public:
+    A(A& a);//拷贝构造函数
+    A(A&& a) //移动构造函数，就是所谓的浅拷贝，拷贝后，传递过来的a不允许再使用
+};
+
+explicit 关键字，用于禁止隐式转换：
+
+class A
+{
+public:
+    A(double a);允许 A a = 3.14;
+    explicit A(int i);  A a = 5;将报错
+}
+
+c++智能指针：
+unique_ptr , shared_ptr ,  weak_ptr
+unique_ptr ：独占式智能指针
+shared_ptr ：最常用
+weak_ptr：不会增加引用计数，解决循环引用的问题，和直接用裸指针功能等同
+
+
+
+
+
+
