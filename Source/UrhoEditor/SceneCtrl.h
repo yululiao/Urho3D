@@ -30,7 +30,7 @@ public:
 	void update();
 	Node* select(float x, float y);
     void addModel(const String& path);
-    Node* getRoot(){return _scene_root;}
+    Node* getRoot() { return rttSceneRoot_; }
     void genRttTex();
     char* getRttData() { return rttData; }
     void OnResizeView(int w, int h);

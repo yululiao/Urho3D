@@ -23,6 +23,7 @@
 #include "Urho3D//Graphics/VertexBuffer.h"
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Math/Ray.h"
+#include "AssetMgr.h"
 //#include "ctrl/utils.h"
 //#include "ctrl/asset_mgr.h"
 //#include "ctrl/global_event.h"
@@ -109,25 +110,32 @@ namespace Urho3D
 
     void SceneCtrl::addModel(const String& path)
     {
-        //auto* cache = GetSubsystem<ResourceCache>();
-        //std::string name = Utils::get_base_name(path);
-        ////加载fbx对应的mdl
-        //std::string mdl_path = Utils::get_file_path(path) + "/" + name + ".mdl";
-        //std::string rpath = asset_mgr::get_instance()->pathToRelative(mdl_path);
+        auto* cache = GetSubsystem<ResourceCache>();
+        
+        String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
+        //加载fbx对应的mdl
+        String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
+        String rpath = AssetMgr::getInstance()->pathToRelative(mdl_path);
 
-        //Node* modelNode = _scene_root->CreateChild(name.c_str());
-        //
-        //modelNode->SetScale(Vector3(0.01,0.01,0.01));
-        ////modelNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-        ////modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
-        //auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
-        ////modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
-        ////modelObject->SetModel(cache->GetResource<Model>("Models/001_Mesh.mdl"));
-        //Model* model = cache->GetResource<Model>(rpath.c_str());
-        //modelObject->SetModel(model);
+        Node* modelNode = rttSceneRoot_->CreateChild(name);
+        
+       // modelNode->SetScale(Vector3(0.01,0.01,0.01));
+        //modelNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
+        //modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
+        auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
+        //modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
+        //modelObject->SetModel(cache->GetResource<Model>("Models/001_Mesh.mdl"));
+        Model* model = cache->GetResource<Model>(rpath);
+        modelObject->SetModel(model);
+
+        Node* cube = GeoUtils::create_cube(_ctx, 1);
+        rttSceneRoot_->AddChild(cube);
+
+        //rttScene_->Update();
         //Material* model_mat = cache->GetResource<Material>("assets/models/001/tex/001.xml");
         //modelObject->SetMaterial(model_mat);
         //global_event::get_instance()->emit_event(eGlobalEventType::AddNodeToScene);
+        //renderTexture->GetImage()->SavePNG("test.png");
     }
 
     void SceneCtrl::genRttTex() 
@@ -250,6 +258,7 @@ namespace Urho3D
         create_rttScene();
         auto* cache = GetSubsystem<ResourceCache>();
         scene_ = new Scene(context_);
+        scene_->SetName("SceneMain");
         scene_->CreateComponent<Octree>();
         Node* zoneNode = scene_->CreateChild("Zone");
         auto* zone = zoneNode->CreateComponent<Zone>();
@@ -288,6 +297,7 @@ namespace Urho3D
     {
         auto* cache = GetSubsystem<ResourceCache>();
         rttScene_ = new Scene(context_);
+        rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         rttSceneRoot_ = rttScene_->CreateChild("Root");
         Node* zoneNode = rttScene_->CreateChild("Zone");
@@ -302,18 +312,27 @@ namespace Urho3D
         rttCameraNode_->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
         rttCameraNode_->LookAt(Vector3(0.0f, 0.0f, -0.0f));
         rttCam_ = rttCameraNode_->CreateComponent<Camera>();
-        rttCam_->SetFarClip(100.0f);
+        rttCam_->SetFarClip(300.0f);
         rttCam_->SetAutoAspectRatio(false);
         rttCam_->SetAspectRatio(constRttSize.x_/constRttSize.y_);
+        //auto* light = rttCameraNode_->CreateComponent<Light>();
+        //light->SetLightType(LIGHT_POINT);
+        //light->SetRange(30.0f);
+
         auto* light = rttCameraNode_->CreateComponent<Light>();
-        light->SetLightType(LIGHT_POINT);
-        light->SetRange(30.0f);
+        light->SetLightType(LIGHT_DIRECTIONAL);
+        light->SetColor(Color(0.2f, 0.2f, 0.2f));
+        light->SetSpecularIntensity(1.0f);
+
         renderTexture = new Texture2D(context_);
         renderTexture->SetSize(constRttSize.x_, constRttSize.y_, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
         renderTexture->SetFilterMode(FILTER_BILINEAR);
         RenderSurface* surface = renderTexture->GetRenderSurface();
         rttViewport_ = new Viewport(context_, rttScene_, rttCam_);
         surface->SetViewport(0, rttViewport_);
+        rttScene_->SetUpdateEnabled(true);
+        //Node* cube = GeoUtils::create_cube(_ctx, 1);
+        //rttSceneRoot_->AddChild(cube);
        
         update_grids();
     }

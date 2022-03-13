@@ -160,14 +160,14 @@ void renderWindow::mouseMoveEvent(Vector2 pos)
     }
     else
     {
-        _app->gizmoCtrl_->onPointerMove(pos.x_ / winSize.x, pos.y_ / winSize.y);
-        if (!_app->gizmoCtrl_->isDraging())
-        {
-            _app->cam_ctrl_->onPointerMove(pos.x_, pos.y_);
-        }
+    _app->gizmoCtrl_->onPointerMove(pos.x_ / winSize.x, pos.y_ / winSize.y);
+    if (!_app->gizmoCtrl_->isDraging())
+    {
+        _app->cam_ctrl_->onPointerMove(pos.x_, pos.y_);
+    }
     }
 }
-void renderWindow::mouseReleaseEvent(Vector2 pos) 
+void renderWindow::mouseReleaseEvent(Vector2 pos)
 {
     auto _app = EditorApp::getInstance();
     _is_mouse_pressed = false;
@@ -200,18 +200,27 @@ void renderWindow::mouseReleaseEvent(Vector2 pos)
 
 
 void renderWindow::onIO()
-{ 
-    ImGuiIO& io = ImGui::GetIO(); 
+{
+    ImGuiIO& io = ImGui::GetIO();
+    Vector2 mousePos(io.MousePos.x, io.MousePos.y);
+    if (!ImGui::IsWindowFocused())
+    {
+        return;
+    }
+    if (!ImGui::IsMouseHoveringRect(ImGui::GetWindowContentRegionMin(), ImGui::GetWindowContentRegionMax()))
+    {
+        return;
+    }
     if (io.MouseWheel != 0.0)
     {
         wheelEvent(io.MouseWheel);
     }
-    Vector2 mousePos(io.MousePos.x, io.MousePos.y);
-    if (io.MouseDown[0] && io.MouseDown[0] != mousePresed)
+
+    if ((io.MouseDown[0] && io.MouseDown[0] != mousePresed) || (io.MouseDown[1] && io.MouseDown[1] != mousePresed))
     {
         mousePressEvent(mousePos);
     }
-    mousePresed = io.MouseDown[0];
+    mousePresed = io.MouseDown[0] || io.MouseDown[1];
     if (-mousePos.x_ != FLT_MAX)
     {
         if (curMousePos != mousePos)
@@ -221,33 +230,49 @@ void renderWindow::onIO()
     }
     curMousePos = mousePos;
 
-    if (io.MouseReleased[0] && (io.MouseReleased[0] != mouseRelease))
+    if ((io.MouseReleased[0] && (io.MouseReleased[0] != mouseRelease)) ||
+        (io.MouseReleased[1] && (io.MouseReleased[1] != mouseRelease)))
     {
-         mouseReleaseEvent(mousePos);
+        mouseReleaseEvent(mousePos);
     }
-    mouseRelease = io.MouseReleased[0];
+    mouseRelease = io.MouseReleased[0] || io.MouseReleased[1];
 }
 
 void renderWindow::update()
 {
     if (showing)
     {
-       
+
         //ImGui::SetNextWindowSize(ImVec2(416,335));
         ImGui::Begin(title.c_str(), &showing);
         ///ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
-        onIO();
         //winSize = ImGui::GetWindowSize();
+        onIO();
         ImVec2 newSize = ImGui::GetWindowSize();
         newSize.x = newSize.x - 14;
         newSize.y = newSize.y - 37;
         if (newSize.x != winSize.x || newSize.y != winSize.y)
         {
             winSize = newSize;
-            SceneCtrl::getInstance()->OnResizeView(winSize.x,winSize.y);
+            SceneCtrl::getInstance()->OnResizeView(winSize.x, winSize.y);
         }
         genGpuTex();
         ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
+        if (ImGui::BeginDragDropTarget())
+        {
+            //void* data = ImGui::AcceptDragDropPayload("drag_res")->Data;
+            if (ImGui::IsMouseReleased(0))
+            {
+                auto data = ImGui::AcceptDragDropPayload("drag_res");
+                char path[200] = {0};
+                memcpy(path,data->Data,data->DataSize);
+                //std::string strpath = path;
+                SceneCtrl::getInstance()->addModel(path);
+                std::cout << "onDrop" << std::endl;
+            }
+          
+            ImGui::EndDragDropTarget();
+        }
         //ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         ImGui::End();
     }

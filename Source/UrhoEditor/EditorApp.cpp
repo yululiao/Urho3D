@@ -13,7 +13,16 @@
 //#include "glfw/glfw3native.h"
 #include "EditorLuaBinding.h"
 #include "ImGuiFileBrowser.h"
+#ifdef _WIN32
+#include <windows.h>
+#include <string>
+#include <shlobj.h>
+#include <iostream>
+#include <sstream>
+#include <Urho3D/Resource/ResourceCache.h>
+#endif // _WIN32
 
+String EditorApp::_getPathResult;
 EditorApp* EditorApp::_instance = nullptr;
 EditorApp::EditorApp(Context* context)
 	:Object(context)
@@ -41,8 +50,7 @@ void EditorApp::createEngine(void* win_ptr)
 		return;
 	}
 	start();
-    cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
-    setCurTool("camera");
+    
 }
 
 void EditorApp::setup()
@@ -64,6 +72,7 @@ void EditorApp::setup()
     {
         //_engineParameters[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
 		//todo
+        //_work_space = "D:/Urho3D/platform/projects/test";
         String assetsPath = "Data;CoreData;" + _work_space;
         _engineParameters[EP_RESOURCE_PATHS] =  assetsPath;
 
@@ -78,7 +87,20 @@ void EditorApp::start()
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
 	SceneCtrl::getInstance()->create_scene();
-	//_cam_ctrl = new CameraCtrl(scene_ctrl::get_inatance()->_cameraNode);
+    cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
+    setCurTool("camera");
+}
+
+int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) 
+{ 
+    if(uMsg == BFFM_INITIALIZED)
+    {
+        std::string tmp = (const char*)lpData;
+        std::cout << "path: " << tmp << std::endl;
+        SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
+        _getPathResult = tmp.c_str();
+    }
+    return 0;
 }
 
 void EditorApp::runFrame()
@@ -99,22 +121,91 @@ void EditorApp::resizeWwindow(int w, int h)
 imgui_addons::ImGuiFileBrowser file_dialog;
 String EditorApp::dialogSelectPath() 
 {
-    String result;
-    ImGui::OpenPopup("Select Path");
-     //if (file_dialog.showFileDialog("Open File", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN,ImVec2(200, 200),".rar,.zip,.7z"))
-    if (file_dialog.showFileDialog("Select Path",imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(200, 200)))
+    //String result;
+    //ImGui::OpenPopup("Select Path");
+    // //if (file_dialog.showFileDialog("Open File", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN,ImVec2(200, 200),".rar,.zip,.7z"))
+    //if (file_dialog.showFileDialog("Select Path",imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(200, 200)))
+    //{
+    //    std::string selected_file = file_dialog.selected_fn;
+    //    std::string path = file_dialog.selected_path;
+    //    result = path.c_str();
+    //}
+    //return result;
+#ifdef _WIN32
+    TCHAR path[MAX_PATH];
+
+    char path_param[] = "C:\\Windows"; // saved_path.c_str();
+    BROWSEINFO bi = {0};
+    bi.lpszTitle = ("Select Path");
+    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+    bi.lpfn = BrowseCallbackProc;
+    bi.lParam = (LPARAM)path_param;
+
+    LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+
+    if (pidl != 0)
     {
-        std::string selected_file = file_dialog.selected_fn;
-        std::string path = file_dialog.selected_path;
-        result = path.c_str();
+        // get the name of the folder and put it in path
+        SHGetPathFromIDList(pidl, path);
+
+        // free memory used
+        IMalloc* imalloc = 0;
+        if (SUCCEEDED(SHGetMalloc(&imalloc)))
+        {
+            imalloc->Free(pidl);
+            imalloc->Release();
+        }
+
+        return String(path);
     }
-    return result;
+    else
+    {
+        return String("");
+    }
+
+
+#endif // _WIN32
+
     
 }
 
 String EditorApp::dialogOpenFile() { return String(); }
 
 void EditorApp::dialogSaveFile() {}
+
+int EditorApp::system(const char* cmd, char* pRetMsg, int msg_len) 
+{
+    FILE* fp;
+    char* p = NULL;
+    int res = -1;
+    if (cmd == NULL || pRetMsg == NULL || msg_len < 0)
+    {
+        printf("Param Error!\n");
+        return -1;
+    }
+    if ((fp = _popen(cmd, "r")) == NULL)
+    {
+        printf("Popen Error!\n");
+        return -2;
+    }
+    else
+    {
+        memset(pRetMsg, 0, msg_len);
+        // get lastest result
+        while (fgets(pRetMsg, msg_len, fp) != NULL)
+        {
+            printf("Msg:%s", pRetMsg); // print all info
+        }
+
+        if ((res = _pclose(fp)) == -1)
+        {
+            printf("close popenerror!\n");
+            return -3;
+        }
+        // pRetMsg[strlen(pRetMsg) - 1] = '\0';
+        return 0;
+    }
+}
 
 void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 {
@@ -137,6 +228,8 @@ void EditorApp::startGame()
     _sceneView = new renderWindow("renderWindow");
     mainWindow->AddWindow(std::unique_ptr<renderWindow>(_sceneView));
     mainWindow->maxSize();
+    auto* cache = GetSubsystem<ResourceCache>();
+    cache->AddResourceDir(_work_space);
 };
 
 void EditorApp::run() 

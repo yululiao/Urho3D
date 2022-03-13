@@ -12,9 +12,9 @@ local EditorLuaApp = {}
 local app = EditorApp.getInstance(EditorApp)
 local assetMgr = AssetMgr.getInstance(AssetMgr)
 
--- local historyFile = "res/editor_historys.json"
--- local json_str = assetMgr:getTextFile(historyFile)
--- local json_obj = Json.decode(json_str)
+local historyFile = "res/editor_historys.json"
+local json_str = assetMgr:getTextFile(historyFile)
+StartView.history = Json.decode(json_str)
 
 local uiUpdater = app:getUiUpdater()
 local menuUpdater = app:getManuBarUpdater()

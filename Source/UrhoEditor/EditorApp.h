@@ -35,12 +35,23 @@ public:
     String dialogSelectPath();
     String dialogOpenFile();
     void dialogSaveFile();
+    /// <summary>
+    /// 执行一个命令行
+    /// </summary>
+    /// <param name="cmd">命令行</param>
+    /// <param name="pRetMsg">执行返回值</param>
+    /// <param name="msg_len"></param>
+    /// <returns></returns>
+    int system(const char* cmd, char* pRetMsg, int msg_len);
+
 protected:
 	void handleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
 
 	void setup();
 	void start();
+    static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
+
 private:
     static EditorApp* _instance;
 	/// Urho3D engine.
@@ -58,5 +69,6 @@ public:
    // SharedPtr<TransformCtrl> _gizmoCtrl = nullptr;
 	TransformCtrl* gizmoCtrl_ = nullptr;
 	String  _curent_tool;
+    static  String _getPathResult;
 };
 

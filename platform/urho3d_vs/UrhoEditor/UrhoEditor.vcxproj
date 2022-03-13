@@ -156,7 +156,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Urho3D\Source\ThirdParty\imgui;D:\Urho3D\Source\UrhoEditor\lib\glfw\include;D:\Urho3D\Source\UrhoEditor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>

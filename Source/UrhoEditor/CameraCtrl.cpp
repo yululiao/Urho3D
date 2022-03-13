@@ -98,7 +98,7 @@ using namespace Urho3D;
             bool altKey = false;
             auto io = ImGui::GetIO();
             altKey = io.KeyAlt;
-            if (altKey)
+            if (altKey || io.MouseDown[1])
 			{					
 				rotate(x, y);
 			}

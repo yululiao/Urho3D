@@ -5,6 +5,7 @@
 #include "Urho3D/Resource/JSONFile.h"
 #include "EditorApp.h"
 
+
 AssetMgr* AssetMgr::_instance = nullptr;
 
 AssetMgr::AssetMgr(Context* ctx)
@@ -37,6 +38,35 @@ String AssetMgr::getTextFile(const String& path)
         buf.put(ch);
     String str = buf.str().c_str();
     return str;
+}
+
+String AssetMgr::getBaseName(const String& path) 
+{ 
+    String baseName = path.Substring(path.FindLast("/")+1);
+    baseName = baseName.Substring(0,baseName.FindLast("."));
+    return baseName;
+}
+
+String AssetMgr::getFilePath(const String& path) 
+{ 
+    return path.Substring(0,path.FindLast("/")); }
+
+String AssetMgr::pathToRelative(const String& path) 
+{ 
+   String workSpace = EditorApp::getInstance()->getWorkSpace();
+    if (path.Find(workSpace) != 0)
+    {
+        throw("Application::pathToRelative: fullPath is not a FullPath!");
+        return "";
+    }
+    String ralativePath = path.Substring(workSpace.Length() + 1);
+    return ralativePath;
+}
+
+String AssetMgr::pathToFull(const String& path)
+{
+    String workSpace = EditorApp::getInstance()->getWorkSpace();
+    return workSpace + "/" + path;
 }
 
 int AssetMgr::getImguiTex(const String& path)

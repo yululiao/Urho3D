@@ -158,6 +158,20 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiSizeCallback custom_callback = NULL
 // Unsupported arg type  void* custom_callback_data = NULL
 //    IMGUI_API void          SetNextWindowContentSize(const ImVec2& size);                               // set next window content size (~ scrollable client area, which enforce the range of scrollbars). Not including window decorations (title bar, menu bar, etc.) nor WindowPadding. set an axis to 0.0f to leave it automatic. call before Begin()
+
+IMGUI_FUNCTION(SetNextWindowPos)
+IM_VEC_2_ARG(pos)
+OPTIONAL_INT_ARG(cond,0)
+IM_VEC_2_ARG(pivot)
+CALL_FUNCTION_NO_RET(SetNextWindowPos, pos,cond,pivot)
+END_IMGUI_FUNC
+
+IMGUI_FUNCTION(SetNextWindowSize)
+IM_VEC_2_ARG(size)
+OPTIONAL_INT_ARG(cond, 0)
+CALL_FUNCTION_NO_RET(SetNextWindowSize, size, cond)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(SetNextWindowContentSize)
 IM_VEC_2_ARG(size)
 CALL_FUNCTION_NO_RET(SetNextWindowContentSize, size)
@@ -607,7 +621,7 @@ END_IMGUI_FUNC
 // Unsupported arg type  const ImVec2& uv0 = ImVec2 0  0
 
 IMGUI_FUNCTION(Image)
-OPTIONAL_NUMBER_ARG(user_texture_id, 0)
+OPTIONAL_INT_ARG(user_texture_id, 0)
 IM_VEC_2_ARG(size)
 //IM_VEC_2_ARG(uv0)
 //IM_VEC_2_ARG(uv1)
@@ -620,13 +634,8 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          ImageButton(ImTextureID user_texture_id, const ImVec2& size, const ImVec2& uv0 = ImVec2 0  0,  const ImVec2& uv1 = ImVec2 1 1, int frame_padding = -1, const ImVec4& bg_col = ImVec4 0 0 0 0, const ImVec4& tint_col = ImVec4 1 1 1 1);    // <0 frame_padding uses default frame padding settings. 0 for no padding
 
 IMGUI_FUNCTION(ImageButton)
-OPTIONAL_NUMBER_ARG(user_texture_id, 0)
+OPTIONAL_INT_ARG(user_texture_id, 0)
 IM_VEC_2_ARG(size)
-// IM_VEC_2_ARG(uv0)
-// IM_VEC_2_ARG(uv1)
-// IM_VEC_4_ARG(tint_col)
-// IM_VEC_4_ARG(border_col)
-// CALL_FUNCTION_NO_RET(Image, user_texture_id, size, uv0, uv1, tint_col, border_col)
 CALL_FUNCTION_NO_RET(ImageButton, user_texture_id, size)
 END_IMGUI_FUNC
 
@@ -1052,6 +1061,12 @@ END_IMGUI_FUNC
 //    IMGUI_API void          SetTooltipV(const char* fmt, va_list args) IM_FMTLIST(1);
 // Unsupported arg type  va_list args) IM_FMTLIST(1
 //    IMGUI_API bool          BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0);                         // return true if the popup is open, and you can start outputting to it.
+
+IMGUI_FUNCTION(SetTooltipText)
+LABEL_ARG(text)
+CALL_FUNCTION_NO_RET(SetTooltipText,text)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(BeginPopup)
 LABEL_ARG(str_id)
 OPTIONAL_INT_ARG(flags, 0)
@@ -1080,7 +1095,21 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiPopupFlags popup_flags = 0
 //    IMGUI_API void          OpenPopupOnItemClick(const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1);   // helper to open popup when clicked on last item. Default to ImGuiPopupFlags_MouseButtonRight == 1. (note: actually triggers on the mouse _released_ event to be consistent with popup behaviors)
 // Unsupported arg type  ImGuiPopupFlags popup_flags = 1
-//    IMGUI_API void          CloseCurrentPopup();                                                                // manually close the popup we have begin-ed into.
+//    IMGUI_API void          CloseCurrentPopup();
+
+IMGUI_FUNCTION(OpenPopup)
+LABEL_ARG(text)
+OPTIONAL_INT_ARG(flags, 0)
+CALL_FUNCTION_NO_RET(OpenPopup, text, flags)
+END_IMGUI_FUNC
+
+IMGUI_FUNCTION(OpenPopupOnItemClick)
+LABEL_ARG(text)
+OPTIONAL_INT_ARG(flags,1)
+CALL_FUNCTION_NO_RET(OpenPopupOnItemClick, text, flags)
+END_IMGUI_FUNC
+
+// manually close the popup we have begin-ed into.
 IMGUI_FUNCTION(CloseCurrentPopup)
 CALL_FUNCTION_NO_RET(CloseCurrentPopup)
 END_IMGUI_FUNC
@@ -1096,6 +1125,14 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiTableFlags flags = 0
 // Unsupported arg type  const ImVec2& outer_size = ImVec2 0.0f  0.0f
 //    IMGUI_API void          EndTable();                                 // only call EndTable() if BeginTable() returns true!
+
+IMGUI_FUNCTION(BeginPopupContextWindow)
+LABEL_ARG(id)
+OPTIONAL_INT_ARG(flags,1)
+CALL_FUNCTION(BeginPopupContextWindow,bool,id,flags)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(EndTable)
 CALL_FUNCTION_NO_RET(EndTable)
 POP_END_STACK(13)
@@ -1270,7 +1307,25 @@ END_IMGUI_FUNC
 // Unsupported arg type  const void* data
 // Unsupported arg type  size_t sz
 // Unsupported arg type  ImGuiCond cond = 0
-//    IMGUI_API void          EndDragDropSource();                                                                    // only call EndDragDropSource() if BeginDragDropSource() returns true!
+//    IMGUI_API void          EndDragDropSource();
+// only call EndDragDropSource() if BeginDragDropSource() returns true!
+
+IMGUI_FUNCTION(SetDragDropPayload)
+LABEL_ARG(type)
+LABEL_ARG(data)
+OPTIONAL_INT_ARG(size, 0)
+CALL_FUNCTION(SetDragDropPayload, bool, type,data,size)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
+
+IMGUI_FUNCTION(BeginDragDropSource)
+OPTIONAL_INT_ARG(flags,0)
+CALL_FUNCTION(BeginDragDropSource, bool,flags)
+IF_RET_ADD_END_STACK(16)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(EndDragDropSource)
 CALL_FUNCTION_NO_RET(EndDragDropSource)
 POP_END_STACK(16)
@@ -1325,6 +1380,11 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          IsItemHovered(ImGuiHoveredFlags flags = 0);                         // is the last item hovered? (and usable, aka not blocked by a popup, etc.). See ImGuiHoveredFlags for more options.
 // Unsupported arg type ImGuiHoveredFlags flags = 0
 //    IMGUI_API bool          IsItemActive();                                                     // is the last item active? (e.g. button being held, text field being edited. This will continuously return true while holding mouse button on an item. Items that don't interact will always return false)
+IMGUI_FUNCTION(IsItemHovered)
+INT_ARG(flag)
+CALL_FUNCTION(IsItemHovered, bool,flag)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
 IMGUI_FUNCTION(IsItemActive)
 CALL_FUNCTION(IsItemActive, bool)
 PUSH_BOOL(ret)
@@ -1524,6 +1584,31 @@ END_IMGUI_FUNC
 // Unsupported return type int
 // Unsupported arg type ImGuiMouseButton button
 //    IMGUI_API bool          IsMouseHoveringRect(const ImVec2& r_min, const ImVec2& r_max, bool clip = true);// is mouse hovering given bounding rect (in screen space). clipped by current clipping settings, but disregarding of other consideration of focus/window ordering/popup-block.
+
+IMGUI_FUNCTION(IsMouseDown)
+OPTIONAL_INT_ARG(id, 0)
+CALL_FUNCTION(IsMouseDown, bool, id)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
+IMGUI_FUNCTION(IsMouseClicked)
+OPTIONAL_INT_ARG(id, 0)
+CALL_FUNCTION(IsMouseClicked, bool, id)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
+IMGUI_FUNCTION(IsMouseReleased)
+OPTIONAL_INT_ARG(id, 0)
+CALL_FUNCTION(IsMouseReleased, bool, id)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
+IMGUI_FUNCTION(IsMouseDoubleClicked)
+OPTIONAL_INT_ARG(id,0)
+CALL_FUNCTION(IsMouseDoubleClicked, bool, id)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(IsMouseHoveringRect)
 IM_VEC_2_ARG(r_min)
 IM_VEC_2_ARG(r_max)

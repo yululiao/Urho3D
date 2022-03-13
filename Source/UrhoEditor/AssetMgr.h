@@ -33,6 +33,11 @@ public:
     int getImguiTex(const String& path);
     //获取文本文件中的内容
     String getTextFile(const String& path);
+    String getBaseName(const String& path);
+    String getFilePath(const String& path);
+    String pathToRelative(const String& path);
+    String pathToFull(const String& path);
+
 private:
     static AssetMgr* _instance;
     //String _history_file = "res/editor_historys.json";

@@ -3323,8 +3323,7 @@ static inline bool IsWindowContentHoverable(ImGuiWindow* window, ImGuiHoveredFla
 
     return true;
 }
-
-// This is roughly matching the behavior of internal-facing ItemHoverable()
+    // This is roughly matching the behavior of internal-facing ItemHoverable()
 // - we allow hovering to be true when ActiveId==window->MoveID, so that clicking on non-interactive items such as a Text() item still returns true with IsItemHovered()
 // - this should work even for non-interactive items that have no ID, so we cannot use LastItemId
 bool ImGui::IsItemHovered(ImGuiHoveredFlags flags)
@@ -9097,6 +9096,12 @@ void ImGui::SetTooltip(const char* fmt, ...)
     va_end(args);
 }
 
+void ImGui::SetTooltipText(const char* fmt)
+{
+    SetTooltip(fmt);
+
+}
+
 //-----------------------------------------------------------------------------
 // [SECTION] POPUPS
 //-----------------------------------------------------------------------------
@@ -11308,8 +11313,8 @@ bool ImGui::BeginDragDropTarget()
 
     const ImRect& display_rect = (g.LastItemData.StatusFlags & ImGuiItemStatusFlags_HasDisplayRect) ? g.LastItemData.DisplayRect : g.LastItemData.Rect;
     ImGuiID id = g.LastItemData.ID;
-    if (id == 0)
-        id = window->GetIDFromRectangle(display_rect);
+    //if (id == 0)
+       // id = window->GetIDFromRectangle(display_rect);
     if (g.DragDropPayload.SourceId == id)
         return false;
 
