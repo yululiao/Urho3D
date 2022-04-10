@@ -594,6 +594,11 @@ bool Graphics::TakeScreenShot(Image& destImage)
     return true;
 }
 
+void Graphics::MakeCurrent() 
+{ 
+    SDL_GL_MakeCurrent(window_, impl_->context_);
+}
+
 bool Graphics::BeginFrame()
 {
     if (!IsInitialized() || IsDeviceLost())

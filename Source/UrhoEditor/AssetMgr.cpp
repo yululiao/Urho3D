@@ -1,9 +1,13 @@
+#include"GLEW/glew.h"
 #include <fstream>
 #include <sstream>
 #include "AssetMgr.h"
 #include "Urho3D/IO/File.h"
 #include "Urho3D/Resource/JSONFile.h"
 #include "EditorApp.h"
+#include "AssetImporter.h"
+#include "Urho3D/IO/FileSystem.h"
+#include "SceneCtrl.h"
 
 
 AssetMgr* AssetMgr::_instance = nullptr;
@@ -69,6 +73,61 @@ String AssetMgr::pathToFull(const String& path)
     return workSpace + "/" + path;
 }
 
+String AssetMgr::GetExt(const String& path) 
+{ 
+    //int test;
+    return path.Substring(path.FindLast("."));
+}
+
+void AssetMgr::ImportFbx(const String& path)
+{
+    auto fileSys = GetSubsystem<FileSystem>();
+    if (fileSys->FileExists(path))
+    {
+        String ext = GetExt(path).ToLower();
+        if (ext == ".fbx")
+        {
+            ImportSingleFbx(path);
+        }
+    }
+    else if (fileSys->DirExists(path))
+    {
+        StringVector files;
+        fileSys->ScanDir(files, path, ".*", SCAN_FILES, true);
+        for (int i = 0; i < files.Size();i++)
+        {
+            if (GetExt(files[i]).ToLower() == ".fbx")
+            {
+                ImportSingleFbx(path + "/" +files[i]);
+            }
+        }
+    }
+    
+}
+
+void AssetMgr::ImportSingleFbx(const String& fbxPath)
+{
+    String base = getBaseName(fbxPath);
+    String fpath = getFilePath(fbxPath);
+    // std::string cmd = "tool/AssetImporter";
+    String args;
+    if (base.Contains("@")) //¶¯»­
+    {
+        String outpath = fpath + "/" + base + ".ani";
+        args = "anim " + fbxPath + " " + outpath;
+    }
+    else
+    {
+        String outpath = fpath + "/" + base + ".mdl -nm -nt";
+        args = "model " + fbxPath + " " + outpath;
+    }
+    // char msg[128] = { 0 };
+    // Utils::_system(cmd.c_str(),msg,sizeof(msg));
+    // QProcess process;
+    // process.startDetached(cmd.c_str(),QString(args.c_str()).split(" "));
+    assimp_import_fbx(args.CString());
+}
+
 int AssetMgr::getImguiTex(const String& path)
 {
     GLuint texID = 0;
@@ -89,6 +148,7 @@ int AssetMgr::getImguiTex(const String& path)
             format = GL_RGB;
         glTexImage2D(GL_TEXTURE_2D, 0, format, img->GetWidth(), img->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
                      img->GetData());
+        //glGenerateMipmap(GL_TEXTURE_2D);
         ImguiTexInfo* info = new ImguiTexInfo(this->GetContext());
         info->id = texID;
         info->img = img;
@@ -101,3 +161,30 @@ int AssetMgr::getImguiTex(const String& path)
     
     return texID;
 }
+
+void AssetMgr::SaveScene(const String& path) 
+{ 
+    auto mainScene = SceneCtrl::getInstance()->GetScene();
+    File file(context_,path,FileMode::FILE_WRITE);
+    mainScene->SaveJSON(file);
+}
+
+void AssetMgr::SavePrefab(Node* node,const String& path) 
+{
+
+    File file(context_, path, FileMode::FILE_WRITE);
+    node->SaveJSON(file);
+}
+
+void AssetMgr::OpenScene(const String& path)
+{ 
+    if (GetExt(path) != ".scene")
+        return;
+    SceneCtrl::getInstance()->OpenScene(path);
+}
+
+void AssetMgr::OpenNewScene() 
+{ 
+    SceneCtrl::getInstance()->OpenNewScene();
+}
+

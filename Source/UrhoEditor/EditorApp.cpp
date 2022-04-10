@@ -86,8 +86,7 @@ void EditorApp::start()
     EditorLuaBinding::LuaBinding(luaScript->GetState());
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
-	SceneCtrl::getInstance()->create_scene();
-    cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
+	SceneCtrl::getInstance()->createScene();
     setCurTool("camera");
 }
 
@@ -108,8 +107,8 @@ void EditorApp::runFrame()
 	SceneCtrl::getInstance()->update();
 	_engine->RunFrame();
     SceneCtrl::getInstance()->genRttTex();
-	/*if (_gizmoCtrl)
-		_gizmoCtrl->update();*/
+    if (gizmoCtrl_)
+        gizmoCtrl_->update();
 }
 
 void EditorApp::resizeWwindow(int w, int h)
@@ -207,6 +206,20 @@ int EditorApp::system(const char* cmd, char* pRetMsg, int msg_len)
     }
 }
 
+Node* EditorApp::GetSceneRoot()
+{
+   return SceneCtrl::getInstance()->getRoot();
+}
+
+void EditorApp::SelectNode(unsigned id)
+{
+    Node* node = getScene()->GetNode(id);
+    if(node && gizmoCtrl_ && _curent_tool != "camera")
+    {
+        gizmoCtrl_->attach(node);
+    }
+}
+
 void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 {
 	using namespace LogMessage;
@@ -290,11 +303,31 @@ MenuBarUpdater* EditorApp::getManuBarUpdater()
     
 }
 
+void EditorApp::Clear()
+{ 
+    if (gizmoCtrl_)
+    {
+        delete gizmoCtrl_;
+        gizmoCtrl_ = nullptr;
+    }
+    if (cam_ctrl_)
+    {
+        delete cam_ctrl_;
+        cam_ctrl_ = nullptr;
+    }
+   
+}
+
 void EditorApp::setCurTool(const String& name) 
 {
+    GetSubsystem<Graphics>()->MakeCurrent();
+    if (cam_ctrl_ == nullptr)
+    {
+        cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
+    }
     if (gizmoCtrl_ == NULL && SceneCtrl::getInstance()->rttScene_)
     {
-        Node* gizmoRoot = SceneCtrl::getInstance()->rttScene_->CreateChild("gizmoRoot");
+        Node* gizmoRoot = SceneCtrl::getInstance()->GetEditorRoot()->CreateChild("gizmoRoot"); 
         gizmoCtrl_ = new TransformCtrl(context_, eTransformCtrlMode::eTranslate, gizmoRoot);
         gizmoCtrl_->setScene(SceneCtrl::getInstance()->rttScene_);
         gizmoCtrl_->setCameraNode(SceneCtrl::getInstance()->rttCameraNode_);

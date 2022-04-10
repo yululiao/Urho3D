@@ -8,6 +8,11 @@
 
 using namespace Urho3D;
 
+namespace Urho3D
+{
+class Node;
+}
+
 class ImguiTexInfo:public Object
 {
     URHO3D_OBJECT(ImguiTexInfo, Object);
@@ -37,7 +42,13 @@ public:
     String getFilePath(const String& path);
     String pathToRelative(const String& path);
     String pathToFull(const String& path);
-
+    String GetExt(const String& path);
+    void ImportFbx(const String& path);
+    void ImportSingleFbx(const String& path);
+    void SaveScene(const String& path);
+    void SavePrefab(Node* node,const String& path);
+    void OpenScene(const String& path);
+    void OpenNewScene();
 private:
     static AssetMgr* _instance;
     //String _history_file = "res/editor_historys.json";

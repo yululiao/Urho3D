@@ -102,7 +102,7 @@ using namespace Urho3D;
 			{					
 				rotate(x, y);
 			}
-			else
+            else if (io.MouseDown[0])
 			{
 				move(x, y);
 			}

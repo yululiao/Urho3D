@@ -12,6 +12,8 @@ local EditorLuaApp = {}
 local app = EditorApp.getInstance(EditorApp)
 local assetMgr = AssetMgr.getInstance(AssetMgr)
 
+EditorLuaApp.cppApp = app;
+
 local historyFile = "res/editor_historys.json"
 local json_str = assetMgr:getTextFile(historyFile)
 StartView.history = Json.decode(json_str)
@@ -20,10 +22,13 @@ local uiUpdater = app:getUiUpdater()
 local menuUpdater = app:getManuBarUpdater()
 MenuBar.app = EditorLuaApp
 ResTree.app = EditorLuaApp
+NodeTree.app = EditorLuaApp
+ResTree.assetMgr = assetMgr
 StartView.app = EditorLuaApp
 ToolBar.app = EditorLuaApp
 ToolBar.assetMgr = assetMgr
 StartView.assetMgr = assetMgr
+EditorLuaApp.toolBar = ToolBar
 
 local isStartView = true;
 
@@ -31,17 +36,18 @@ function onUiUpdate()
     if isStartView then
         StartView:Update()
     else
-        ToolBar:Update()
         NodeTree:Update()
         ResTree:Update()
         ResPreview:Update()
         Inspector:Update()
+        --ToolBar:Update()
     end
     -- body
 end
 
 function onUpdateMenuBar()
     if isStartView == false then
+        ToolBar:Update()
         MenuBar:update()
     end
     -- body

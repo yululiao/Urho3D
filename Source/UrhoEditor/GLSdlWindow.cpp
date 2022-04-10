@@ -40,6 +40,7 @@ UMainWindow::UMainWindow(int width, int height) : width{ width }, height{ height
 #endif // GLFW_EXPOSE_NATIVE_WIN32
     //menuBar = new WinMainMenu(hwnd);
     glfwMakeContextCurrent(window);
+    //wglShareLists(g_HGLRC, data->hGLRC);
     //glfwMaximizeWindow(window);
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 410";
@@ -203,11 +204,12 @@ void renderWindow::onIO()
 {
     ImGuiIO& io = ImGui::GetIO();
     Vector2 mousePos(io.MousePos.x, io.MousePos.y);
+    ImVec2 winPos = ImGui::GetWindowPos();
+    ImVec2 offset = ImGui::GetWindowContentRegionMin();
+    winPos.x = winPos.x + offset.x;
+    winPos.y = winPos.y + offset.y;
+    mousePos = Vector2(mousePos.x_ - winPos.x,mousePos.y_ - winPos.y);
     if (!ImGui::IsWindowFocused())
-    {
-        return;
-    }
-    if (!ImGui::IsMouseHoveringRect(ImGui::GetWindowContentRegionMin(), ImGui::GetWindowContentRegionMax()))
     {
         return;
     }
@@ -283,11 +285,6 @@ void renderWindow::genGpuTex()
     {
         glGenTextures(1, &rttTexID);
     }
-    else
-    {
-        delteGpuTex();
-        glGenTextures(1, &rttTexID);
-    }
     glBindTexture(GL_TEXTURE_2D, rttTexID);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -336,15 +333,6 @@ void DockerContainer::update()
     ImGui::Begin("###DockSpace", &showing, window_flags);
     ImGui::PopStyleVar();
     _menuBarUpdater->update();
-    /*if (ImGui::BeginMenuBar())
-    {
-        if (ImGui::BeginMenu("文件"))
-        {
-            ImGui::MenuItem("保存", nullptr, new bool(true));
-            ImGui::EndMenu();
-        }
-        ImGui::EndMenuBar();
-    }*/
     if (opt_fullscreen)
         ImGui::PopStyleVar(2);
 

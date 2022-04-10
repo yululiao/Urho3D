@@ -139,6 +139,7 @@ void RotateGizmo::createGizmos(std::string axisName)
     // handles
     GizmogeoInfo* handleInfo = new GizmogeoInfo();
     SharedPtr<Node> circle(GeoUtils::create_line(context_, linePoints, circleColor));
+    GizmoUtils::setLineMat(circle,circleColor);
     handleInfo->geo = circle;
     std::vector<GizmogeoInfo*> handleInfoList;
     handleInfoList.push_back(handleInfo);

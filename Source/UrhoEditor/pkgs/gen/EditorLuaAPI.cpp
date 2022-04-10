@@ -500,6 +500,71 @@ static int tolua_EditorLuaAPI_EditorApp_dialogSaveFile00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: GetSceneRoot of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_GetSceneRoot00
+static int tolua_EditorLuaAPI_EditorApp_GetSceneRoot00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'GetSceneRoot'", NULL);
+#endif
+ {
+  Node* tolua_ret = (Node*)  self->GetSceneRoot();
+  tolua_pushusertype(tolua_S,(void*)tolua_ret,"Node");
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'GetSceneRoot'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: SelectNode of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_SelectNode00
+static int tolua_EditorLuaAPI_EditorApp_SelectNode00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+  unsigned id = ((unsigned)  tolua_tonumber(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'SelectNode'", NULL);
+#endif
+ {
+  self->SelectNode(id);
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'SelectNode'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* method: getInstance of class  AssetMgr */
 #ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_getInstance00
 static int tolua_EditorLuaAPI_AssetMgr_getInstance00(lua_State* tolua_S)
@@ -598,6 +663,175 @@ static int tolua_EditorLuaAPI_AssetMgr_getImguiTex00(lua_State* tolua_S)
 }
 #endif //#ifndef TOLUA_DISABLE
 
+/* method: ImportFbx of class  AssetMgr */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_ImportFbx00
+static int tolua_EditorLuaAPI_AssetMgr_ImportFbx00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"AssetMgr",0,&tolua_err) ||
+ !tolua_isurho3dstring(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  AssetMgr* self = (AssetMgr*)  tolua_tousertype(tolua_S,1,0);
+  const String path = ((const String)  tolua_tourho3dstring(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'ImportFbx'", NULL);
+#endif
+ {
+  self->ImportFbx(path);
+ tolua_pushurho3dstring(tolua_S,(const char*)path);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'ImportFbx'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: SaveScene of class  AssetMgr */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_SaveScene00
+static int tolua_EditorLuaAPI_AssetMgr_SaveScene00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"AssetMgr",0,&tolua_err) ||
+ !tolua_isurho3dstring(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  AssetMgr* self = (AssetMgr*)  tolua_tousertype(tolua_S,1,0);
+  const String path = ((const String)  tolua_tourho3dstring(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'SaveScene'", NULL);
+#endif
+ {
+  self->SaveScene(path);
+ tolua_pushurho3dstring(tolua_S,(const char*)path);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'SaveScene'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: SavePrefab of class  AssetMgr */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_SavePrefab00
+static int tolua_EditorLuaAPI_AssetMgr_SavePrefab00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"AssetMgr",0,&tolua_err) ||
+ !tolua_isusertype(tolua_S,2,"Node",0,&tolua_err) ||
+ !tolua_isurho3dstring(tolua_S,3,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,4,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  AssetMgr* self = (AssetMgr*)  tolua_tousertype(tolua_S,1,0);
+  Node* node = ((Node*)  tolua_tousertype(tolua_S,2,0));
+  const String path = ((const String)  tolua_tourho3dstring(tolua_S,3,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'SavePrefab'", NULL);
+#endif
+ {
+  self->SavePrefab(node,path);
+ tolua_pushurho3dstring(tolua_S,(const char*)path);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'SavePrefab'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: OpenScene of class  AssetMgr */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_OpenScene00
+static int tolua_EditorLuaAPI_AssetMgr_OpenScene00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"AssetMgr",0,&tolua_err) ||
+ !tolua_isurho3dstring(tolua_S,2,0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,3,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  AssetMgr* self = (AssetMgr*)  tolua_tousertype(tolua_S,1,0);
+  const String path = ((const String)  tolua_tourho3dstring(tolua_S,2,0));
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'OpenScene'", NULL);
+#endif
+ {
+  self->OpenScene(path);
+ tolua_pushurho3dstring(tolua_S,(const char*)path);
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'OpenScene'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: OpenNewScene of class  AssetMgr */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_AssetMgr_OpenNewScene00
+static int tolua_EditorLuaAPI_AssetMgr_OpenNewScene00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"AssetMgr",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  AssetMgr* self = (AssetMgr*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'OpenNewScene'", NULL);
+#endif
+ {
+  self->OpenNewScene();
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'OpenNewScene'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
 /* Open function */
 TOLUA_API int tolua_EditorLuaAPI_open (lua_State* tolua_S)
 {
@@ -627,12 +861,19 @@ TOLUA_API int tolua_EditorLuaAPI_open (lua_State* tolua_S)
   tolua_function(tolua_S,"dialogSelectPath",tolua_EditorLuaAPI_EditorApp_dialogSelectPath00);
   tolua_function(tolua_S,"dialogOpenFile",tolua_EditorLuaAPI_EditorApp_dialogOpenFile00);
   tolua_function(tolua_S,"dialogSaveFile",tolua_EditorLuaAPI_EditorApp_dialogSaveFile00);
+  tolua_function(tolua_S,"GetSceneRoot",tolua_EditorLuaAPI_EditorApp_GetSceneRoot00);
+  tolua_function(tolua_S,"SelectNode",tolua_EditorLuaAPI_EditorApp_SelectNode00);
  tolua_endmodule(tolua_S);
  tolua_cclass(tolua_S,"AssetMgr","AssetMgr","Object",NULL);
  tolua_beginmodule(tolua_S,"AssetMgr");
   tolua_function(tolua_S,"getInstance",tolua_EditorLuaAPI_AssetMgr_getInstance00);
   tolua_function(tolua_S,"getTextFile",tolua_EditorLuaAPI_AssetMgr_getTextFile00);
   tolua_function(tolua_S,"getImguiTex",tolua_EditorLuaAPI_AssetMgr_getImguiTex00);
+  tolua_function(tolua_S,"ImportFbx",tolua_EditorLuaAPI_AssetMgr_ImportFbx00);
+  tolua_function(tolua_S,"SaveScene",tolua_EditorLuaAPI_AssetMgr_SaveScene00);
+  tolua_function(tolua_S,"SavePrefab",tolua_EditorLuaAPI_AssetMgr_SavePrefab00);
+  tolua_function(tolua_S,"OpenScene",tolua_EditorLuaAPI_AssetMgr_OpenScene00);
+  tolua_function(tolua_S,"OpenNewScene",tolua_EditorLuaAPI_AssetMgr_OpenNewScene00);
  tolua_endmodule(tolua_S);
  tolua_endmodule(tolua_S);
  return 1;

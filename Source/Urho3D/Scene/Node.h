@@ -86,7 +86,7 @@ public:
     /// Register object factory.
     /// @nobind
     static void RegisterObject(Context* context);
-
+    void SetNeedSave(bool b);
     /// Load from binary data. Return true if successful.
     bool Load(Deserializer& source) override;
     /// Load from XML data. Return true if successful.
@@ -729,6 +729,7 @@ private:
 protected:
     /// Network update queued flag.
     bool networkUpdate_;
+    bool needSave_ = true;
 
 private:
     /// Parent scene node.

@@ -29,12 +29,18 @@ class EditorApp:public Object
  String dialogSelectPath();
  String dialogOpenFile();
  void dialogSaveFile();
+ Node* GetSceneRoot();
+ void SelectNode(unsigned id);
 };
 
 class AssetMgr : public Object
 {
-static AssetMgr* getInstance();
-String getTextFile(const String& path);
-int getImguiTex(const String& path);
-
+ static AssetMgr* getInstance();
+ String getTextFile(const String& path);
+ int getImguiTex(const String& path);
+ void ImportFbx(const String& path);
+ void SaveScene(const String& path);
+ void SavePrefab(Node* node,const String& path);
+ void OpenScene(const String& path);
+ void OpenNewScene();
 };

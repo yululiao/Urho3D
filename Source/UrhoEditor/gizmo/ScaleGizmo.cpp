@@ -97,7 +97,7 @@ void ScaleGizmo::createGizmos(std::string axisName)
 	axisBoxInfo->geo = GeoUtils::create_cube(context_,0.05);
 	//axisBoxInfo->geo->set_color(axisColor);
 	GizmoUtils::set_default_mat(axisBoxInfo->geo);
-	GizmoUtils::set_geo_color(axisBoxInfo->geo,0xff000000 + axisColor);
+	GizmoUtils::set_geo_color(axisBoxInfo->geo,0x77000000 + axisColor);
 	axisBoxInfo->pos = axisPos;
 	axisBoxInfo->rot = axisAngle;
 	std::vector<GizmogeoInfo*> xGizmos;
@@ -106,6 +106,7 @@ void ScaleGizmo::createGizmos(std::string axisName)
 		GizmogeoInfo* axisLineInfo = new GizmogeoInfo();
 		//auto xline = new lines_3d();
 		SharedPtr<Node> xline(GeoUtils::create_line(context_,linePoints,axisColor));
+        GizmoUtils::setLineMat(xline,axisColor);
 		//xline->set_vertices(linePoints);
 		//xline->set_color(axisColor);
 		axisLineInfo->geo = xline;

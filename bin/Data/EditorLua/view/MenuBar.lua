@@ -8,7 +8,7 @@ function MenuBar.onOpen()
     print("onOpenFile")
 end
 function MenuBar.onSave()
-    print("onOpen")
+    --print("onOpen")
 end
 
 function MenuBar.onUndo()

@@ -100,6 +100,14 @@ END_IMGUI_FUNC
 //    IMGUI_API bool          BeginChild(ImGuiID id, const ImVec2& size = ImVec2 0  0, bool border = false, ImGuiWindowFlags flags = 0);
 // Unsupported arg type  const ImVec2& size = ImVec2 0  0
 //    IMGUI_API void          EndChild();
+IMGUI_FUNCTION(BeginChild)
+LABEL_ARG(name)
+IM_VEC_2_ARG(size)
+CALL_FUNCTION(BeginChild, bool, name,size)
+IF_RET_ADD_END_STACK(1)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(EndChild)
 CALL_FUNCTION_NO_RET(EndChild)
 POP_END_STACK(2)
@@ -636,9 +644,9 @@ END_IMGUI_FUNC
 IMGUI_FUNCTION(ImageButton)
 OPTIONAL_INT_ARG(user_texture_id, 0)
 IM_VEC_2_ARG(size)
-CALL_FUNCTION_NO_RET(ImageButton, user_texture_id, size)
+CALL_FUNCTION(ImageButton, bool,user_texture_id, size)
+PUSH_BOOL(ret)
 END_IMGUI_FUNC
-
 
 // Unsupported arg type  const ImVec2& uv0 = ImVec2 0  0
 //    IMGUI_API bool          Checkbox(const char* label, bool* v);
@@ -1125,6 +1133,13 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiTableFlags flags = 0
 // Unsupported arg type  const ImVec2& outer_size = ImVec2 0.0f  0.0f
 //    IMGUI_API void          EndTable();                                 // only call EndTable() if BeginTable() returns true!
+IMGUI_FUNCTION(BeginPopupContextItem)
+LABEL_ARG(id)
+OPTIONAL_INT_ARG(flags, 1)
+CALL_FUNCTION(BeginPopupContextItem, bool, id, flags)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 
 IMGUI_FUNCTION(BeginPopupContextWindow)
 LABEL_ARG(id)
@@ -1396,7 +1411,13 @@ PUSH_BOOL(ret)
 END_IMGUI_FUNC
 //    IMGUI_API bool          IsItemClicked(ImGuiMouseButton mouse_button = 0);                   // is the last item hovered and mouse clicked on? (**)  == IsMouseClicked(mouse_button) && IsItemHovered()Important. (**) this it NOT equivalent to the behavior of e.g. Button(). Read comments in function definition.
 // Unsupported arg type ImGuiMouseButton mouse_button = 0
-//    IMGUI_API bool          IsItemVisible();                                                    // is the last item visible? (items may be out of sight because of clipping/scrolling)
+//    IMGUI_API bool          IsItemVisible();// is the last item visible? (items may be out of sight because of clipping/scrolling)
+IMGUI_FUNCTION(IsItemClicked)
+INT_ARG(flag)
+CALL_FUNCTION(IsItemClicked, bool,flag)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(IsItemVisible)
 CALL_FUNCTION(IsItemVisible, bool)
 PUSH_BOOL(ret)

@@ -24,6 +24,8 @@
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Math/Ray.h"
 #include "AssetMgr.h"
+#include "Urho3D/IO/FileSystem.h"
+#include "EditorApp.h"
 //#include "ctrl/utils.h"
 //#include "ctrl/asset_mgr.h"
 //#include "ctrl/global_event.h"
@@ -54,55 +56,6 @@ namespace Urho3D
 
 	}
 
-    void SceneCtrl::create_models()
-    {
-        auto* cache = GetSubsystem<ResourceCache>();
-
-        // Create scene node & StaticModel component for showing a static plane
-        Node* planeNode = scene_->CreateChild("Plane");
-        planeNode->SetScale(Vector3(50.0f, 1.0f, 50.0f));
-        auto* planeObject = planeNode->CreateComponent<StaticModel>();
-        planeObject->SetModel(cache->GetResource<Model>("Models/Plane.mdl"));
-        //Material* tmp_mat = cache->GetResource<Material>("Materials/StoneTiled.xml");
-        planeObject->SetMaterial(cache->GetResource<Material>("Materials/StoneTiled.xml"));
-        //planeObject->GetMaterial()->SetFillMode(FillMode::FILL_WIREFRAME);
-
-        SharedPtr<Node> geoNode(GeoUtils::create_sphere(context_, 1, 30, 30));
-        geoNode->SetName("geoNode");
-        //geoNode->SetScale(Vector3(0.1f, 0.1f, 0.1f));
-        geoNode->SetPosition(Vector3(2.0f, 1.0f, 15.0f));
-        geoNode->Pitch(-90);
-        //SharedPtr<Model> model = geometry_util::create_plane(_context,2,2);
-        //SharedPtr<Model> model = geometry_util::create_torus(_context, 1, 0.5,30,30);
-        //SharedPtr<Model> model = geometry_util::create_cylinder(_context, 1, 0.0, 2, 30,10);
-        //SharedPtr<Model> model = geometry_util::create_disk(_context, 0.5, 1.0, 20, 20);
-        //SharedPtr<Model> model = geometry_util::create__cube(_context, 1.0);
-        geoNode->GetComponent<StaticModel>()->SetMaterial(cache->GetResource<Material>("Materials/StoneTiled.xml"));
-        //geoNode->GetComponent<StaticModel>()->GetMaterial()->SetCullMode(CullMode::CULL_CW);
-        _scene_root->AddChild(geoNode);
-
-        _modelNode = _scene_root->CreateChild("Jill");
-        _modelNode->SetPosition(Vector3(0.0f, 1.0f, 0.0f));
-        //modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
-        auto* modelObject = _modelNode->CreateComponent<AnimatedModel>();
-        modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
-        Material* model_mat = cache->GetResource<Material>("Models/Kachujin/Materials/Kachujin.xml");
-        modelObject->SetMaterial(model_mat);
-        //model_mat->SetShaderParameter("MatDiffColor", Vector4(1.0,0.0,0.0,1));
-        //modelObject->GetMaterial()->SetFillMode(FillMode::FILL_WIREFRAME);
-        modelObject->SetCastShadows(true);
-
-        auto* walkAnimation = cache->GetResource<Animation>("Models/Kachujin/Kachujin_Walk.ani");
-        AnimationState* state = modelObject->AddAnimationState(walkAnimation);
-        if (state)
-        {
-            state->SetWeight(1.0f);
-            state->SetLooped(true);
-            state->SetTime(Random(walkAnimation->GetLength()));
-        }
-
-    }
-
     void SceneCtrl::deleteNode(Urho3D::Node* node) 
     { 
         node->Remove();
@@ -110,32 +63,19 @@ namespace Urho3D
 
     void SceneCtrl::addModel(const String& path)
     {
+        GetSubsystem<Graphics>()->MakeCurrent();
         auto* cache = GetSubsystem<ResourceCache>();
-        
         String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
         //加载fbx对应的mdl
         String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
         String rpath = AssetMgr::getInstance()->pathToRelative(mdl_path);
-
         Node* modelNode = rttSceneRoot_->CreateChild(name);
-        
-       // modelNode->SetScale(Vector3(0.01,0.01,0.01));
-        //modelNode->SetPosition(Vector3(0.0f, 0.0f, 0.0f));
-        //modelNode->SetRotation(Quaternion(0.0f, Random(360.0f), 0.0f));
+        modelNode->SetScale(Vector3(0.01,0.01,0.01));
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
-        //modelObject->SetModel(cache->GetResource<Model>("Models/Kachujin/Kachujin.mdl"));
-        //modelObject->SetModel(cache->GetResource<Model>("Models/001_Mesh.mdl"));
         Model* model = cache->GetResource<Model>(rpath);
         modelObject->SetModel(model);
-
-        Node* cube = GeoUtils::create_cube(_ctx, 1);
-        rttSceneRoot_->AddChild(cube);
-
-        //rttScene_->Update();
         //Material* model_mat = cache->GetResource<Material>("assets/models/001/tex/001.xml");
         //modelObject->SetMaterial(model_mat);
-        //global_event::get_instance()->emit_event(eGlobalEventType::AddNodeToScene);
-        //renderTexture->GetImage()->SavePNG("test.png");
     }
 
     void SceneCtrl::genRttTex() 
@@ -223,7 +163,7 @@ namespace Urho3D
         _grid_lines.clear();
         if(_grid_root.Null())
         {
-            _grid_root = rttScene_->CreateChild("GridRoot");
+            _grid_root = editorRoot_->CreateChild("GridRoot");
         }
         int line_count = 20;
         float line_dis = 1;
@@ -253,88 +193,88 @@ namespace Urho3D
 
     }
 
-	void SceneCtrl::create_scene()
-	{
-        create_rttScene();
-        auto* cache = GetSubsystem<ResourceCache>();
-        scene_ = new Scene(context_);
-        scene_->SetName("SceneMain");
-        scene_->CreateComponent<Octree>();
-        Node* zoneNode = scene_->CreateChild("Zone");
-        auto* zone = zoneNode->CreateComponent<Zone>();
-        zone->SetBoundingBox(BoundingBox(-1000.0f, 1000.0f));
-        zone->SetAmbientColor(Color(0.1f, 0.1f, 0.1f));
-        zone->SetFogStart(100.0f);
-        zone->SetFogEnd(300.0f);
-        Node* lightNode = scene_->CreateChild("DirectionalLight");
-        lightNode->SetDirection(Vector3(0.5f, -1.0f, 0.5f));
-        auto* light = lightNode->CreateComponent<Light>();
-        light->SetLightType(LIGHT_DIRECTIONAL);
-        light->SetColor(Color(0.2f, 0.2f, 0.2f));
-        light->SetSpecularIntensity(1.0f);
-        Node* screenNode = scene_->CreateChild("Screen");
-        screenNode->SetPosition(Vector3(0.0f, 10.0f, -0.27f));
-        screenNode->SetRotation(Quaternion(-90.0f, 0.0f, 0.0f));
-        screenNode->SetScale(Vector3(20.0f, 0.0f, 15.0f));
-        auto* screenObject = screenNode->CreateComponent<StaticModel>();
-        screenObject->SetModel(cache->GetResource<Model>("Models/Plane.mdl"));
-        renderMaterial_ = new Material(context_);
-        renderMaterial_->SetTechnique(0, cache->GetResource<Technique>("Techniques/DiffUnlit.xml"));
-        renderMaterial_->SetTexture(TU_DIFFUSE, renderTexture);
-        renderMaterial_->SetDepthBias(BiasParameters(-0.001f, 0.0f));
-        screenObject->SetMaterial(renderMaterial_);
+    void SceneCtrl::Clear() 
+    { 
+        EditorApp::getInstance()->Clear();
+        _grid_root = nullptr;
+        rttSceneRoot_ = nullptr;
+    }
 
-        cameraNode_ = scene_->CreateChild("Camera");
-        auto* camera = cameraNode_->CreateComponent<Camera>();
-        camera->SetFarClip(300.0f);
-        cameraNode_->SetPosition(Vector3(0.0f, 7.0f, -30.0f));
-        auto* renderer = GetSubsystem<Renderer>();
-        SharedPtr<Viewport> viewport(new Viewport(context_, scene_, cameraNode_->GetComponent<Camera>()));
-        renderer->SetViewport(0, viewport);
-	}
-
-    void SceneCtrl::create_rttScene() 
+    void SceneCtrl::InitScene(bool hasRoot)
     {
-        auto* cache = GetSubsystem<ResourceCache>();
-        rttScene_ = new Scene(context_);
-        rttScene_->SetName("RttScene");
-        rttScene_->CreateComponent<Octree>();
-        rttSceneRoot_ = rttScene_->CreateChild("Root");
-        Node* zoneNode = rttScene_->CreateChild("Zone");
-        auto* zone = zoneNode->CreateComponent<Zone>();
-        zone->SetBoundingBox(BoundingBox(-1000.0f, 1000.0f));
-        zone->SetAmbientColor(Color(0.2f, 0.2f, 0.2f));
-        zone->SetFogColor(Color(0.2f, 0.2f, 0.2f));
-        zone->SetFogStart(10.0f);
-        zone->SetFogEnd(100.0f);
-        
-        rttCameraNode_ = rttScene_->CreateChild("Camera");
-        rttCameraNode_->SetPosition(Vector3(0.0f, 5.0f, -10.0f));
+        if(hasRoot)
+        {
+            rttSceneRoot_ = rttScene_->GetChild("Root");
+        }
+        else
+        {
+            rttSceneRoot_ = rttScene_->CreateChild("Root");
+            Node* zoneNode = rttSceneRoot_->CreateChild("Zone");
+            auto* zone = zoneNode->CreateComponent<Zone>();
+            zone->SetBoundingBox(BoundingBox(-1000.0f, 1000.0f));
+            zone->SetAmbientColor(Color(0.2f, 0.2f, 0.2f));
+            zone->SetFogColor(Color(0.2f, 0.2f, 0.2f));
+            zone->SetFogStart(10.0f);
+            zone->SetFogEnd(100.0f);
+
+            Node* lightNode = rttSceneRoot_->CreateChild("DirLight");
+            lightNode->SetPosition(Vector3(5.0f, 5.0f, -5.0f));
+            lightNode->LookAt(Vector3(0.0f, 0.0f, -0.0f));
+            auto* light = lightNode->CreateComponent<Light>();
+            light->SetLightType(LIGHT_DIRECTIONAL);
+            light->SetColor(Color(0.8f, 0.8f, 0.8f));
+            light->SetSpecularIntensity(1.0f);
+        }
+        editorRoot_ = rttScene_->CreateChild("EditorRoot");
+        editorRoot_->SetNeedSave(false);
+
+        rttCameraNode_ = editorRoot_->CreateChild("Camera");
+        rttCameraNode_->SetPosition(Vector3(5.0f, 5.0f, -5.0f));
         rttCameraNode_->LookAt(Vector3(0.0f, 0.0f, -0.0f));
         rttCam_ = rttCameraNode_->CreateComponent<Camera>();
         rttCam_->SetFarClip(300.0f);
         rttCam_->SetAutoAspectRatio(false);
-        rttCam_->SetAspectRatio(constRttSize.x_/constRttSize.y_);
-        //auto* light = rttCameraNode_->CreateComponent<Light>();
-        //light->SetLightType(LIGHT_POINT);
-        //light->SetRange(30.0f);
-
-        auto* light = rttCameraNode_->CreateComponent<Light>();
-        light->SetLightType(LIGHT_DIRECTIONAL);
-        light->SetColor(Color(0.2f, 0.2f, 0.2f));
-        light->SetSpecularIntensity(1.0f);
-
+        rttCam_->SetAspectRatio(viewSize_.x_ / viewSize_.y_);
         renderTexture = new Texture2D(context_);
         renderTexture->SetSize(constRttSize.x_, constRttSize.y_, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
         renderTexture->SetFilterMode(FILTER_BILINEAR);
         RenderSurface* surface = renderTexture->GetRenderSurface();
+        surface->SetUpdateMode(SURFACE_UPDATEALWAYS);
         rttViewport_ = new Viewport(context_, rttScene_, rttCam_);
         surface->SetViewport(0, rttViewport_);
         rttScene_->SetUpdateEnabled(true);
-        //Node* cube = GeoUtils::create_cube(_ctx, 1);
-        //rttSceneRoot_->AddChild(cube);
-       
+
         update_grids();
+    }
+
+    void SceneCtrl::OpenScene(const String& path) 
+    { 
+        GetSubsystem<Graphics>()->MakeCurrent();
+        Clear();
+        File file(context_,path,FileMode::FILE_READ);
+        rttScene_ = new Scene(context_);
+        rttScene_->LoadJSON(file);
+        InitScene(true);
+        EditorApp::getInstance()->setCurTool("camera");
+    }
+
+    void SceneCtrl::OpenNewScene()
+    {
+        GetSubsystem<Graphics>()->MakeCurrent();
+        Clear();
+        rttScene_ = new Scene(context_);
+        rttScene_->SetName("RttScene");
+        rttScene_->CreateComponent<Octree>();
+        InitScene(false);
+        EditorApp::getInstance()->setCurTool("camera");
+    }
+
+    void SceneCtrl::createScene() 
+    {
+        rttScene_ = new Scene(context_);
+        rttScene_->SetName("RttScene");
+        rttScene_->CreateComponent<Octree>();
+        InitScene(false);
     }
 
 	void SceneCtrl::update()
@@ -350,7 +290,7 @@ namespace Urho3D
 	Node* SceneCtrl::select(float x, float y)
 	{
 		Node* hit = nullptr;
-        Ray world_ray = cameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
+        Ray world_ray = rttCameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
 		float dis = 100000;
         hit = intersectObj(world_ray, rttSceneRoot_, dis);
 		return hit;

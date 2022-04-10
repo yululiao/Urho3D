@@ -8,6 +8,18 @@ function OnDrag()
     --print("onDrag")
  end
 
+function OnImport(path)
+    ResTree.assetMgr:ImportFbx(path)
+end
+
+function OnItemDoubleClicked(path)
+    if string.find(path,".scene",1) then
+        ResTree.assetMgr:OpenScene(path)
+        ResTree.app.cppApp:setCurTool("camera")
+        ResTree.app.toolBar.curToolName = "camera"
+    end
+end
+
 local drawResTree
 drawResTree = function(path)
     local dirs = fileSystem:ScanDir(path,".*",3,false)
@@ -17,10 +29,11 @@ drawResTree = function(path)
     end
     local name = pathItems[#pathItems]
     if imgui.TreeNode(name) then
-        for i=1,#dirs,1 do
-            if dirs[i] ~= "." and dirs[i] ~= ".." then
-                drawResTree(path.."/"..dirs[i],false)
+        if imgui.BeginPopupContextItem("ResContext",1) then
+            if imgui.MenuItem("import","",false,true) then
+                OnImport(path)
             end
+            imgui.EndPopup()
         end
         if imgui.BeginDragDropSource(0) then
             imgui.SetDragDropPayload("drag_res",path,#path)
@@ -31,6 +44,16 @@ drawResTree = function(path)
             OnDrop()
             imgui.BeginDragDropTarget()
         end--]]
+        --imgui.OpenPopupOnItemClick("ResContex",1)
+        if imgui.IsMouseDoubleClicked(0) and imgui.IsItemHovered(0) then
+            OnItemDoubleClicked(path)
+        end
+        --所有树节点事件处理在子节点绘制前
+        for i=1,#dirs,1 do
+            if dirs[i] ~= "." and dirs[i] ~= ".." then
+                drawResTree(path.."/"..dirs[i])
+            end
+        end
         imgui.TreePop()
     end
  end

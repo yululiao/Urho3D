@@ -16,10 +16,22 @@ using namespace Urho3D;
 void GizmoUtils::set_default_mat(Urho3D::Node* geoNode)
 {
 	auto* cache = geoNode->GetSubsystem<ResourceCache>();
-	SharedPtr<Material> t_mat = cache->GetResource<Material>("Materials/DefaultGreyAlpha.xml")->Clone();
+	SharedPtr<Material> t_mat = cache->GetResource<Material>("Materials/DefaultGreyAlphaOverlay.xml")->Clone();
 	t_mat->SetCullMode(CullMode::CULL_NONE);
-	t_mat->GetPass(0, "alpha")->SetDepthTestMode(CompareMode::CMP_ALWAYS);
+	//t_mat->GetPass(0, "alpha")->SetDepthTestMode(CompareMode::CMP_ALWAYS);
 	geoNode->GetComponent<StaticModel>()->SetMaterial(t_mat);
+}
+
+void GizmoUtils::setLineMat(Urho3D::Node* geoNode,unsigned color)
+{
+    auto* cache = geoNode->GetSubsystem<ResourceCache>();
+    SharedPtr<Material> t_mat = cache->GetResource<Material>("Materials/LineMatOverlay.xml")->Clone();
+    t_mat->SetCullMode(CullMode::CULL_NONE);
+    color = 0xff000000 + color;
+    Color t_color(color, Color::ARGB);
+    t_mat->SetShaderParameter("MatDiffColor", t_color.ToVector4());
+    // t_mat->GetPass(0, "alpha")->SetDepthTestMode(CompareMode::CMP_ALWAYS);
+    geoNode->GetComponent<StaticModel>()->SetMaterial(t_mat);
 }
 
 void GizmoUtils::set_geo_color(Urho3D::Node* geoNode, unsigned value)

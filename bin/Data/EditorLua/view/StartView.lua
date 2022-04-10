@@ -44,6 +44,10 @@ function StartView:Update()
             self.trigged = true;
         end
         imgui.PopStyleVar(1)
+        imgui.Spacing()
+        imgui.Spacing()
+        imgui.Spacing()
+        imgui.Separator()
         self:RenderHistoryList()
         if self.trigged then
             local path = self.app.DialogGetPath()

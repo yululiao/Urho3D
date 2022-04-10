@@ -93,6 +93,11 @@ void Node::RegisterObject(Context* context)
         AM_NET | AM_NOEDIT);
 }
 
+void Node::SetNeedSave(bool b) 
+{ 
+    needSave_ = b;
+}
+
 bool Node::Load(Deserializer& source)
 {
     SceneResolver resolver;
@@ -114,6 +119,8 @@ bool Node::Load(Deserializer& source)
 
 bool Node::Save(Serializer& dest) const
 {
+    if (!needSave_)
+        return true;
     // Write node ID
     if (!dest.WriteUInt(id_))
         return false;
@@ -193,6 +200,8 @@ bool Node::LoadJSON(const JSONValue& source)
 
 bool Node::SaveXML(XMLElement& dest) const
 {
+    if (!needSave_)
+        return true;
     // Write node ID
     if (!dest.SetUInt("id", id_))
         return false;
@@ -230,6 +239,8 @@ bool Node::SaveXML(XMLElement& dest) const
 
 bool Node::SaveJSON(JSONValue& dest) const
 {
+    if (!needSave_)
+        return true;
     // Write node ID
     dest.Set("id", id_);
 

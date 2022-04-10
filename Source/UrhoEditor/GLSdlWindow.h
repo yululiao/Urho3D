@@ -8,6 +8,8 @@
 #include "ImguiUpdater.h"
 #include <memory>
 
+class UMainWindow;
+
 class UIWindow
 {
 public:
@@ -16,6 +18,7 @@ public:
     void Show() { showing = true; }
     void Hide() { showing = false; }
     SharedPtr<MenuBarUpdater> _menuBarUpdater = nullptr;
+    void SetParent(UMainWindow* p){ _parent  = p;}
 protected:
     bool showing = true;
     std::string title;
@@ -23,6 +26,7 @@ protected:
     Vector2 curMousePos;
     bool mousePresed = false;
     bool mouseRelease = true;
+    UMainWindow* _parent = nullptr;
 };
 
 class renderWindow : public UIWindow
@@ -82,6 +86,7 @@ public:
     }
     void AddWindow(std::unique_ptr<UIWindow> newWindow) 
     { 
+        newWindow->SetParent(this);
         newWindow->_menuBarUpdater = _menuBarUpdater;
         windows.push_back(std::move(newWindow));
     }

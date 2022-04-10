@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetImporter.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\AssetMgr.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\CameraCtrl.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\SceneCtrl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetImporter.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\AssetMgr.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\CameraCtrl.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.h" />

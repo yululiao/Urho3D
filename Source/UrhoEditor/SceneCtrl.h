@@ -22,20 +22,25 @@ public:
 	~SceneCtrl();
 	static SceneCtrl* getInstance();
 	static Context* _ctx;
-	void create_scene();
-    void create_rttScene();
-    void create_models();
+	//void create_scene();
+    void createScene();
     void deleteNode(Urho3D::Node* node);
     void update_grids();
 	void update();
 	Node* select(float x, float y);
     void addModel(const String& path);
     Node* getRoot() { return rttSceneRoot_; }
+    Node* GetEditorRoot() { return editorRoot_; }
     void genRttTex();
     char* getRttData() { return rttData; }
     void OnResizeView(int w, int h);
     Node* intersectObj(Ray& ray, Node* pnode, float& dis);
     void intersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out);
+    Scene* GetScene() { return rttScene_; }
+    void Clear();
+    void InitScene(bool hasRoot);
+    void OpenScene(const String& path);
+    void OpenNewScene();
 
 protected:
     char* rttData = nullptr;
@@ -43,11 +48,11 @@ protected:
 private:
 	SceneCtrl(Context* ctx);
 	static SceneCtrl* _instance;
-    SharedPtr<Node> _modelNode = nullptr;
-    SharedPtr<Scene> scene_;
-    SharedPtr<Node> _scene_root = nullptr;
+    //SharedPtr<Node> _modelNode = nullptr;
+    //SharedPtr<Scene> scene_;
+    //SharedPtr<Node> _scene_root = nullptr;
     /// Camera scene node.
-    SharedPtr<Node> cameraNode_;
+    //SharedPtr<Node> cameraNode_;
     SharedPtr<Viewport> rttViewport_ = nullptr;
 
 public:
@@ -56,14 +61,16 @@ public:
     SharedPtr<Texture2D> renderTexture = nullptr;
     std::vector<SharedPtr<Node>> _grid_lines;
 
-     SharedPtr<Scene> rttScene_;
+    SharedPtr<Scene> rttScene_;
     /// Camera scene node in the render-to-texture scene.
-     SharedPtr<Node> rttCameraNode_;
-    Node* rttSceneRoot_ = nullptr;
+    SharedPtr<Node> rttCameraNode_;
+    //SharedPtr<Node> lightNode;
+    SharedPtr<Node> rttSceneRoot_ = nullptr;
     Vector2 viewSize_;
     SharedPtr<Material> renderMaterial_ = nullptr;
     Camera* rttCam_ = nullptr;
     Vector2 constRttSize;
+    SharedPtr<Node> editorRoot_ = nullptr;
 };
 
 }

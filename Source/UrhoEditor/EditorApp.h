@@ -35,6 +35,7 @@ public:
     String dialogSelectPath();
     String dialogOpenFile();
     void dialogSaveFile();
+    void Clear();
     /// <summary>
     /// 执行一个命令行
     /// </summary>
@@ -43,7 +44,8 @@ public:
     /// <param name="msg_len"></param>
     /// <returns></returns>
     int system(const char* cmd, char* pRetMsg, int msg_len);
-
+    Node* GetSceneRoot();
+    void SelectNode(unsigned id);
 protected:
 	void handleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;

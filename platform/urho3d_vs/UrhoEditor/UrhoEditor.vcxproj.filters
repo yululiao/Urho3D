@@ -68,6 +68,9 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\AssetMgr.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetImporter.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\UrhoEditor\GLSdlWindow.h">
@@ -113,6 +116,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\AssetMgr.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetImporter.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
