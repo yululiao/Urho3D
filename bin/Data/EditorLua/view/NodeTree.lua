@@ -1,9 +1,10 @@
 local NodeTree = {}
 NodeTree.isShow = true
 local Translator = require("EditorLua/core/Translate")
+require("EditorLua/core/BitUtils")
 
-local OnClicked = function(id)
-    NodeTree.app.cppApp:SelectNode(id)
+local OnClicked = function(node)
+    NodeTree.app.cppApp:SelectNode(node)
 end
 
 local OnDoubleClicked = function()
@@ -12,17 +13,29 @@ end
 local DrawNode
 DrawNode = function(node)
     local nodeName = node:GetName()
-    if imgui.TreeNode(nodeName) then
-        --events
-        if imgui.IsItemClicked(0) then
-            OnClicked(node:GetID())
-        end
-        if imgui.IsMouseDoubleClicked(0) and imgui.IsItemHovered(0) then
-            OnDoubleClicked(path)
-        end
-        --events end
+    --ImGuiTreeNodeFlags_Selected
+    --ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+    local flags = BitOr(imgui.constant.TreeNodeFlags.OpenOnArrow,imgui.constant.TreeNodeFlags.OpenOnDoubleClick)
+    flags =  BitOr(flags,imgui.constant.TreeNodeFlags.SpanAvailWidth)
+    local children = node:GetChildren(false)
+    if NodeTree.app.cppApp:GetSelectNode() and node:GetID() == NodeTree.app.cppApp:GetSelectNode():GetID() then
+        flags =  BitOr(flags,imgui.constant.TreeNodeFlags.Selected)
+    end
+    if(#children == 0) then
+        --ImGuiTreeNodeFlags_Leaf |ImGuiTreeNodeFlags_NoTreePushOnOpen
+        flags =  BitOr(flags,imgui.constant.TreeNodeFlags.Leaf)
+    end
+    local node_open = imgui.TreeNodeEx(nodeName,flags)
+    --events
+    if imgui.IsItemClicked(0) then
+        OnClicked(node)
+    end
+    if imgui.IsMouseDoubleClicked(0) and imgui.IsItemHovered(0) then
+        OnDoubleClicked(path)
+    end
+    --events end
+    if node_open then
         --children
-        local children = node:GetChildren(false)
         for k,v in ipairs(children) do
             DrawNode(v)
         end

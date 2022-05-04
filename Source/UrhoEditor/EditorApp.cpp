@@ -211,13 +211,23 @@ Node* EditorApp::GetSceneRoot()
    return SceneCtrl::getInstance()->getRoot();
 }
 
-void EditorApp::SelectNode(unsigned id)
+void EditorApp::SelectNode(Node* node)
 {
-    Node* node = getScene()->GetNode(id);
-    if(node && gizmoCtrl_ && _curent_tool != "camera")
+    _selectedNode = node;
+    if(gizmoCtrl_ && _curent_tool != "camera")
     {
         gizmoCtrl_->attach(node);
     }
+}
+
+Node* EditorApp::GetSelectNode() 
+{
+    return _selectedNode;
+}
+
+void EditorApp::MakeCurent() 
+{
+    GetSubsystem<Graphics>()->MakeCurrent();
 }
 
 void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)

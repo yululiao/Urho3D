@@ -30,7 +30,9 @@ class EditorApp:public Object
  String dialogOpenFile();
  void dialogSaveFile();
  Node* GetSceneRoot();
- void SelectNode(unsigned id);
+ void SelectNode(Node* node);
+ Node* GetSelectNode();
+ void MakeCurent();
 };
 
 class AssetMgr : public Object

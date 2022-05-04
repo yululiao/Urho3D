@@ -101,6 +101,10 @@ void UMainWindow::imguiUpdate()
     bool show = true;
     //showDockSpace(&show);
     bool showMian = true;
+    if(_showDemo)
+    {
+        ImGui::ShowDemoWindow(&_showDemo);
+    }
     for (auto i = 0; i < windows.size(); i++)
     {
         windows[i]->update();
@@ -266,11 +270,15 @@ void renderWindow::update()
             if (ImGui::IsMouseReleased(0))
             {
                 auto data = ImGui::AcceptDragDropPayload("drag_res");
-                char path[200] = {0};
-                memcpy(path,data->Data,data->DataSize);
-                //std::string strpath = path;
-                SceneCtrl::getInstance()->addModel(path);
-                std::cout << "onDrop" << std::endl;
+                if(data)
+                {
+                    char path[200] = { 0 };
+                    memcpy(path, data->Data, data->DataSize);
+                    //std::string strpath = path;
+                    SceneCtrl::getInstance()->addModel(path);
+                    std::cout << "onDrop" << std::endl;
+                }
+                
             }
           
             ImGui::EndDragDropTarget();

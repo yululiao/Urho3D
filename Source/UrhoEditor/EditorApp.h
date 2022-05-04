@@ -45,7 +45,9 @@ public:
     /// <returns></returns>
     int system(const char* cmd, char* pRetMsg, int msg_len);
     Node* GetSceneRoot();
-    void SelectNode(unsigned id);
+    void SelectNode(Node* node);
+    Node* GetSelectNode();
+    void MakeCurent();
 protected:
 	void handleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -65,7 +67,7 @@ private:
     String _work_space;
     renderWindow* _sceneView = nullptr;
     bool _gameStarted = false;
-
+    Node* _selectedNode = nullptr;
 public:
 	CameraCtrl* cam_ctrl_ = nullptr;
    // SharedPtr<TransformCtrl> _gizmoCtrl = nullptr;

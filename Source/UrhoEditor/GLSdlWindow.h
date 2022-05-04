@@ -102,6 +102,7 @@ private:
     GLFWwindow* window = nullptr;
     //MainMenu* menuBar = nullptr;
     bool done = false;
+    bool _showDemo = false;
    
 };
 

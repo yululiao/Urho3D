@@ -39,6 +39,7 @@ function StartView:Update()
         self.isShow = imgui.Begin(Translator:translate("StartView"),self.isShow)
         --local undotex = self.assetMgr:getImguiTex("res/img/undo.png")
         --imgui.Image(undotex,32,32)
+        --ImGuiStyleVar_ButtonTextAlign
         imgui.PushStyleVar_2(imgui.constant.StyleVar.ButtonTextAlign,0,0)
         if imgui.Button("Open...",80,25) then
             self.trigged = true;

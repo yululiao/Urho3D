@@ -540,7 +540,7 @@ static int tolua_EditorLuaAPI_EditorApp_SelectNode00(lua_State* tolua_S)
  tolua_Error tolua_err;
  if (
  !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
- !tolua_isnumber(tolua_S,2,0,&tolua_err) ||
+ !tolua_isusertype(tolua_S,2,"Node",0,&tolua_err) ||
  !tolua_isnoobj(tolua_S,3,&tolua_err)
  )
  goto tolua_lerror;
@@ -548,18 +548,81 @@ static int tolua_EditorLuaAPI_EditorApp_SelectNode00(lua_State* tolua_S)
 #endif
  {
   EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
-  unsigned id = ((unsigned)  tolua_tonumber(tolua_S,2,0));
+  Node* node = ((Node*)  tolua_tousertype(tolua_S,2,0));
 #ifndef TOLUA_RELEASE
  if (!self) tolua_error(tolua_S,"invalid 'self' in function 'SelectNode'", NULL);
 #endif
  {
-  self->SelectNode(id);
+  self->SelectNode(node);
  }
  }
  return 0;
 #ifndef TOLUA_RELEASE
  tolua_lerror:
  tolua_error(tolua_S,"#ferror in function 'SelectNode'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: GetSelectNode of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_GetSelectNode00
+static int tolua_EditorLuaAPI_EditorApp_GetSelectNode00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'GetSelectNode'", NULL);
+#endif
+ {
+  Node* tolua_ret = (Node*)  self->GetSelectNode();
+  tolua_pushusertype(tolua_S,(void*)tolua_ret,"Node");
+ }
+ }
+ return 1;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'GetSelectNode'.",&tolua_err);
+ return 0;
+#endif
+}
+#endif //#ifndef TOLUA_DISABLE
+
+/* method: MakeCurent of class  EditorApp */
+#ifndef TOLUA_DISABLE_tolua_EditorLuaAPI_EditorApp_MakeCurent00
+static int tolua_EditorLuaAPI_EditorApp_MakeCurent00(lua_State* tolua_S)
+{
+#ifndef TOLUA_RELEASE
+ tolua_Error tolua_err;
+ if (
+ !tolua_isusertype(tolua_S,1,"EditorApp",0,&tolua_err) ||
+ !tolua_isnoobj(tolua_S,2,&tolua_err)
+ )
+ goto tolua_lerror;
+ else
+#endif
+ {
+  EditorApp* self = (EditorApp*)  tolua_tousertype(tolua_S,1,0);
+#ifndef TOLUA_RELEASE
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'MakeCurent'", NULL);
+#endif
+ {
+  self->MakeCurent();
+ }
+ }
+ return 0;
+#ifndef TOLUA_RELEASE
+ tolua_lerror:
+ tolua_error(tolua_S,"#ferror in function 'MakeCurent'.",&tolua_err);
  return 0;
 #endif
 }
@@ -863,6 +926,8 @@ TOLUA_API int tolua_EditorLuaAPI_open (lua_State* tolua_S)
   tolua_function(tolua_S,"dialogSaveFile",tolua_EditorLuaAPI_EditorApp_dialogSaveFile00);
   tolua_function(tolua_S,"GetSceneRoot",tolua_EditorLuaAPI_EditorApp_GetSceneRoot00);
   tolua_function(tolua_S,"SelectNode",tolua_EditorLuaAPI_EditorApp_SelectNode00);
+  tolua_function(tolua_S,"GetSelectNode",tolua_EditorLuaAPI_EditorApp_GetSelectNode00);
+  tolua_function(tolua_S,"MakeCurent",tolua_EditorLuaAPI_EditorApp_MakeCurent00);
  tolua_endmodule(tolua_S);
  tolua_cclass(tolua_S,"AssetMgr","AssetMgr","Object",NULL);
  tolua_beginmodule(tolua_S,"AssetMgr");

@@ -26,6 +26,7 @@ NodeTree.app = EditorLuaApp
 ResTree.assetMgr = assetMgr
 StartView.app = EditorLuaApp
 ToolBar.app = EditorLuaApp
+Inspector.app = EditorLuaApp
 ToolBar.assetMgr = assetMgr
 StartView.assetMgr = assetMgr
 EditorLuaApp.toolBar = ToolBar

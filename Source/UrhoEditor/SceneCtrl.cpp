@@ -256,6 +256,7 @@ namespace Urho3D
         rttScene_->LoadJSON(file);
         InitScene(true);
         EditorApp::getInstance()->setCurTool("camera");
+        EditorApp::getInstance()->SelectNode(nullptr);
     }
 
     void SceneCtrl::OpenNewScene()
@@ -267,6 +268,7 @@ namespace Urho3D
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
         EditorApp::getInstance()->setCurTool("camera");
+        EditorApp::getInstance()->SelectNode(nullptr);
     }
 
     void SceneCtrl::createScene() 
@@ -275,6 +277,7 @@ namespace Urho3D
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
+        EditorApp::getInstance()->SelectNode(nullptr);
     }
 
 	void SceneCtrl::update()
@@ -293,6 +296,7 @@ namespace Urho3D
         Ray world_ray = rttCameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
 		float dis = 100000;
         hit = intersectObj(world_ray, rttSceneRoot_, dis);
+        EditorApp::getInstance()->SelectNode(hit);
 		return hit;
 	}
 }

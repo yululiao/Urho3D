@@ -921,6 +921,14 @@ END_IMGUI_FUNC
 // Unsupported arg type  ImGuiTreeNodeFlags flags
 // Unsupported arg type  va_list args) IM_FMTLIST(3
 //    IMGUI_API void          TreePush(const char* str_id);                                       // ~ Indent()+PushId(). Already called by TreeNode() when returning true, but you can call TreePush/TreePop yourself if desired.
+IMGUI_FUNCTION(TreeNodeEx)
+LABEL_ARG(label)
+OPTIONAL_INT_ARG(flags, 0)
+CALL_FUNCTION(TreeNodeEx,bool, label, flags)
+ADD_END_STACK(6)
+PUSH_BOOL(ret)
+END_IMGUI_FUNC
+
 IMGUI_FUNCTION(TreePush)
 LABEL_ARG(str_id)
 CALL_FUNCTION_NO_RET(TreePush, str_id)
