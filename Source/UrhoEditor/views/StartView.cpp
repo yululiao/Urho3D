@@ -55,9 +55,13 @@ void StartView::Update()
 	if (ImGui::Button("Open...",ImVec2(80,25)))
 	{
 		String path = EditorApp::getInstance()->dialogSelectPath();
-		EditorApp::getInstance()->openWorkSpace(path);
-		EditorApp::getInstance()->startGame();
-		_isShow = false;
+		if(path != "")
+		{
+			EditorApp::getInstance()->openWorkSpace(path);
+			EditorApp::getInstance()->startGame();
+			_isShow = false;
+		}
+		
 	}
 	ImGui::PopStyleVar(1);
 	ImGui::Spacing(), ImGui::Spacing(), ImGui::Spacing();
