@@ -30,7 +30,7 @@
 //#include "ctrl/asset_mgr.h"
 //#include "ctrl/global_event.h"
 
-namespace Urho3D
+namespace Urho3DEditor
 {
 
 	SceneCtrl* SceneCtrl::_instance = nullptr;

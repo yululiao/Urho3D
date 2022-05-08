@@ -4,7 +4,8 @@
 #include "imgui.h"
 
 using namespace Urho3D;
-
+namespace Urho3DEditor 
+{
 	CameraCtrl::CameraCtrl(Node* cam)
 	{
 		_camera = cam;
@@ -175,4 +176,5 @@ using namespace Urho3D;
 
 		Vector3 result = d * direct.Normalized() + point;
 		return result;
+	}
 	}

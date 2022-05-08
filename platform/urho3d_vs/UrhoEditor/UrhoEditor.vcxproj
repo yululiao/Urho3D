@@ -19,10 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetImporter.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\AssetMgr.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\CameraCtrl.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\EditorApp.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.cpp" />
@@ -30,19 +31,28 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\GLSdlWindow.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\ImguiUpdater.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\main.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\MainMenu.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\pkgs\gen\EditorLuaAPI.cpp" />
-    <ClCompile Include="..\..\..\Source\UrhoEditor\SceneCtrl.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\model\ProjHistory.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\ConsoleView.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\Inspector.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\MainWindow.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\Menubar.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\NodeTree.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\ResPreview.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\ResTree.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\SceneView.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\StartView.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\Toolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetImporter.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\AssetMgr.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\CameraCtrl.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\EditorLuaBinding.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\EditorApp.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.h" />
@@ -50,11 +60,22 @@
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformCtrl.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TransformGizmo.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\TranslateGizmo.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\GLSdlWindow.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\ImguiUpdater.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\imgui_impl_glfw.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\MainMenu.h" />
-    <ClInclude Include="..\..\..\Source\UrhoEditor\SceneCtrl.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\model\ProjHistory.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\Utils.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\ConsoleView.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\Inspector.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\MainWindow.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\Menubar.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\NodeTree.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\ResPreview.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\ResTree.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\SceneView.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\EditorWidget.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\StartView.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\Toolbar.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\UrhoEditor\pkgs\EditorLuaAPI.pkg" />

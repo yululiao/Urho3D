@@ -9,7 +9,7 @@
 #include "Urho3D/IO/FileSystem.h"
 #include "SceneCtrl.h"
 
-
+namespace Urho3DEditor {
 AssetMgr* AssetMgr::_instance = nullptr;
 
 AssetMgr::AssetMgr(Context* ctx)
@@ -186,5 +186,6 @@ void AssetMgr::OpenScene(const String& path)
 void AssetMgr::OpenNewScene() 
 { 
     SceneCtrl::getInstance()->OpenNewScene();
+}
 }
 

@@ -6,6 +6,7 @@
 #include "Urho3D/Math/Quaternion.h"
 #include "GizmoUtils.h"
 
+using namespace Urho3DEditor;
 
 TransformGizmo::TransformGizmo(Context* ctx)
 	:Node(ctx)

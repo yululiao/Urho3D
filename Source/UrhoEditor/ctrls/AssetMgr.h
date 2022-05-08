@@ -13,6 +13,8 @@ namespace Urho3D
 class Node;
 }
 
+namespace Urho3DEditor {
+
 class ImguiTexInfo:public Object
 {
     URHO3D_OBJECT(ImguiTexInfo, Object);
@@ -55,3 +57,5 @@ private:
     std::map<String, SharedPtr<ImguiTexInfo>> _texMap;
 
 };
+
+}

@@ -2,6 +2,9 @@
 #include "Urho3D/Scene/Node.h"
 #include "Urho3D/Math/Vector3.h"
 
+
+namespace Urho3DEditor {
+
 class CameraCtrl
 {
 public:
@@ -40,3 +43,4 @@ private:
 	float game_dis = 170.0f;
 	Urho3D::Vector3 look_pos;
 };
+}

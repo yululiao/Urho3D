@@ -3,11 +3,13 @@
 #include "Urho3D/Core/Main.h"
 #include "Urho3D/Engine/Engine.h"
 #include "Urho3D/Container/Str.h"
-#include "GLSDLWindow.h"
+#include "views/MainWindow.h"
+#include "views/SceneView.h"
 #include "gizmo/TransformCtrl.h"
-#include "CameraCtrl.h"
+#include "ctrls/CameraCtrl.h"
 
 using namespace Urho3D;
+namespace Urho3DEditor {
 
 class EditorApp :public Object
 {
@@ -22,9 +24,7 @@ public:
 	void createEngine(void* win_ptr);
 	void runFrame();
 	void resizeWwindow(int w,int h);
-    ImguiUpdater* getUiUpdater();
-    MenuBarUpdater* getManuBarUpdater();
-    UMainWindow* mainWindow = nullptr;
+    MainWindow* mainWindow = nullptr;
     void setCurTool(const String& name);
     Node* getRootNode();
     Scene* getScene();
@@ -65,7 +65,7 @@ private:
 	String _startupErrors;
 	void* _window_ptr = nullptr;
     String _work_space;
-    renderWindow* _sceneView = nullptr;
+    SceneView* _sceneView = nullptr;
     bool _gameStarted = false;
     Node* _selectedNode = nullptr;
 public:
@@ -74,5 +74,7 @@ public:
 	TransformCtrl* gizmoCtrl_ = nullptr;
 	String  _curent_tool;
     static  String _getPathResult;
+    bool _isStartView = true;
 };
+}
 

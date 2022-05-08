@@ -9,9 +9,9 @@
 #include <Urho3D/Graphics/Graphics.h>
 
 #include <Urho3D/LuaScript/LuaScript.h>
-#include "SceneCtrl.h"
+#include "ctrls/SceneCtrl.h"
 //#include "glfw/glfw3native.h"
-#include "EditorLuaBinding.h"
+//#include "EditorLuaBinding.h"//todo
 #include "ImGuiFileBrowser.h"
 #ifdef _WIN32
 #include <windows.h>
@@ -22,6 +22,8 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #endif // _WIN32
 
+
+namespace Urho3DEditor {
 String EditorApp::_getPathResult;
 EditorApp* EditorApp::_instance = nullptr;
 EditorApp::EditorApp(Context* context)
@@ -83,7 +85,7 @@ void EditorApp::setup()
 void EditorApp::start()
 {
     auto* luaScript = new LuaScript(context_);
-    EditorLuaBinding::LuaBinding(luaScript->GetState());
+    //EditorLuaBinding::LuaBinding(luaScript->GetState());//todo
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
 	SceneCtrl::getInstance()->createScene();
@@ -248,11 +250,13 @@ void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 void EditorApp::startGame() 
 { 
     _gameStarted = true;
-    _sceneView = new renderWindow("renderWindow");
-    mainWindow->AddWindow(std::unique_ptr<renderWindow>(_sceneView));
+    _sceneView = new SceneView("renderWindow");
+    mainWindow->AddWindow(std::unique_ptr<SceneView>(_sceneView));
+    mainWindow->StartGame();
     mainWindow->maxSize();
     auto* cache = GetSubsystem<ResourceCache>();
     cache->AddResourceDir(_work_space);
+    _isStartView = false;
 };
 
 void EditorApp::run() 
@@ -260,13 +264,9 @@ void EditorApp::run()
 	/*_start_ui = new start_view();
 	_start_ui->show();*/
 	//UMainWindow ui(800, 600);
-    mainWindow = new UMainWindow(800,600);
-    mainWindow->createUiUpdaer(_context);
+    mainWindow = new MainWindow(800,600);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
-    mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
-    //StartWindow* startWin = new StartWindow("Urho3D");
-    //startWin->mainWindow = mainWindow;
-    //mainWindow->AddWindow(std::unique_ptr<StartWindow>(startWin));
+    //mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
     createEngine(nullptr);
     while (!mainWindow->shouldClose())
     {
@@ -300,17 +300,6 @@ EditorApp* EditorApp::getInstance()
         _instance = new EditorApp(new Context());
     }
     return _instance;
-}
-
-ImguiUpdater* EditorApp::getUiUpdater() 
-{ 
-	return mainWindow->_imguiUpdater;
-}
-
-MenuBarUpdater* EditorApp::getManuBarUpdater() 
-{ 
-	return mainWindow->_menuBarUpdater;
-    
 }
 
 void EditorApp::Clear()
@@ -377,7 +366,10 @@ String EditorApp::getWorkSpace()
 	return _work_space; 
 }
 
-String EditorApp::getAssetRoot() { return String(); }
+String EditorApp::getAssetRoot() 
+{
+    return _work_space + "/assets";
+}
 
 void EditorApp::showSceneView(bool show) 
 { 
@@ -393,4 +385,6 @@ void EditorApp::showSceneView(bool show)
 //    EditorMenu* menu = new EditorMenu(_context,act);
 //    return menu;
 //}
+
+}
 

@@ -4,6 +4,7 @@
 #include "Urho3D/Container/Str.h"
 #include "Urho3D/Core/Context.h"
 
+using namespace Urho3D;
 namespace Urho3D
 {
 class Node;
@@ -14,7 +15,10 @@ class Viewport;
 class Material;
 class Camera;
 class Ray;
+}
 
+namespace Urho3DEditor
+{
 class SceneCtrl :public Object
 {
 	URHO3D_OBJECT(SceneCtrl, Object);
