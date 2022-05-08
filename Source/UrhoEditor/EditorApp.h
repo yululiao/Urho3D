@@ -26,6 +26,7 @@ public:
 	void resizeWwindow(int w,int h);
     MainWindow* mainWindow = nullptr;
     void setCurTool(const String& name);
+    String GetCurTool(){return _curent_tool;}
     Node* getRootNode();
     Scene* getScene();
     String getWorkSpace(); //{ return _work_space; }

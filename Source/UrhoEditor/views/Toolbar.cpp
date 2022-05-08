@@ -33,7 +33,7 @@ void Toolbar::DrawTransformTool()
 	for (int i= 0;i< toolList.Size();++i)
 	{
 		auto item = toolList[i];
-		if (item == curToolName) 
+		if (item == EditorApp::getInstance()->GetCurTool()) 
 		{
 			curColor = selectedColor;
 		}
@@ -87,8 +87,8 @@ void Toolbar::DrawTrigerTool()
 }
 void Toolbar::Init() 
 {
-	curToolName = "camera";
-
+	//curToolName = "camera";
+	EditorApp::getInstance()->GetCurTool();
 }
 void Toolbar::OnSave() 
 {
@@ -107,7 +107,6 @@ void Toolbar::OnNewScene()
 }
 void Toolbar::OnTransformTool(const String& name)
 {
-	curToolName = name;
 	EditorApp::getInstance()->setCurTool(name);
 }
 }

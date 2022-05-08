@@ -29,7 +29,7 @@ private:
 private:
 	int itemSize = 20;
 	bool isShow = true;
-	String curToolName;
+	//String curToolName;
 	unsigned selectedColor = 0x77999999;
 };
 }
