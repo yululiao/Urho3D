@@ -9,9 +9,6 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="src\gen">
-      <UniqueIdentifier>{45ed8dcb-5b0b-4b7a-8ef4-cc0a866a850e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\gizmo">
       <UniqueIdentifier>{c079cca5-87e2-4a8a-b1c9-08f45052541e}</UniqueIdentifier>
     </Filter>
@@ -26,6 +23,18 @@
     </Filter>
     <Filter Include="src\views\inspectors">
       <UniqueIdentifier>{6afd0e63-3d0b-48c3-864e-dabdc56a8fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\event">
+      <UniqueIdentifier>{efe9d042-9725-4954-996c-82cd506e5d2e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\cmd">
+      <UniqueIdentifier>{d734536b-7185-45a6-be87-89912b9811a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\luabind">
+      <UniqueIdentifier>{45ed8dcb-5b0b-4b7a-8ef4-cc0a866a850e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\delegate">
+      <UniqueIdentifier>{d6388215-0c3a-4732-87b4-640ffd9c54c7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +118,15 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.cpp">
       <Filter>src\views\inspectors</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\event\EventEmitter.cpp">
+      <Filter>src\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\event\GEvent.cpp">
+      <Filter>src\event</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\cmd\CmdMgr.cpp">
+      <Filter>src\cmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -196,13 +214,37 @@
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.h">
       <Filter>src\views\inspectors</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\EventData.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\EventEmitter.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\GEvent.h">
+      <Filter>src\event</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\delegate\Delegate.h">
+      <Filter>src\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\delegate\FastDelegate.h">
+      <Filter>src\delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\CmdMgr.h">
+      <Filter>src\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\EditCmd.h">
+      <Filter>src\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\CmdDefines.h">
+      <Filter>src\cmd</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\Source\UrhoEditor\pkgs\EditorLuaAPI.pkg">
-      <Filter>src\gen</Filter>
+      <Filter>src\luabind</Filter>
     </None>
     <None Include="..\..\..\Source\UrhoEditor\pkgs\genluabinding.py">
-      <Filter>src\gen</Filter>
+      <Filter>src\luabind</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -45,7 +45,6 @@ public:
     void InitScene(bool hasRoot);
     void OpenScene(const String& path);
     void OpenNewScene();
-
 protected:
     char* rttData = nullptr;
 

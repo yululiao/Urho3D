@@ -1,6 +1,6 @@
 #include "TransformInspector.h"
 #include "EditorApp.h"
-
+#include "cmd/CmdDefines.h"
 
 namespace Urho3DEditor 
 {
@@ -67,13 +67,18 @@ void TransformInspector::Update()
 
 	if(_pos != selectedNode->GetPosition())
 	{
-		selectedNode->SetPosition(_pos);
+		//selectedNode->SetPosition(_pos);
+		Urho3DEditor::TransformCmd::Translate("Tranform",selectedNode,_pos);
 	}
-	if (_rot != selectedNode->GetRotation().EulerAngles()) {
-		selectedNode->SetRotation(Quaternion(_rot));
+	if (_rot != selectedNode->GetRotation().EulerAngles()) 
+	{
+		//selectedNode->SetRotation(Quaternion(_rot));
+		Urho3DEditor::TransformCmd::Rot("Tranform",selectedNode, _rot);
 	}
-	if (_scale != selectedNode->GetScale()) {
-		selectedNode->SetScale(_scale);
+	if (_scale != selectedNode->GetScale()) 
+	{
+		//selectedNode->SetScale(_scale);
+		Urho3DEditor::TransformCmd::Scale("Tranform",selectedNode, _scale);
 	}
 }
 }

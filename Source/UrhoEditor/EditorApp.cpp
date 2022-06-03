@@ -89,7 +89,7 @@ void EditorApp::start()
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
 	SceneCtrl::getInstance()->createScene();
-    setCurTool("camera");
+    setCurTool("move");
 }
 
 int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) 

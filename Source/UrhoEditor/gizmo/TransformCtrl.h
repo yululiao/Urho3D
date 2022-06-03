@@ -19,7 +19,6 @@ class TransformCtrl:public Object
 {
 URHO3D_OBJECT(TransformCtrl, Object);
 public:
-static std::string cmdName;
 TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot);
 virtual ~TransformCtrl();
 void onPointerDown(float x, float y);
@@ -74,5 +73,6 @@ Vector3 oriparentScale;
 Node* _gizmoRoot = nullptr;
 Node* _camNode = nullptr;
 Scene* _scene = nullptr;
+std::string _cmdName;
 
 };

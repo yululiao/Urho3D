@@ -9,7 +9,8 @@
 #include "ctrls/CameraCtrl.h"
 
 using namespace Urho3D;
-namespace Urho3DEditor {
+namespace Urho3DEditor 
+{
 
 class EditorApp :public Object
 {

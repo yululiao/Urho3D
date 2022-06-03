@@ -255,7 +255,7 @@ namespace Urho3DEditor
         rttScene_ = new Scene(context_);
         rttScene_->LoadJSON(file);
         InitScene(true);
-        EditorApp::getInstance()->setCurTool("camera");
+        EditorApp::getInstance()->setCurTool("move");
         EditorApp::getInstance()->SelectNode(nullptr);
     }
 
@@ -267,7 +267,7 @@ namespace Urho3DEditor
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
-        EditorApp::getInstance()->setCurTool("camera");
+        EditorApp::getInstance()->setCurTool("move");
         EditorApp::getInstance()->SelectNode(nullptr);
     }
 

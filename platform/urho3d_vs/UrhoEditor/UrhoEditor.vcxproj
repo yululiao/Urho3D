@@ -19,12 +19,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\cmd\CmdMgr.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\EditorApp.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\event\EventEmitter.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\event\GEvent.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.cpp" />
@@ -48,12 +51,20 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Toolbar.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\CmdDefines.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\CmdMgr.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\EditCmd.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\delegate\Delegate.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\delegate\FastDelegate.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\EditorApp.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\EventData.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\EventEmitter.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\event\GEvent.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\GizmoUtils.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\RotateGizmo.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\gizmo\ScaleGizmo.h" />
@@ -179,7 +190,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>D:\Urho3D\Source\ThirdParty\imgui;D:\Urho3D\Source\UrhoEditor\lib\glfw\include;D:\Urho3D\Source\UrhoEditor;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty;$(ProjectDir)..\..\..\Source\ThirdParty\Assimp\include;$(ProjectDir)..\out\$(Platform)-$(Configuration)\include\Urho3D\ThirdParty\LuaJIT;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
@@ -198,7 +209,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>NDEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;GLFW_EXPOSE_NATIVE_WIN32;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>

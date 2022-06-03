@@ -34,7 +34,7 @@ void ResTree::OnItemDoubleClicked(const String& path)
 	if(path.Find(String(".scene"))!= String::NPOS)
 	{
 		AssetMgr::getInstance()->OpenScene(path);
-		EditorApp::getInstance()->setCurTool("camera");
+		EditorApp::getInstance()->setCurTool("move");
 	}
 }
 void ResTree::DrawResNode(const String& path)

@@ -10,8 +10,9 @@
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Graphics/GeoUtils.h"
 #include "GizmoUtils.h"
+#include "cmd/CmdDefines.h"
+#include "Utils.h"
 
-std::string TransformCtrl::cmdName = "";
 TransformCtrl::TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot)
 	:Object(ctx)
 {
@@ -156,7 +157,7 @@ void TransformCtrl::onPointerDown(float x, float y)
 			//parentWordMatrixInverse.get_scale(oriparentScale);
 			oriparentScale = object->GetParent()->GetWorldScale();
 			_dragging = true;
-
+			_cmdName = Urho3DEditor::Utils::GenGuid();
 		}
 
 	}
@@ -334,8 +335,9 @@ void TransformCtrl::translate(float x, float y)
 		point = oriworldRotationMatrix * localPoint;
 				
 		//object->set_world_pos(startPos + point);
-		object->SetWorldPosition(startPos + point);
-		
+		//object->SetWorldPosition(startPos + point);
+		Vector3 pos =(startPos + point)- object->GetParent()->GetWorldPosition();
+		Urho3DEditor::TransformCmd::Translate(_cmdName,object, pos);
 	}
 }
 void TransformCtrl::scale(float x, float y)
@@ -368,7 +370,8 @@ void TransformCtrl::scale(float x, float y)
 				newScale.z_ = startScale.z_ * (1 + point.z_);
 
 		}
-		object->SetScale(newScale);
+		//object->SetScale(newScale);
+		Urho3DEditor::TransformCmd::Scale(_cmdName,object, newScale);
 	}
 
 }
@@ -429,16 +432,10 @@ void TransformCtrl::rotate(float x, float y)
 				
 		//std::cout << "mouseXY:" << "x" << x << ",y" << y;
 		//std::cout << "quaternionY:" << "x" << quaternionY.x << ",y" << quaternionY.y << ",z" << quaternionY.z << ",w" << quaternionY.w << std::endl;
-		object->SetRotation(quaternionXYZ);
+		//object->SetRotation(quaternionXYZ);
 
-		/*SceneObjEvent* data = new SceneObjEvent(object);
-		vec3d angles;
-		detaRot.get_euler(angles);
-		float angleP = 1.0/3.1415926 * 180;
-		data->numberList.push_back(angles.x * angleP);
-		data->numberList.push_back(angles.y * angleP);
-		data->numberList.push_back(angles.z * angleP);
-		EventMgr::GetInstance()->emitEvent(eGlobalEventType::RotateInScene, data);*/
+		Urho3DEditor::TransformCmd::Rot(_cmdName,object, quaternionXYZ.EulerAngles());
+
 
 	}
 }

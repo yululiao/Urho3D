@@ -1,6 +1,7 @@
 #include "Toolbar.h"
 #include "ctrls/AssetMgr.h"
 #include "EditorApp.h"
+#include "cmd/CmdMgr.h"
 
 namespace Urho3DEditor
 {
@@ -67,15 +68,34 @@ void Toolbar::DrawTrigerTool()
 	imgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/save.png"));
 	imgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/undo.png"));
 	imgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/redo.png"));
-	ImGui::PushStyleColor(ImGuiCol_Button, 0x00ffffff);
+	Vector<int> grayImgList;
+	grayImgList.Push(0);
+	grayImgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/save_gray.png"));
+	grayImgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/undo_gray.png"));
+	grayImgList.Push(AssetMgr::getInstance()->getImguiTex("res/img/redo_gray.png"));
+	Vector<bool> activeList;
+	activeList.Push(true);
+	activeList.Push(CmdMgr::Instance()->HasNode());
+	activeList.Push(CmdMgr::Instance()->CanUnDo());
+	activeList.Push(CmdMgr::Instance()->CanReDo());
+
+	ImGui::PushStyleColor(ImGuiCol_Button, 0x00ff0000);
 	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, 0x77999999);
 	for (int i = 0; i < toolList.Size(); ++i) 
 	{
 		auto item = toolList[i];
 		ImGui::SameLine();
-		if(ImGui::ImageButton(imgList[i], ImVec2(itemSize, itemSize)))
+		int tmpImg = imgList[i];
+		if(!activeList[i])
 		{
-			handleList[i]();
+			tmpImg = grayImgList[i];
+		}
+		if(ImGui::ImageButton(tmpImg, ImVec2(itemSize, itemSize)))
+		{
+			if(activeList[i])
+			{
+				handleList[i]();
+			}
 		}
 		if (ImGui::IsItemHovered()) {
 			ImGui::BeginTooltip();
@@ -93,13 +113,17 @@ void Toolbar::Init()
 void Toolbar::OnSave() 
 {
 	String assetRoot = EditorApp::getInstance()->getAssetRoot();
-	AssetMgr::getInstance()->SaveScene(assetRoot + "test.scene");
+	AssetMgr::getInstance()->SaveScene(assetRoot + "/test.scene");
+	CmdMgr::Instance()->OnSave();
 }
 void Toolbar::OnRedo() 
 {
+	CmdMgr::Instance()->ReDo();
+
 }
 void Toolbar::OnUndo() 
 {
+	CmdMgr::Instance()->UnDo();
 }
 void Toolbar::OnNewScene() 
 {

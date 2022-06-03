@@ -27,6 +27,8 @@ void StartView::RenderHistoryList()
 	auto historys = _historyMgr->get_history_list();
 	for(auto item: historys)
 	{
+		ImGui::Text("");
+		ImGui::SameLine();
 		ImGui::PushStyleColor(ImGuiCol_Button,0x00ffffff);
 		ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
 		if(ImGui::Button(item.CString(),ImVec2(300,25)))
@@ -52,6 +54,8 @@ void StartView::Update()
 	ImGui::BeginChild("StartView");
 	ImGui::Spacing();
 	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
+	ImGui::Text("");
+	ImGui::SameLine();
 	if (ImGui::Button("Open...",ImVec2(80,25)))
 	{
 		String path = EditorApp::getInstance()->dialogSelectPath();
