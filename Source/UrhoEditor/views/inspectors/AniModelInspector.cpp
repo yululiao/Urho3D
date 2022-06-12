@@ -1,4 +1,8 @@
 #include "AniModelInspector.h"
+#include "EditorApp.h"
+#include "cmd/CmdDefines.h"
+#include <Urho3D/Graphics/AnimatedModel.h>
+#include "VariantDrawer.h"
 
 class AniModelInspector 
 {
@@ -17,8 +21,16 @@ void Urho3DEditor::AniModelInspector::Update()
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
+	Node* selectedNode = EditorApp::getInstance()->GetSelectNode();
+	if (!selectedNode || !selectedNode->HasComponent<AnimatedModel>())
+		return;
+	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();
+	//const Vector<AttributeInfo>* attributes = aniModel->GetAttributes();
 	if(ImGui::TreeNodeEx("AnimatedModel",flags))
 	{
+		//filter: TEXT("Text Files(*.txt)\0*.txt\0")
+		_modelPath = aniModel->GetModelAttr().name_;
+		VariantDrawer::DrawPath("model",_modelPath, "Model Files(*.mdl)\0*.mdl\0\0",true);
 		ImGui::TreePop();
 	}
 }

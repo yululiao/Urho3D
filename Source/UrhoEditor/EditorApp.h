@@ -35,7 +35,7 @@ public:
     void showSceneView(bool show);
     void startGame();
     String dialogSelectPath();
-    String dialogOpenFile();
+    String dialogOpenFile(const char* filter);
     void dialogSaveFile();
     void Clear();
     /// <summary>

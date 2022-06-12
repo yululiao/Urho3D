@@ -122,19 +122,8 @@ void EditorApp::resizeWwindow(int w, int h)
 imgui_addons::ImGuiFileBrowser file_dialog;
 String EditorApp::dialogSelectPath() 
 {
-    //String result;
-    //ImGui::OpenPopup("Select Path");
-    // //if (file_dialog.showFileDialog("Open File", imgui_addons::ImGuiFileBrowser::DialogMode::OPEN,ImVec2(200, 200),".rar,.zip,.7z"))
-    //if (file_dialog.showFileDialog("Select Path",imgui_addons::ImGuiFileBrowser::DialogMode::SELECT, ImVec2(200, 200)))
-    //{
-    //    std::string selected_file = file_dialog.selected_fn;
-    //    std::string path = file_dialog.selected_path;
-    //    result = path.c_str();
-    //}
-    //return result;
 #ifdef _WIN32
     TCHAR path[MAX_PATH];
-
     char path_param[] = "C:\\Windows"; // saved_path.c_str();
     BROWSEINFO bi = {0};
     bi.lpszTitle = ("Select Path");
@@ -163,6 +152,7 @@ String EditorApp::dialogSelectPath()
     {
         return String("");
     }
+#else
 
 
 #endif // _WIN32
@@ -170,9 +160,40 @@ String EditorApp::dialogSelectPath()
     
 }
 
-String EditorApp::dialogOpenFile() { return String(); }
+String EditorApp::dialogOpenFile(const char* filter)
+{ 
+   String filePath;
+#ifdef _WIN32
+   OPENFILENAME ofn;
+   char szFile[300];
+   ZeroMemory(&ofn, sizeof(ofn));
+   ofn.lStructSize = sizeof(ofn);
+   ofn.hwndOwner = NULL;
+   ofn.lpstrFile = szFile;
+   ofn.lpstrFile[0] = '\0';
+   ofn.nMaxFile = sizeof(szFile);
+   ofn.lpstrFilter = filter;//"Model Files(*.mdl)\0*.mdl\0";//filter.CString();
+   ofn.nFilterIndex = 1;
+   ofn.lpstrFileTitle = NULL;
+   ofn.nMaxFileTitle = 0;
+   ofn.lpstrInitialDir = NULL;
+   ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+   if (GetOpenFileName(&ofn)) 
+   {
+       //wprintf(L"%s\n", ofn.lpstrFile);
+       filePath = String(ofn.lpstrFile);
+   }
+#else
 
-void EditorApp::dialogSaveFile() {}
+#endif // _WIN32
+
+   return filePath;
+}
+
+void EditorApp::dialogSaveFile() 
+{
+
+}
 
 int EditorApp::system(const char* cmd, char* pRetMsg, int msg_len) 
 {

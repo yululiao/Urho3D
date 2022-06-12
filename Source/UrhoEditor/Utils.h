@@ -31,5 +31,16 @@ public:
         }
         return ss.str();
     }
+    static std::string GenGuid64() {
+        std::stringstream ss;
+        for (auto i = 0; i < 32; i++) {
+            auto rc = random_char();
+            std::stringstream hexstream;
+            hexstream << std::hex << int(rc);
+            auto hex = hexstream.str();
+            ss << (hex.length() < 2 ? '0' + hex : hex);
+        }
+        return ss.str();
+    }
 };
 }

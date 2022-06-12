@@ -12,18 +12,6 @@
     <Filter Include="src\gizmo">
       <UniqueIdentifier>{c079cca5-87e2-4a8a-b1c9-08f45052541e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\views">
-      <UniqueIdentifier>{b96ac6e5-2628-4fd9-91c6-cdc661103e52}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\ctrls">
-      <UniqueIdentifier>{c2348f16-8e2d-442d-bdfd-70c02292cddb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\model">
-      <UniqueIdentifier>{4be58bb0-64f9-40bc-8979-40f82316f533}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\views\inspectors">
-      <UniqueIdentifier>{6afd0e63-3d0b-48c3-864e-dabdc56a8fc1}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\event">
       <UniqueIdentifier>{efe9d042-9725-4954-996c-82cd506e5d2e}</UniqueIdentifier>
     </Filter>
@@ -35,6 +23,21 @@
     </Filter>
     <Filter Include="src\delegate">
       <UniqueIdentifier>{d6388215-0c3a-4732-87b4-640ffd9c54c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mvc">
+      <UniqueIdentifier>{674da1f8-0ad8-4723-9f1e-ed66f3152648}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mvc\views">
+      <UniqueIdentifier>{b96ac6e5-2628-4fd9-91c6-cdc661103e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mvc\views\inspectors">
+      <UniqueIdentifier>{6afd0e63-3d0b-48c3-864e-dabdc56a8fc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mvc\model">
+      <UniqueIdentifier>{4be58bb0-64f9-40bc-8979-40f82316f533}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\mvc\ctrls">
+      <UniqueIdentifier>{c2348f16-8e2d-442d-bdfd-70c02292cddb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -66,58 +69,58 @@
       <Filter>src\gizmo</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\SceneView.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\MainWindow.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.cpp">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.cpp">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.cpp">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.cpp">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.cpp">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\model\ProjHistory.cpp">
-      <Filter>src\model</Filter>
+      <Filter>src\mvc\model</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\ConsoleView.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Inspector.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Menubar.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\NodeTree.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\ResPreview.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\ResTree.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\StartView.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Toolbar.cpp">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.cpp">
-      <Filter>src\views\inspectors</Filter>
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.cpp">
-      <Filter>src\views\inspectors</Filter>
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\event\EventEmitter.cpp">
       <Filter>src\event</Filter>
@@ -127,6 +130,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\Source\UrhoEditor\cmd\CmdMgr.cpp">
       <Filter>src\cmd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.cpp">
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -155,64 +161,64 @@
       <Filter>src\gizmo</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\SceneView.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\MainWindow.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\EditorWidget.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetImporter.h">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\AssetMgr.h">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\CameraCtrl.h">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\SceneCtrl.h">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\ctrls\HistoryMgr.h">
-      <Filter>src\ctrls</Filter>
+      <Filter>src\mvc\ctrls</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\model\ProjHistory.h">
-      <Filter>src\model</Filter>
+      <Filter>src\mvc\model</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\ConsoleView.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\Inspector.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\Menubar.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\NodeTree.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\ResPreview.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\ResTree.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\StartView.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\Toolbar.h">
-      <Filter>src\views</Filter>
+      <Filter>src\mvc\views</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\Utils.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.h">
-      <Filter>src\views\inspectors</Filter>
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.h">
-      <Filter>src\views\inspectors</Filter>
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\event\EventData.h">
       <Filter>src\event</Filter>
@@ -237,6 +243,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\cmd\CmdDefines.h">
       <Filter>src\cmd</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.h">
+      <Filter>src\mvc\views\inspectors</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

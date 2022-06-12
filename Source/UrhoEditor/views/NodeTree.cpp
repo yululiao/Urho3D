@@ -1,5 +1,6 @@
 #include "NodeTree.h"
 #include "EditorApp.h"
+#include "Utils.h"
 
 namespace Urho3DEditor 
 {
@@ -44,7 +45,11 @@ void NodeTree::DrawNode(Node* node)
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
+	//std::string guid = Utils::GenGuid();
+	ImGui::PushID(node->GetID());
+	//ImGui::PushID((nodeName+ String(guid.c_str())).CString());
 	bool node_open = ImGui::TreeNodeEx(nodeName.CString(),flags);
+	ImGui::PopID();
 	if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered())
 	{
 		OnDoubleClicked();
@@ -61,6 +66,5 @@ void NodeTree::DrawNode(Node* node)
 		}
 		ImGui::TreePop();
 	}
-	
 }
 }

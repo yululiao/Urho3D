@@ -1,6 +1,5 @@
 #pragma once
 
-#include "imgui.h"
 #include "Urho3D/Scene/Scene.h"
 using namespace Urho3D;
 

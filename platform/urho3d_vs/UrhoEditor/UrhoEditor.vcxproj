@@ -41,6 +41,7 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Inspector.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.cpp" />
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\MainWindow.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\Menubar.cpp" />
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\NodeTree.cpp" />
@@ -78,6 +79,7 @@
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\Inspector.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\AniModelInspector.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\TransformInspector.h" />
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\MainWindow.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\Menubar.h" />
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\NodeTree.h" />
