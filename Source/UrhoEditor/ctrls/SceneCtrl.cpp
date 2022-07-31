@@ -74,8 +74,8 @@ namespace Urho3DEditor
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
         Model* model = cache->GetResource<Model>(rpath);
         modelObject->SetModel(model);
-        Material* model_mat = cache->GetResource<Material>("assets/models/robot/tex/robot.xml");
-        modelObject->SetMaterial(model_mat);
+        SharedPtr<Material> defMat(cache->GetResource<Material>("Materials/Default.xml"));
+        modelObject->SetMaterial(defMat);
     }
 
     void SceneCtrl::genRttTex() 
