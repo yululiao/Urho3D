@@ -134,6 +134,9 @@
     <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.cpp">
       <Filter>src\mvc\views\inspectors</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\UrhoEditor\views\inspectors\MatInspector.cpp">
+      <Filter>src\mvc\views\inspectors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\UrhoEditor\EditorApp.h">
@@ -245,6 +248,9 @@
       <Filter>src\cmd</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\VariantDrawer.h">
+      <Filter>src\mvc\views\inspectors</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\UrhoEditor\views\inspectors\MatInspector.h">
       <Filter>src\mvc\views\inspectors</Filter>
     </ClInclude>
   </ItemGroup>
