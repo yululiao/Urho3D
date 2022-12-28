@@ -55,7 +55,7 @@ namespace Urho3DEditor
 		float detaX = x - lastMouseX;
 		float detaY = y - lastMouseY;
 		float speed = 0.1;
-		Vector3 axisY(0, detaX, 0);
+        Vector3 axisY = _camera->GetUp().Normalized() * detaX;
 		Vector3 axisX = _camera->GetRight().Normalized() * detaY;
 		Vector3 axis = axisX + axisY;
 		float angle = axis.Length() * speed;

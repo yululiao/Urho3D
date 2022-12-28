@@ -30,9 +30,10 @@ void MatInspector::Update()
 	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();
 	SharedPtr<Material> mat(aniModel->GetMaterial());
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
-	Urho3D::String matPath = mat->GetName();
+	Urho3D::String matPath = "";
 	if(mat)
 	{
+		matPath = mat->GetName();
 		VariantDrawer::DrawPath("MatPath", matPath, "Mat Files(*.xml)\0*.xml\0\0", false);
 		if (matPath != mat->GetName()) 
 		{
@@ -42,7 +43,7 @@ void MatInspector::Update()
 			return;
 		}
 	}
-	if(matPath == "Materials/Default.xml")//默认材质不允许编辑
+	if(matPath == "Materials/Default.xml" || matPath == "")//默认材质不允许编辑
 		return;
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
