@@ -56,8 +56,8 @@ namespace Urho3DEditor
 
 	}
 
-    void SceneCtrl::deleteNode(Urho3D::Node* node) 
-    { 
+    void SceneCtrl::deleteNode(Urho3D::Node* node)
+    {
         node->Remove();
     }
 
@@ -78,20 +78,21 @@ namespace Urho3DEditor
         modelObject->SetMaterial(defMat);
     }
 
-    void SceneCtrl::genRttTex() 
-    { 
+    void SceneCtrl::genRttTex()
+    {
         if (!renderTexture)
             return;
         if (!rttData)
         {
-            rttData = new char[constRttSize.x_* constRttSize.y_*3];
+            int dataSize = constRttSize.x_* constRttSize.y_*3;
+            rttData = new char[dataSize];
         }
         renderTexture->GetData(0,rttData);
        //renderTexture->GetImage()->SavePNG("test.png");
     }
 
-    void SceneCtrl::OnResizeView(int w, int h) 
-    { 
+    void SceneCtrl::OnResizeView(int w, int h)
+    {
         Vector2 newSize(w, h);
         if (newSize == viewSize_)
         {
@@ -193,8 +194,8 @@ namespace Urho3DEditor
 
     }
 
-    void SceneCtrl::Clear() 
-    { 
+    void SceneCtrl::Clear()
+    {
         EditorApp::getInstance()->Clear();
         _grid_root = nullptr;
         rttSceneRoot_ = nullptr;
@@ -247,8 +248,8 @@ namespace Urho3DEditor
         update_grids();
     }
 
-    void SceneCtrl::OpenScene(const String& path) 
-    { 
+    void SceneCtrl::OpenScene(const String& path)
+    {
         GetSubsystem<Graphics>()->MakeCurrent();
         Clear();
         File file(context_,path,FileMode::FILE_READ);
@@ -271,7 +272,7 @@ namespace Urho3DEditor
         EditorApp::getInstance()->SelectNode(nullptr);
     }
 
-    void SceneCtrl::createScene() 
+    void SceneCtrl::createScene()
     {
         rttScene_ = new Scene(context_);
         rttScene_->SetName("RttScene");

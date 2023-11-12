@@ -3,6 +3,9 @@
 #include <map>
 #include "Urho3D/Container/Str.h"
 #include "Urho3D/Core/Context.h"
+#include "Urho3D/Graphics/Texture2D.h"
+#include "Urho3D/Graphics/Viewport.h"
+
 
 using namespace Urho3D;
 namespace Urho3D
@@ -59,7 +62,7 @@ private:
     SharedPtr<Viewport> rttViewport_ = nullptr;
 
 public:
-	
+
     SharedPtr<Node> _grid_root = nullptr;
     SharedPtr<Texture2D> renderTexture = nullptr;
     std::vector<SharedPtr<Node>> _grid_lines;
