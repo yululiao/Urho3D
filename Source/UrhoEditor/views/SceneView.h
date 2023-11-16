@@ -17,6 +17,7 @@ public:
     void delteGpuTex();
     void onIO();
     void wheelEvent(float deta);
+    void mouseHoverEvent(Vector2 pos);
     void mouseMoveEvent(Vector2 pos);
     void mouseReleaseEvent(Vector2 pos);
     void mousePressEvent(Vector2 pos);
