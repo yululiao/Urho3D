@@ -21,6 +21,7 @@
 #include <sstream>
 #include <Urho3D/Resource/ResourceCache.h>
 #endif // _WIN32
+#include <ndf/nfd.h>
 
 
 namespace Urho3DEditor {
@@ -34,8 +35,8 @@ EditorApp::EditorApp(Context* context)
 }
 
 EditorApp::~EditorApp() 
-{
-
+{ 
+   NFD_Quit(); 
 }
 
 void EditorApp::createEngine(void* win_ptr)
@@ -119,73 +120,52 @@ void EditorApp::resizeWwindow(int w, int h)
 	//graphics->SetMode(w, h);
 }
 
-imgui_addons::ImGuiFileBrowser file_dialog;
 String EditorApp::dialogSelectPath() 
 {
-#ifdef _WIN32
-    TCHAR path[MAX_PATH];
-    char path_param[] = "C:\\Windows"; // saved_path.c_str();
-    BROWSEINFO bi = {0};
-    bi.lpszTitle = ("Select Path");
-    bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
-    bi.lpfn = BrowseCallbackProc;
-    bi.lParam = (LPARAM)path_param;
-
-    LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
-
-    if (pidl != 0)
+    String resultPath;
+    nfdchar_t* outPath;
+    nfdchar_t* defaultPath = "";
+    nfdresult_t result = NFD_PickFolder(&outPath, defaultPath);
+    if (result == NFD_OKAY)
     {
-        // get the name of the folder and put it in path
-        SHGetPathFromIDList(pidl, path);
-
-        // free memory used
-        IMalloc* imalloc = 0;
-        if (SUCCEEDED(SHGetMalloc(&imalloc)))
-        {
-            imalloc->Free(pidl);
-            imalloc->Release();
-        }
-
-        return String(path);
+        puts("Success!");
+        puts(outPath);
+        resultPath = String(outPath);
+        NFD_FreePath(outPath);
+    }
+    else if (result == NFD_CANCEL)
+    {
+        puts("User pressed cancel.");
     }
     else
     {
-        return String("");
+        printf("Error: %s\n", NFD_GetError());
     }
-#else
-
-
-#endif // _WIN32
-
-    
+    resultPath.Replace('\\','/');
+    return resultPath;
 }
 
-String EditorApp::dialogOpenFile(const char* filter)
+String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
 { 
-   String filePath;
-#ifdef _WIN32
-   OPENFILENAME ofn;
-   char szFile[300];
-   ZeroMemory(&ofn, sizeof(ofn));
-   ofn.lStructSize = sizeof(ofn);
-   ofn.hwndOwner = NULL;
-   ofn.lpstrFile = szFile;
-   ofn.lpstrFile[0] = '\0';
-   ofn.nMaxFile = sizeof(szFile);
-   ofn.lpstrFilter = filter;//"Model Files(*.mdl)\0*.mdl\0";//filter.CString();
-   ofn.nFilterIndex = 1;
-   ofn.lpstrFileTitle = NULL;
-   ofn.nMaxFileTitle = 0;
-   ofn.lpstrInitialDir = NULL;
-   ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-   if (GetOpenFileName(&ofn)) 
-   {
-       //wprintf(L"%s\n", ofn.lpstrFile);
-       filePath = String(ofn.lpstrFile);
-   }
-#else
-
-#endif // _WIN32
+    String filePath;
+    nfdchar_t* outPath;
+    //nfdfilteritem_t filterItem[2] = { { "Source code", "c,cpp,cc" }, { "Headers", "h,hpp" } };
+    nfdfilteritem_t filterItem[1] = {{filter[0].CString(), filter[1].CString()}};
+    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, filter.Size()/2, NULL);
+    if (result == NFD_OKAY)
+    {
+        puts("Success!");
+        puts(outPath);
+        NFD_FreePath(outPath);
+    }
+    else if (result == NFD_CANCEL)
+    {
+        puts("User pressed cancel.");
+    }
+    else
+    {
+        printf("Error: %s\n", NFD_GetError());
+    }
 
    return filePath;
 }
@@ -285,6 +265,7 @@ void EditorApp::run()
 	/*_start_ui = new start_view();
 	_start_ui->show();*/
 	//UMainWindow ui(800, 600);
+    NFD_Init();
     mainWindow = new MainWindow(800,600);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
     //mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));

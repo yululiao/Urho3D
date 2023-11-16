@@ -16,7 +16,7 @@ void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& val
 	{
 	case Urho3D::VAR_INT:
 	{
-		int int_value = value.GetInt64();
+		int int_value = (int)value.GetInt64();
 		DrawInt(name,int_value,-100,100);
 		value = int_value;
 		break;
@@ -124,7 +124,7 @@ void VariantDrawer::DrawBool(const Urho3D::String& name, bool& data)
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::Checkbox(name.CString(),&data);
 
@@ -134,7 +134,7 @@ void VariantDrawer::DrawFloat(const Urho3D::String& name, float& data, float min
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 	/*ImGui::Text(name.CString());
 	ImGui::SameLine();*/
 	ImGui::DragFloat(name.CString(), &data, 0.1f,min, max, "%.4f");
@@ -144,7 +144,7 @@ void VariantDrawer::DrawInt(const Urho3D::String& name, int& data, int min, int 
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
@@ -159,7 +159,8 @@ void VariantDrawer::DrawStr(const Urho3D::String& name, Urho3D::String& value)
 	value = Urho3D::String(&texBuf[0]);
 
 }
-void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, const char* filter, bool readOnly)
+void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, Urho3D::Vector<Urho3D::String> filter,
+                             bool readOnly)
 {
 	char texBuf[256];
 	strcpy(texBuf,path.CString());
@@ -173,35 +174,30 @@ void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, c
 	{
 		path = Urho3D::String(texBuf);
 	}
-	auto openFun = [](Urho3D::String& path1, const char* filter1)
-	{
-		Urho3D::String openFile = EditorApp::getInstance()->dialogOpenFile(filter1);
-		if (openFile != "")
-		{
-			openFile.Replace('\\','/');
-			path1 = openFile;
-			path1 = AssetMgr::getInstance()->pathToRelative(path1);
-		}
-			
-	};
 	std::string guid = Utils::GenGuid();
 	//ImGui::PushID(guid.c_str());
 	ImGui::SameLine();
 	if (ImGui::Button("...",ImVec2(30,25)))
 	{
-		openFun(path,filter);
+        String resultPath = EditorApp::getInstance()->dialogOpenFile(filter);
+		if (resultPath != "")
+        {
+			path = resultPath;
+		}
 	}
 	//ImGui::PopID();
 	
 }
-void VariantDrawer::DrawPathVec(const Urho3D::Vector<Urho3D::String>& paths, const char* filer, bool readOnly)
+void VariantDrawer::DrawPathVec(const Urho3D::Vector<Urho3D::String>& paths, Urho3D::Vector<Urho3D::String> filer,
+                                bool readOnly)
 {
+
 }
 void VariantDrawer::DrawVec2d(const Urho3D::String& name, Urho3D::Vector2& data)
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::PushID((name + "_x").CString());
 	ImGui::InputFloat("x", &data.x_, 0, 0, "%.4f");
@@ -220,7 +216,7 @@ void VariantDrawer::DrawVec3d(const Urho3D::String& name, Urho3D::Vector3& data)
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::PushID((name + "_x").CString());
 	ImGui::InputFloat("x", &data.x_, 0, 0, "%.4f");
@@ -245,7 +241,7 @@ void VariantDrawer::DrawVec4d(const Urho3D::String& name, Urho3D::Vector4& data)
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0);
+	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::PushID((name + "_x").CString());
 	ImGui::InputFloat("x", &data.x_, 0, 0, "%.4f");

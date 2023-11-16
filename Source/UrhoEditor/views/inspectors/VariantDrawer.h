@@ -5,6 +5,7 @@
 //#include "Urho3D/Math/Color.h"
 //#include "Urho3D/Container/Str.h"
 #include "Urho3D/Core/Variant.h"
+#include "Urho3D/Container/Vector.h"
 
 
 namespace Urho3DEditor
@@ -18,8 +19,10 @@ public:
 	static void DrawInt(const Urho3D::String& name, int& data,int min,int max);
 	static void DrawStr(const Urho3D::String& name,Urho3D::String& value);
 	// filter:TEXT("Text Files(*.txt)\0*.txt\0")
-	static void DrawPath(const Urho3D::String& name,Urho3D::String& path,const char* filer = nullptr,bool readOnly = false);
-	static void DrawPathVec(const Urho3D::Vector<Urho3D::String>& paths, const char* filer = nullptr, bool readOnly = false);
+    static void DrawPath(const Urho3D::String& name, Urho3D::String& path, Urho3D::Vector<Urho3D::String> filer,
+                         bool readOnly = false);
+    static void DrawPathVec(const Urho3D::Vector<Urho3D::String>& paths, Urho3D::Vector<Urho3D::String> filer,
+                            bool readOnly = false);
 	static void DrawVec2d(const Urho3D::String& name, Urho3D::Vector2& data);
 	static void DrawVec3d(const Urho3D::String& name, Urho3D::Vector3& data);
 	static void DrawVec4d(const Urho3D::String& name, Urho3D::Vector4& data);

@@ -34,7 +34,7 @@ void MatInspector::Update()
 	if(mat)
 	{
 		matPath = mat->GetName();
-		VariantDrawer::DrawPath("MatPath", matPath, "Mat Files(*.xml)\0*.xml\0\0", false);
+        VariantDrawer::DrawPath("MatPath", matPath, {"Mat Files", "xml"}, false);
 		if (matPath != mat->GetName()) 
 		{
 			mat = cache->GetResource<Urho3D::Material>(matPath);
@@ -51,7 +51,7 @@ void MatInspector::Update()
 		for (auto item : textures) {
 			Urho3D::String name = mat->GetTextureUnitName(item.first_);
 			Urho3D::String path = item.second_->GetName();
-			VariantDrawer::DrawPath(name,path, "Texture Files(*.dds)\0*.dds\0\0", false);
+            VariantDrawer::DrawPath(name, path, {"Texture Files", "png,tga,jpg,dds"}, false);
 			if(path != item.second_->GetName())
 			{
 				Urho3D::Texture2D* newTex = cache->GetResource<Urho3D::Texture2D>(path);

@@ -36,7 +36,7 @@ void Urho3DEditor::AniModelInspector::Update()
 	{
 		//filter: TEXT("Text Files(*.txt)\0*.txt\0")
 		_modelPath = aniModel->GetModelAttr().name_;
-		VariantDrawer::DrawPath("model",_modelPath, "Model Files(*.mdl)\0*.mdl\0\0",true);
+        VariantDrawer::DrawPath("model", _modelPath, {"Model Files", "mdl"}, true);
 		_matInspector->Update();
 		ImGui::TreePop();
 

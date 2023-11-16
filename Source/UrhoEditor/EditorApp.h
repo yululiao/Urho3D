@@ -35,7 +35,7 @@ public:
     void showSceneView(bool show);
     void startGame();
     String dialogSelectPath();
-    String dialogOpenFile(const char* filter);
+    String dialogOpenFile(Urho3D::Vector<String> filer);
     void dialogSaveFile();
     void Clear();
     /// <summary>
