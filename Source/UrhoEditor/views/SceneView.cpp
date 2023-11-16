@@ -1,6 +1,8 @@
 #include "SceneView.h"
 #include "ctrls/SceneCtrl.h"
 #include "EditorApp.h"
+#include "imgui/imgui.h"
+#include "imgui/imgui_internal.h"
 
 namespace Urho3DEditor 
 {
@@ -79,13 +81,19 @@ void SceneView::onIO() {
     winPos.x = winPos.x + offset.x;
     winPos.y = winPos.y + offset.y;
     mousePos = Vector2(mousePos.x_ - winPos.x, mousePos.y_ - winPos.y);
-    if (!ImGui::IsWindowFocused()) {
+    ImVec2 winSize = ImGui::GetWindowSize();
+    ImVec2 rightBottom(winPos.x + winSize.x,winPos.y + winSize.y);
+    ImRect winRec(winPos, rightBottom);
+    if(!winRec.Contains(io.MousePos))
+    {
         return;
     }
     if (io.MouseWheel != 0.0) {
         wheelEvent(io.MouseWheel);
     }
-
+    if (!ImGui::IsWindowFocused()) {
+        return;
+    }
     if ((io.MouseDown[0] && io.MouseDown[0] != mousePresed) || (io.MouseDown[1] && io.MouseDown[1] != mousePresed)) {
         mousePressEvent(mousePos);
     }
