@@ -54,6 +54,7 @@ CmdModifyMat::~CmdModifyMat() {
 }
 
 void CmdModifyMat::ToDo() {
+	SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 	if(_type == 0)
 	{
 		Variant oldValue = _mat->GetShaderParameter(_attrName);
@@ -93,10 +94,10 @@ void CmdModifyResPath::ToDo() {
 		auto aniModel = dynamic_cast<StaticModel*>(_obj.Get());
 		if(aniModel)
 		{
+			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 			SharedPtr<Material> mat(aniModel->GetMaterial());
 			String oldPath = mat->GetName();
 			mat = cache->GetResource<Urho3D::Material>(_path);
-			//SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 			aniModel->SetMaterial(mat);
 			_path = oldPath;
 		}
