@@ -1,0 +1,148 @@
+{
+	"id": 1,
+	"attributes": {
+		"Name": "RttScene",
+		"Time Scale": 1.0,
+		"Smoothing Constant": 50.0,
+		"Snap Threshold": 5.0,
+		"Elapsed Time": 128.4044189453125,
+		"Next Replicated Node ID": 792,
+		"Next Replicated Component ID": 457,
+		"Next Local Node ID": 16777216,
+		"Next Local Component ID": 16777216,
+		"Variables": {},
+		"Variable Names": ""
+	},
+	"components": [
+		{
+			"type": "Octree",
+			"id": 1,
+			"attributes": null
+		}
+	],
+	"children": [
+		{
+			"id": 2,
+			"attributes": {
+				"Is Enabled": true,
+				"Name": "Root",
+				"Tags": [],
+				"Position": "0 0 0",
+				"Rotation": "1 0 0 0",
+				"Scale": "1 1 1",
+				"Variables": {}
+			},
+			"components": [],
+			"children": [
+				{
+					"id": 3,
+					"attributes": {
+						"Is Enabled": true,
+						"Name": "Zone",
+						"Tags": [],
+						"Position": "0 0 0",
+						"Rotation": "1 0 0 0",
+						"Scale": "1 1 1",
+						"Variables": {}
+					},
+					"components": [
+						{
+							"type": "Zone",
+							"id": 2,
+							"attributes": {
+								"Bounding Box Min": "-1000 -1000 -1000",
+								"Bounding Box Max": "1000 1000 1000",
+								"Ambient Color": "0.2 0.2 0.2 1",
+								"Fog Color": "0.2 0.2 0.2 1",
+								"Fog Start": 10.0,
+								"Fog End": 100.0
+							}
+						}
+					],
+					"children": []
+				},
+				{
+					"id": 4,
+					"attributes": {
+						"Is Enabled": true,
+						"Name": "DirLight",
+						"Tags": [],
+						"Position": "5 5 -5",
+						"Rotation": "0.880476 0.279848 -0.364705 0.115917",
+						"Scale": "1 1 1",
+						"Variables": {}
+					},
+					"components": [
+						{
+							"type": "Light",
+							"id": 3,
+							"attributes": {
+								"Light Type": "Directional",
+								"Color": "0.8 0.8 0.8 1"
+							}
+						}
+					],
+					"children": []
+				},
+				{
+					"id": 51,
+					"attributes": {
+						"Is Enabled": true,
+						"Name": "plane",
+						"Tags": [],
+						"Position": "0 0 0",
+						"Rotation": "1 0 0 0",
+						"Scale": "0.01 0.01 0.01",
+						"Variables": {}
+					},
+					"components": [
+						{
+							"type": "AnimatedModel",
+							"id": 47,
+							"attributes": {
+								"Model": "Model;assets/fbx/plane.mdl",
+								"Material": "Material;assets/mats/Ninja.xml",
+								"Animation States": [
+									{
+										"type": "Int",
+										"value": 0
+									}
+								]
+							}
+						}
+					],
+					"children": []
+				}
+			]
+		},
+		{
+			"id": 280,
+			"attributes": {
+				"Is Enabled": true,
+				"Name": "",
+				"Tags": [],
+				"Position": "0 0 0",
+				"Rotation": "1 0 0 0",
+				"Scale": "1 1 1",
+				"Variables": {}
+			},
+			"components": [],
+			"children": []
+		},
+		{
+			"id": 441,
+			"attributes": {
+				"Is Enabled": true,
+				"Name": "",
+				"Tags": [],
+				"Position": "0 0 0",
+				"Rotation": "1 0 0 0",
+				"Scale": "1 1 1",
+				"Variables": {}
+			},
+			"components": [],
+			"children": []
+		},
+		null
+	]
+}

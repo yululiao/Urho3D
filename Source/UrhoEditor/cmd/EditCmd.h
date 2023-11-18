@@ -1,6 +1,5 @@
 ﻿#pragma once
-#include <string>
-#include <vector>
+#include "Urho3D/Container/Str.h"
 
 namespace Urho3DEditor 
 {
@@ -8,7 +7,7 @@ namespace Urho3DEditor
 class EditCmd
 {
 public:
-	EditCmd(const std::string& id) 
+	EditCmd(const Urho3D::String& id) 
 	{
 		_id = id;
 	};
@@ -21,7 +20,7 @@ public:
 	virtual bool Reversible() { return can_reverse; };
 	bool can_reverse = true;
 public:
-	std::string _id;
+	Urho3D::String _id;
 };
 
 

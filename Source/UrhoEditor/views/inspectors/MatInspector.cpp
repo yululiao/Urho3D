@@ -9,6 +9,9 @@
 #include "Urho3D/Graphics/Texture2D.h"
 #include <Urho3D/Resource/ResourceCache.h>
 #include "Urho3D/Graphics/Graphics.h"
+#include "cmd/CmdDefines.h"
+#include "Utils.h"
+#include "ctrls/AssetMgr.h"
 
 namespace Urho3DEditor
 {
@@ -37,14 +40,16 @@ void MatInspector::Update()
         VariantDrawer::DrawPath("MatPath", matPath, {"Mat Files", "xml"}, false);
 		if (matPath != mat->GetName()) 
 		{
-			mat = cache->GetResource<Urho3D::Material>(matPath);
-			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
-			aniModel->SetMaterial(mat);
+			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath,CmdModifyResPath::ResType::MAT);
 			return;
 		}
 	}
 	if(matPath == "Materials/Default.xml" || matPath == "")//默认材质不允许编辑
 		return;
+	if(ImGui::Button("Save"))
+	{
+		mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+	}
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
 		auto textures = mat->GetTextures();
@@ -54,9 +59,7 @@ void MatInspector::Update()
             VariantDrawer::DrawPath(name, path, {"Texture Files", "png,tga,jpg,dds"}, false);
 			if(path != item.second_->GetName())
 			{
-				Urho3D::Texture2D* newTex = cache->GetResource<Urho3D::Texture2D>(path);
-				//SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
-				mat->SetTexture(item.first_, newTex);
+				DoMatTexModify(Utils::GenGuid().c_str(),mat, (uint16_t)item.first_, path);
 			}
 			
 		}
@@ -66,7 +69,11 @@ void MatInspector::Update()
 			Urho3D::String name = item.second_.name_;
 			Variant value = item.second_.value_;
 			VariantDrawer::DrawVariant(name,value);
-			mat->SetShaderParameter(name,value);
+			if(value != item.second_.value_)
+			{
+				DoMatModify(Utils::GenGuid().c_str(), mat,name,value);
+			}
+			
 		}
 		ImGui::TreePop();
 	}

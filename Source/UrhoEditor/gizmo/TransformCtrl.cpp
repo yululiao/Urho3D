@@ -337,7 +337,7 @@ void TransformCtrl::translate(float x, float y)
 		//object->set_world_pos(startPos + point);
 		//object->SetWorldPosition(startPos + point);
 		Vector3 pos =(startPos + point)- object->GetParent()->GetWorldPosition();
-		Urho3DEditor::TransformCmd::Translate(_cmdName,object, pos);
+		Urho3DEditor::DoModify(String(_cmdName.c_str()),object,"Position",pos);
 	}
 }
 void TransformCtrl::scale(float x, float y)
@@ -371,7 +371,7 @@ void TransformCtrl::scale(float x, float y)
 
 		}
 		//object->SetScale(newScale);
-		Urho3DEditor::TransformCmd::Scale(_cmdName,object, newScale);
+		Urho3DEditor::DoModify(String(_cmdName.c_str()), object, "Scale", newScale);
 	}
 
 }
@@ -433,8 +433,8 @@ void TransformCtrl::rotate(float x, float y)
 		//std::cout << "mouseXY:" << "x" << x << ",y" << y;
 		//std::cout << "quaternionY:" << "x" << quaternionY.x << ",y" << quaternionY.y << ",z" << quaternionY.z << ",w" << quaternionY.w << std::endl;
 		//object->SetRotation(quaternionXYZ);
-
-		Urho3DEditor::TransformCmd::Rot(_cmdName,object, quaternionXYZ.EulerAngles());
+		//Urho3DEditor::TransformCmd::Rot(_cmdName,object, quaternionXYZ.EulerAngles());
+		Urho3DEditor::DoModify(String(_cmdName.c_str()), object, "Rotation", quaternionXYZ);
 
 
 	}

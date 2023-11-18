@@ -1,6 +1,8 @@
 ﻿#include "CmdMgr.h"
 #include "event/GEvent.h"
+#include "Urho3D/Container/Str.h"
 
+using namespace Urho3D;
 namespace Urho3DEditor 
 {
 CmdMgr* CmdMgr::_instance = nullptr;
@@ -130,7 +132,7 @@ std::vector<EditCmd*> CmdMgr::GetUnDoNodes(int index)
 		}
 		it++;
 	}
-	std::string cmdName = (*it)->_id;
+	String cmdName = (*it)->_id;
 	if (cmdName != "" && it != editNodeList.begin())
 	{
 		it--;
@@ -162,7 +164,7 @@ std::vector<EditCmd*> CmdMgr::GetRedoNodes(int index)
 		}
 		it++;
 	}
-	std::string cmdName = (*it)->_id;
+	String cmdName = (*it)->_id;
 	if (cmdName != "" && it != editNodeList.end())
 	{
 		it++;

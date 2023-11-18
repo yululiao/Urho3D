@@ -22,6 +22,7 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #endif // _WIN32
 #include <ndf/nfd.h>
+#include "ctrls/AssetMgr.h"
 
 
 namespace Urho3DEditor {
@@ -122,7 +123,7 @@ void EditorApp::resizeWwindow(int w, int h)
 
 String EditorApp::dialogSelectPath() 
 {
-    String resultPath;
+    String dirPath;
     nfdchar_t* outPath;
     nfdchar_t* defaultPath = "";
     nfdresult_t result = NFD_PickFolder(&outPath, defaultPath);
@@ -130,8 +131,11 @@ String EditorApp::dialogSelectPath()
     {
         puts("Success!");
         puts(outPath);
-        resultPath = String(outPath);
+        dirPath = String(outPath);
         NFD_FreePath(outPath);
+        dirPath.Replace('\\', '/');
+        dirPath = AssetMgr::getInstance()->pathToRelative(dirPath);
+        return dirPath;
     }
     else if (result == NFD_CANCEL)
     {
@@ -141,8 +145,7 @@ String EditorApp::dialogSelectPath()
     {
         printf("Error: %s\n", NFD_GetError());
     }
-    resultPath.Replace('\\','/');
-    return resultPath;
+    return dirPath;
 }
 
 String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
@@ -156,7 +159,11 @@ String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
     {
         puts("Success!");
         puts(outPath);
+        filePath = String(outPath);
         NFD_FreePath(outPath);
+        filePath.Replace('\\', '/');
+        filePath = AssetMgr::getInstance()->pathToRelative(filePath);
+        return filePath;
     }
     else if (result == NFD_CANCEL)
     {
@@ -166,7 +173,6 @@ String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
     {
         printf("Error: %s\n", NFD_GetError());
     }
-
    return filePath;
 }
 

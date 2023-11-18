@@ -1,64 +1,73 @@
 #pragma once
 #include "CmdMgr.h"
 #include <Urho3D/Scene/Scene.h>
+#include "Urho3D/Graphics/Material.h"
 
 using namespace Urho3D;
 
 namespace Urho3DEditor {
 
-class TransformCmd : public EditCmd
+//基于数据的命令，数据的变化可以抽象成一下几种：
+//1.数据修改 2.增加数据 3.删除数据
+//其中增加数据分为list vector map中增加插入数据
+//删除数据可以分为list vector map删除数据
+//基于此设计出以下几种命令
+//CmdModify CmdInsertList CmdInsertVector CmdInsertMap CmdDeleteList CmdDeleteVector CmdDeleteMap
+//数据单元是继承Serializable的对象，Serializable有属性反射的能力
+//Resource不继承Serializable需要特殊处理
+class CmdModify : public EditCmd
 {
 public:
-	TransformCmd(const std::string& id, const std::string& tag = "")
-		:EditCmd(id),_tag(tag)
-	{
-
-	}
-	virtual ~TransformCmd() {}
-	void ToDo() {
-		Vector3 oldData;
-		if (_tag == "pos") {
-			oldData = _node->GetPosition();
-			_node->SetPosition(_data);
-		}
-		else if (_tag == "rot") {
-			oldData = _node->GetRotation().EulerAngles();
-			_node->SetRotation(Quaternion(_data));
-		}
-		else {
-			oldData = _node->GetScale();
-			_node->SetScale(_data);
-		}
-		_data = oldData;
-	}
-	void UnDo() {
-		ToDo();
-	}
-
-	static void Translate(const std::string&name,Node* node, Vector3 data) 
-	{
-		SetTransform(name,"pos",node,data);
-	}
-	static void Scale(const std::string& name,Node* node, Vector3 data)
-	{
-		SetTransform(name,"scale", node, data);
-	}
-	static void Rot(const std::string& name,Node* node, Vector3 data)
-	{
-		SetTransform(name,"rot", node, data);
-	}
+	CmdModify(const String& id, Serializable* obj,const String& attrName, Variant value);
+	~CmdModify();
+	void ToDo() override;
+	void UnDo() override;
 private:
-	static void SetTransform(const std::string& name,const std::string& tag, Node* node, Vector3 data)
-	{
-		Urho3DEditor::TransformCmd* cmd = new Urho3DEditor::TransformCmd(name, tag);
-		cmd->_data = data;
-		cmd->_node = node;
-		Urho3DEditor::CmdMgr::Instance()->ToDo(cmd);
-	}
+	String _attrName;
+	Variant _value;
+	SharedPtr<Serializable> _obj;
+};
+//材质不继承自Serializable,需要特殊处理
+class CmdModifyMat:public EditCmd
+{
 public:
-	Vector3 _data;
-	Node* _node = nullptr;
-	std::string _tag;
+	CmdModifyMat(const String& id, Material* mat, const String& attrName, Variant value);
+	CmdModifyMat(const String& id, Material* mat, uint16_t texUnit, Variant value);
+	~CmdModifyMat();
+	void ToDo() override;
+	void UnDo() override;
+private:
+	String _attrName;
+	uint16_t _texUnit;
+	Variant _value;
+	SharedPtr<Material> _mat;
+	uint8_t _type = 0;//0 attr ,1 tex ,2 reset path
 };
 
+
+class CmdModifyResPath:public EditCmd
+{
+public:
+	enum ResType
+	{
+		FBX,
+		MAT
+	};
+	CmdModifyResPath(const String& id,Serializable* obj,const String& path,ResType type);
+	~CmdModifyResPath();
+	void ToDo() override;
+	void UnDo() override;
+private:
+	SharedPtr<Serializable> _obj;
+	String _path;
+	ResType _resType;
+};
+
+
+void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value);
+void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value);
+void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value);
+void DoResPathModify(const String& id, Serializable* obj, const String& path, CmdModifyResPath::ResType type);
+
 }
+
