@@ -42,6 +42,7 @@ void StartView::RenderHistoryList()
 		if( ImGui::Button("x",ImVec2(25,25)))
 		{
 			_historyMgr->delete_history(item);
+			_historyMgr->save();
 		}
 		ImGui::PopStyleColor(1);
 	}
@@ -61,6 +62,8 @@ void StartView::Update()
 		String path = EditorApp::getInstance()->dialogSelectPath();
 		if(path != "")
 		{
+			_historyMgr->add_project(path);
+			_historyMgr->save();
 			EditorApp::getInstance()->openWorkSpace(path);
 			EditorApp::getInstance()->startGame();
 			_isShow = false;
