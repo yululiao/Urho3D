@@ -134,7 +134,6 @@ String EditorApp::dialogSelectPath()
         dirPath = String(outPath);
         NFD_FreePath(outPath);
         dirPath.Replace('\\', '/');
-        dirPath = AssetMgr::getInstance()->pathToRelative(dirPath);
         return dirPath;
     }
     else if (result == NFD_CANCEL)
@@ -162,7 +161,6 @@ String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
         filePath = String(outPath);
         NFD_FreePath(outPath);
         filePath.Replace('\\', '/');
-        filePath = AssetMgr::getInstance()->pathToRelative(filePath);
         return filePath;
     }
     else if (result == NFD_CANCEL)

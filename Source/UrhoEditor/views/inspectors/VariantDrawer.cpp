@@ -182,6 +182,7 @@ void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, U
         String resultPath = EditorApp::getInstance()->dialogOpenFile(filter);
 		if (resultPath != "")
         {
+			resultPath = AssetMgr::getInstance()->pathToRelative(resultPath);
 			path = resultPath;
 		}
 	}
