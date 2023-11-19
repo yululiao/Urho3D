@@ -13,8 +13,10 @@ private:
 	void OnDrag();
 	void OnImport(const String& path);
 	void OnItemDoubleClicked(const String& path);
+	void DrawNodeNoInWindows(int itemH);
 	void DrawResNode(const String& path);
 private:
 	String _selected;
+	HashMap<String,bool> _foldState;
 };
 }

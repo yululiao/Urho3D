@@ -83,14 +83,15 @@ void SceneView::MouseReleaseEvent(Vector2 pos) {
 void SceneView::OnIO() {
     ImGuiIO& io = ImGui::GetIO();
     Vector2 mousePos(io.MousePos.x, io.MousePos.y);
-    ImVec2 winPos = ImGui::GetWindowPos();
+    _winPos = ImGui::GetWindowPos();
     ImVec2 offset = ImGui::GetWindowContentRegionMin();
-    winPos.x = winPos.x + offset.x;
-    winPos.y = winPos.y + offset.y;
-    mousePos = Vector2(mousePos.x_ - winPos.x, mousePos.y_ - winPos.y);
-    ImVec2 rightBottom(winPos.x + winSize.x,winPos.y + winSize.y);
-    ImRect winRec(winPos, rightBottom);
-    if(!winRec.Contains(io.MousePos))
+    ImVec2 contentOriPos;
+    contentOriPos.x = _winPos.x + offset.x;
+    contentOriPos.y = _winPos.y + offset.y;
+    mousePos = Vector2(mousePos.x_ - contentOriPos.x, mousePos.y_ - contentOriPos.y);
+    ImVec2 rightBottom(contentOriPos.x + winSize.x, contentOriPos.y + winSize.y);
+    ImRect contentRec(contentOriPos, rightBottom);
+    if(!contentRec.Contains(io.MousePos))
     {
         return;
     }

@@ -15,6 +15,11 @@ void NodeTree::Update()
 	if(!showing)
 		return;
 	ImGui::Begin("NodeTree",&showing);
+	ImVec2 newSize = ImGui::GetWindowSize();
+	_winPos = ImGui::GetWindowPos();
+	if (newSize.x != winSize.x || newSize.y != winSize.y) {
+		winSize = newSize;
+	}
 	DrawNode(EditorApp::GetInstance()->GetSceneRoot());
 	/*if(ImGui::BeginPopupContextWindow("context"),1)
 	{
@@ -31,6 +36,15 @@ void NodeTree::OnDoubleClicked()
 {
 	
 }
+
+void NodeTree::DrawNodeNoInWindows(int itemH)
+{
+	//Draw nothing
+	ImVec2 curPos = ImGui::GetCursorScreenPos();
+	curPos.y = curPos.y + itemH;
+	ImGui::SetCursorScreenPos(curPos);
+}
+
 void NodeTree::DrawNode(Node* node)
 {
 	String nodeName = node->GetName();
@@ -45,26 +59,37 @@ void NodeTree::DrawNode(Node* node)
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
-	//std::string guid = Utils::GenGuid();
-	ImGui::PushID(node->GetID());
-	//ImGui::PushID((nodeName+ String(guid.c_str())).CString());
-	bool node_open = ImGui::TreeNodeEx(nodeName.CString(),flags);
-	ImGui::PopID();
-	if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered())
+	if (IsInWindow(ImGui::GetCursorScreenPos()))
 	{
-		OnDoubleClicked();
-	}
-	else if(ImGui::IsItemClicked())
-	{
-		OnClicked(node);
-	}
-	if(node_open)
-	{
-		for(auto item:children)
-		{
-			DrawNode(item);
+		ImGui::PushID(node->GetID());
+		bool node_open = ImGui::TreeNodeEx(nodeName.CString(), flags);
+		ImGui::PopID();
+		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered()) {
+			OnDoubleClicked();
 		}
-		ImGui::TreePop();
+		else if (ImGui::IsItemClicked()) {
+			OnClicked(node);
+		}
+		if (node_open) {
+			if(children.Size() > 0)
+			{
+				_foldState[node->GetID()] = true;
+			}
+			for (auto item : children) {
+				DrawNode(item);
+			}
+			ImGui::TreePop();
+		}
 	}
+	else
+	{
+		DrawNodeNoInWindows(ImGui::GetItemRectSize().y);
+		if (_foldState.Contains(node->GetID()) && _foldState[node->GetID()]) {
+			for (auto item : children) {
+				DrawNode(item);
+			}
+		}
+	}
+	
 }
 }

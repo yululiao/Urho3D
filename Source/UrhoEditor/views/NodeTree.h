@@ -17,7 +17,9 @@ public:
 private:
 	void OnClicked(Node* node);
 	void OnDoubleClicked();
+	void DrawNodeNoInWindows(int itemH);
 	void DrawNode(Node* node);
+	HashMap<int, bool> _foldState;
 
 };
 }
