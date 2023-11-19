@@ -265,21 +265,22 @@ void EditorApp::StartGame()
 };
 
 
-static int gFpsFrameCount = 0;//30次取一次平均
+int gFpsFrameCount = 0;
 int gAllFps = 0;
+static const float gCalculateFpsNum = 30.0f;
 void EditorApp::EditorOneFrame()
 {
     time_t nowTime = GetTickCount64();
     if(_lastTime > 0 && nowTime >_lastTime)
     {
         int tmpFps = (int)(1000.0f/(nowTime - _lastTime));
-        if(gFpsFrameCount < 30)
+        if(gFpsFrameCount < gCalculateFpsNum)
         {
             gAllFps += tmpFps;
         }
         else
         {
-            _fps = (int)(gAllFps /30.0f);
+            _fps = (int)(gAllFps / gCalculateFpsNum);
             gFpsFrameCount = 0;
             gAllFps = 0;
         }
