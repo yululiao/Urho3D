@@ -133,6 +133,9 @@ void MainWindow::UpdateDockerSpace()
 void MainWindow::Update() 
 {
     glfwMakeContextCurrent(glfwGetCurrentContext());
+    //¿ªÆôÈ«¾ÖÔ²½Ç
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding
+        ,4.0f);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImguiUpdate();

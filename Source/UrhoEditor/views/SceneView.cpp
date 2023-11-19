@@ -63,7 +63,7 @@ void SceneView::MouseReleaseEvent(Vector2 pos) {
     }
     else {
         if (!_is_mouse_moved) {
-            Node* hitNode = SceneCtrl::getInstance()->select(pos.x_ / winSize.x, pos.y_ / winSize.y);
+            Node* hitNode = SceneCtrl::getInstance()->Select(pos.x_ / winSize.x, pos.y_ / winSize.y);
             if (hitNode) {
                 _app->gizmoCtrl_->attach(hitNode);
             }
@@ -148,7 +148,7 @@ void SceneView::Update() {
                     char path[200] = { 0 };
                     memcpy(path, data->Data, data->DataSize);
                     //std::string strpath = path;
-                    SceneCtrl::getInstance()->addModel(path);
+                    SceneCtrl::getInstance()->AddModel(path);
                     std::cout << "onDrop" << std::endl;
                 }
 
@@ -171,7 +171,7 @@ void SceneView::GenGpuTex() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     Vector2 rttSize = SceneCtrl::getInstance()->constRttSize;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rttSize.x_, rttSize.y_, 0, GL_RGB, GL_UNSIGNED_BYTE,
-        SceneCtrl::getInstance()->getRttData());
+        SceneCtrl::getInstance()->GetRttData());
     //glGenerateMipmap(GL_TEXTURE_2D);
 
 }

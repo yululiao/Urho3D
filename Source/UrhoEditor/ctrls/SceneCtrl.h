@@ -30,19 +30,19 @@ public:
 	static SceneCtrl* getInstance();
 	static Context* _ctx;
 	//void create_scene();
-    void createScene();
-    void deleteNode(Urho3D::Node* node);
-    void update_grids();
-	void update();
-	Node* select(float x, float y);
-    void addModel(const String& path);
-    Node* getRoot() { return rttSceneRoot_; }
+    void CreateScene();
+    void DeleteNode(Urho3D::Node* node);
+    void UpdateGrids();
+	void Update();
+	Node* Select(float x, float y);
+    void AddModel(const String& path);
+    Node* GetRoot() { return rttSceneRoot_; }
     Node* GetEditorRoot() { return editorRoot_; }
-    void genRttTex();
-    char* getRttData() { return rttData; }
+    void GenRttTex();
+    char* GetRttData() { return rttData; }
     void OnResizeView(int w, int h);
-    Node* intersectObj(Ray& ray, Node* pnode, float& dis);
-    void intersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out);
+    Node* IntersectObj(Ray& ray, Node* pnode, float& dis);
+    void IntersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out);
     Scene* GetScene() { return rttScene_; }
     void Clear();
     void InitScene(bool hasRoot);

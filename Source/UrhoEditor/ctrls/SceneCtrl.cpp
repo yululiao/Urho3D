@@ -56,12 +56,12 @@ namespace Urho3DEditor
 
 	}
 
-    void SceneCtrl::deleteNode(Urho3D::Node* node)
+    void SceneCtrl::DeleteNode(Urho3D::Node* node)
     {
         node->Remove();
     }
 
-    void SceneCtrl::addModel(const String& path)
+    void SceneCtrl::AddModel(const String& path)
     {
         GetSubsystem<Graphics>()->MakeCurrent();
         auto* cache = GetSubsystem<ResourceCache>();
@@ -78,7 +78,7 @@ namespace Urho3DEditor
         modelObject->SetMaterial(defMat);
     }
 
-    void SceneCtrl::genRttTex()
+    void SceneCtrl::GenRttTex()
     {
         if (!renderTexture)
             return;
@@ -103,11 +103,11 @@ namespace Urho3DEditor
         rttCam_->SetAspectRatioInternal(viewSize_.x_ / viewSize_.y_);
     }
 
-    Node* SceneCtrl::intersectObj(Ray& ray, Node* pnode, float& dis)
+    Node* SceneCtrl::IntersectObj(Ray& ray, Node* pnode, float& dis)
     {
         Node* result = nullptr;
         std::map<float, Node*> out;
-        intersectObj(ray, pnode, out);
+        IntersectObj(ray, pnode, out);
         if (out.size() == 0)
             return result;
         result = out.begin()->second;
@@ -115,7 +115,7 @@ namespace Urho3DEditor
         return result;
     }
 
-    void SceneCtrl::intersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out)
+    void SceneCtrl::IntersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out)
     {
         StaticModel* stmodel = pnode->GetComponent<StaticModel>();
         AnimatedModel* animodel = pnode->GetComponent<AnimatedModel>();
@@ -155,11 +155,11 @@ namespace Urho3DEditor
         auto& children = pnode->GetChildren();
         for (auto it = children.Begin(); it != children.End(); it++)
         {
-            intersectObj(ray, *it, out);
+            IntersectObj(ray, *it, out);
         }
     }
 
-    void SceneCtrl::update_grids()
+    void SceneCtrl::UpdateGrids()
     {
         _grid_lines.clear();
         if(_grid_root.Null())
@@ -245,7 +245,7 @@ namespace Urho3DEditor
         surface->SetViewport(0, rttViewport_);
         rttScene_->SetUpdateEnabled(true);
 
-        update_grids();
+        UpdateGrids();
     }
 
     void SceneCtrl::OpenScene(const String& path)
@@ -272,7 +272,7 @@ namespace Urho3DEditor
         EditorApp::GetInstance()->SelectNode(nullptr);
     }
 
-    void SceneCtrl::createScene()
+    void SceneCtrl::CreateScene()
     {
         rttScene_ = new Scene(context_);
         rttScene_->SetName("RttScene");
@@ -281,7 +281,7 @@ namespace Urho3DEditor
         EditorApp::GetInstance()->SelectNode(nullptr);
     }
 
-	void SceneCtrl::update()
+	void SceneCtrl::Update()
 	{
 		/*auto* model = _modelNode->GetComponent<AnimatedModel>(true);
 		if (model->GetNumAnimationStates())
@@ -291,12 +291,12 @@ namespace Urho3DEditor
 		}*/
 	}
 
-	Node* SceneCtrl::select(float x, float y)
+	Node* SceneCtrl::Select(float x, float y)
 	{
 		Node* hit = nullptr;
         Ray world_ray = rttCameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
 		float dis = 100000;
-        hit = intersectObj(world_ray, rttSceneRoot_, dis);
+        hit = IntersectObj(world_ray, rttSceneRoot_, dis);
         EditorApp::GetInstance()->SelectNode(hit);
 		return hit;
 	}

@@ -90,7 +90,7 @@ void EditorApp::Start()
     //EditorLuaBinding::LuaBinding(luaScript->GetState());//todo
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
-	SceneCtrl::getInstance()->createScene();
+	SceneCtrl::getInstance()->CreateScene();
     SetCurTool("move");
 }
 
@@ -108,9 +108,9 @@ int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
 
 void EditorApp::RunFrame()
 {
-	SceneCtrl::getInstance()->update();
+	SceneCtrl::getInstance()->Update();
 	_engine->RunFrame();
-    SceneCtrl::getInstance()->genRttTex();
+    SceneCtrl::getInstance()->GenRttTex();
     if (gizmoCtrl_)
         gizmoCtrl_->update();
 }
@@ -215,7 +215,7 @@ int EditorApp::System(const char* cmd, char* pRetMsg, int msg_len)
 
 Node* EditorApp::GetSceneRoot()
 {
-   return SceneCtrl::getInstance()->getRoot();
+   return SceneCtrl::getInstance()->GetRoot();
 }
 
 void EditorApp::SelectNode(Node* node)
