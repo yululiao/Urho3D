@@ -9,7 +9,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     SetConsoleOutputCP(CP_UTF8);
     freopen("CONOUT$", "w", stdout);
 	//----------
-	EditorApp::getInstance()->run();
+	EditorApp::GetInstance()->Run();
 	return 0;
 }
 

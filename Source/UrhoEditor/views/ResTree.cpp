@@ -16,7 +16,7 @@ void ResTree::Update()
 	if(!showing)
 		return;
 	ImGui::Begin("ResTree",&showing);
-	auto root = EditorApp::getInstance()->getAssetRoot();
+	auto root = EditorApp::GetInstance()->GetAssetRoot();
 	DrawResNode(root);
 	ImGui::End();
 }
@@ -34,12 +34,12 @@ void ResTree::OnItemDoubleClicked(const String& path)
 	if(path.Find(String(".scene"))!= String::NPOS)
 	{
 		AssetMgr::getInstance()->OpenScene(path);
-		EditorApp::getInstance()->setCurTool("move");
+		EditorApp::GetInstance()->SetCurTool("move");
 	}
 }
 void ResTree::DrawResNode(const String& path)
 {
-	auto fileSystem = EditorApp::getInstance()->GetSubsystem<FileSystem>();
+	auto fileSystem = EditorApp::GetInstance()->GetSubsystem<FileSystem>();
 	StringVector dirs;
 	fileSystem->ScanDir(dirs,path,".*",SCAN_DIRS|SCAN_FILES,false);
 	auto pathItems = path.Split('/');

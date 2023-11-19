@@ -34,7 +34,7 @@ void Toolbar::DrawTransformTool()
 	for (int i= 0;i< toolList.Size();++i)
 	{
 		auto item = toolList[i];
-		if (item == EditorApp::getInstance()->GetCurTool()) 
+		if (item == EditorApp::GetInstance()->GetCurTool()) 
 		{
 			curColor = selectedColor;
 		}
@@ -108,11 +108,11 @@ void Toolbar::DrawTrigerTool()
 void Toolbar::Init() 
 {
 	//curToolName = "camera";
-	EditorApp::getInstance()->GetCurTool();
+	EditorApp::GetInstance()->GetCurTool();
 }
 void Toolbar::OnSave() 
 {
-	String assetRoot = EditorApp::getInstance()->getAssetRoot();
+	String assetRoot = EditorApp::GetInstance()->GetAssetRoot();
 	AssetMgr::getInstance()->SaveScene(assetRoot + "/test.scene");
 	CmdMgr::Instance()->OnSave();
 }
@@ -131,6 +131,6 @@ void Toolbar::OnNewScene()
 }
 void Toolbar::OnTransformTool(const String& name)
 {
-	EditorApp::getInstance()->setCurTool(name);
+	EditorApp::GetInstance()->SetCurTool(name);
 }
 }

@@ -196,7 +196,7 @@ namespace Urho3DEditor
 
     void SceneCtrl::Clear()
     {
-        EditorApp::getInstance()->Clear();
+        EditorApp::GetInstance()->Clear();
         _grid_root = nullptr;
         rttSceneRoot_ = nullptr;
     }
@@ -256,8 +256,8 @@ namespace Urho3DEditor
         rttScene_ = new Scene(context_);
         rttScene_->LoadJSON(file);
         InitScene(true);
-        EditorApp::getInstance()->setCurTool("move");
-        EditorApp::getInstance()->SelectNode(nullptr);
+        EditorApp::GetInstance()->SetCurTool("move");
+        EditorApp::GetInstance()->SelectNode(nullptr);
     }
 
     void SceneCtrl::OpenNewScene()
@@ -268,8 +268,8 @@ namespace Urho3DEditor
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
-        EditorApp::getInstance()->setCurTool("move");
-        EditorApp::getInstance()->SelectNode(nullptr);
+        EditorApp::GetInstance()->SetCurTool("move");
+        EditorApp::GetInstance()->SelectNode(nullptr);
     }
 
     void SceneCtrl::createScene()
@@ -278,7 +278,7 @@ namespace Urho3DEditor
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
-        EditorApp::getInstance()->SelectNode(nullptr);
+        EditorApp::GetInstance()->SelectNode(nullptr);
     }
 
 	void SceneCtrl::update()
@@ -297,7 +297,7 @@ namespace Urho3DEditor
         Ray world_ray = rttCameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
 		float dis = 100000;
         hit = intersectObj(world_ray, rttSceneRoot_, dis);
-        EditorApp::getInstance()->SelectNode(hit);
+        EditorApp::GetInstance()->SelectNode(hit);
 		return hit;
 	}
 }

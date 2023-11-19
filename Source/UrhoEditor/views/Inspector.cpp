@@ -16,7 +16,7 @@ void Inspector::Update()
 {
 	if(!showing)
 		return;
-	Node* selectedNode = EditorApp::getInstance()->GetSelectNode();
+	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
 	ImGui::Begin("Inspector",&showing);
 	if(selectedNode)
 	{

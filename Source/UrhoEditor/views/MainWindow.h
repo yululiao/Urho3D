@@ -20,21 +20,21 @@ public:
     ~MainWindow();
     void Draw()const;
     bool WindowShouldClose()const;
-    int getWidth()const { return width; }
-    int getHeight()const { return height; }
+    int GetWidth()const { return width; }
+    int GetHeight()const { return height; }
     void Resize(int width, int height);
-    GLFWwindow* getRawWindow();
+    GLFWwindow* GetRawWindow();
     virtual void Update();
     //void showDockSpace(bool* p_open);
-    void imguiUpdate();
-    bool shouldClose() { return WindowShouldClose(); }
+    void ImguiUpdate();
+    bool ShouldClose() { return WindowShouldClose(); }
     void AddWindow(std::unique_ptr<EditorWidget> newWindow)
     {
         windows.push_back(std::move(newWindow));
     }
 
-    void maxSize();
-    GLFWwindow* getGlfwWindow() {
+    void MaxSize();
+    GLFWwindow* GetGlfwWindow() {
         return window;
     }
     void StartGame();

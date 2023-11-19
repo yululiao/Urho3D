@@ -33,8 +33,8 @@ void StartView::RenderHistoryList()
 		ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
 		if(ImGui::Button(item.CString(),ImVec2(300,25)))
 		{
-			EditorApp::getInstance()->openWorkSpace(item);
-			EditorApp::getInstance()->startGame();
+			EditorApp::GetInstance()->OpenWorkSpace(item);
+			EditorApp::GetInstance()->StartGame();
 			_isShow = false;
 		}
 		ImGui::PopStyleVar(1);
@@ -59,13 +59,13 @@ void StartView::Update()
 	ImGui::SameLine();
 	if (ImGui::Button("Open...",ImVec2(80,25)))
 	{
-		String path = EditorApp::getInstance()->dialogSelectPath();
+		String path = EditorApp::GetInstance()->DialogSelectPath();
 		if(path != "")
 		{
 			_historyMgr->add_project(path);
 			_historyMgr->save();
-			EditorApp::getInstance()->openWorkSpace(path);
-			EditorApp::getInstance()->startGame();
+			EditorApp::GetInstance()->OpenWorkSpace(path);
+			EditorApp::GetInstance()->StartGame();
 			_isShow = false;
 		}
 		

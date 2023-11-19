@@ -179,7 +179,7 @@ void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, U
 	ImGui::SameLine();
 	if (ImGui::Button("...",ImVec2(30,25)))
 	{
-        String resultPath = EditorApp::getInstance()->dialogOpenFile(filter);
+        String resultPath = EditorApp::GetInstance()->DialogOpenFile(filter);
 		if (resultPath != "")
         {
 			resultPath = AssetMgr::getInstance()->pathToRelative(resultPath);

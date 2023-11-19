@@ -40,24 +40,24 @@ EditorApp::~EditorApp()
    NFD_Quit(); 
 }
 
-void EditorApp::createEngine(void* win_ptr)
+void EditorApp::CreateEngine(void* win_ptr)
 {
 	_window_ptr = win_ptr;
 	_engineParameters = Engine::ParseParameters(GetArguments());
 	// Create the Engine, but do not initialize it yet. Subsystems except Graphics & Renderer are registered at this point
 	_engine = new Engine(_context);
 	// Subscribe to log messages so that can show errors if ErrorExit() is called with empty message
-	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, handleLogMessage));
-	setup();
+	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, HandleLogMessage));
+	Setup();
 	if (!_engine->Initialize(_engineParameters))
 	{
 		return;
 	}
-	start();
+	Start();
     
 }
 
-void EditorApp::setup()
+void EditorApp::Setup()
 {
 	_engineParameters[EP_EXTERNAL_WINDOW] = _window_ptr;
     _engineParameters[EP_WINDOW_HIDE] = true;
@@ -84,14 +84,14 @@ void EditorApp::setup()
 
 }
 
-void EditorApp::start()
+void EditorApp::Start()
 {
     auto* luaScript = new LuaScript(context_);
     //EditorLuaBinding::LuaBinding(luaScript->GetState());//todo
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
 	SceneCtrl::getInstance()->createScene();
-    setCurTool("move");
+    SetCurTool("move");
 }
 
 int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) 
@@ -106,7 +106,7 @@ int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
     return 0;
 }
 
-void EditorApp::runFrame()
+void EditorApp::RunFrame()
 {
 	SceneCtrl::getInstance()->update();
 	_engine->RunFrame();
@@ -115,13 +115,13 @@ void EditorApp::runFrame()
         gizmoCtrl_->update();
 }
 
-void EditorApp::resizeWwindow(int w, int h)
+void EditorApp::ResizeWwindow(int w, int h)
 {
     //auto* graphics = GetSubsystem<Graphics>();
 	//graphics->SetMode(w, h);
 }
 
-String EditorApp::dialogSelectPath() 
+String EditorApp::DialogSelectPath() 
 {
     String dirPath;
     nfdchar_t* outPath;
@@ -147,7 +147,7 @@ String EditorApp::dialogSelectPath()
     return dirPath;
 }
 
-String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
+String EditorApp::DialogOpenFile(Urho3D::Vector<String> filter)
 { 
     String filePath;
     nfdchar_t* outPath;
@@ -174,12 +174,12 @@ String EditorApp::dialogOpenFile(Urho3D::Vector<String> filter)
    return filePath;
 }
 
-void EditorApp::dialogSaveFile() 
+void EditorApp::DialogSaveFile() 
 {
 
 }
 
-int EditorApp::system(const char* cmd, char* pRetMsg, int msg_len) 
+int EditorApp::System(const char* cmd, char* pRetMsg, int msg_len) 
 {
     FILE* fp;
     char* p = NULL;
@@ -237,7 +237,7 @@ void EditorApp::MakeCurent()
     GetSubsystem<Graphics>()->MakeCurrent();
 }
 
-void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
+void EditorApp::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 {
 	using namespace LogMessage;
 
@@ -252,19 +252,19 @@ void EditorApp::handleLogMessage(StringHash eventType, VariantMap& eventData)
 	}
 }
 
-void EditorApp::startGame() 
+void EditorApp::StartGame() 
 { 
     _gameStarted = true;
     _sceneView = new SceneView("renderWindow");
     mainWindow->AddWindow(std::unique_ptr<SceneView>(_sceneView));
     mainWindow->StartGame();
-    mainWindow->maxSize();
+    mainWindow->MaxSize();
     auto* cache = GetSubsystem<ResourceCache>();
     cache->AddResourceDir(_work_space);
     _isStartView = false;
 };
 
-void EditorApp::run() 
+void EditorApp::Run() 
 {
 	/*_start_ui = new start_view();
 	_start_ui->show();*/
@@ -273,19 +273,19 @@ void EditorApp::run()
     mainWindow = new MainWindow(800,600);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
     //mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
-    createEngine(nullptr);
-    while (!mainWindow->shouldClose())
+    CreateEngine(nullptr);
+    while (!mainWindow->ShouldClose())
     {
         mainWindow->Update();
         if (_gameStarted)
         {
-            runFrame();
+            RunFrame();
         }
     }
     //return 0;
 }
 
-void EditorApp::openWorkSpace(const String& path)
+void EditorApp::OpenWorkSpace(const String& path)
 {
 	_work_space = path;
 	//work_space::get_instance()->set_workspace(path);
@@ -298,7 +298,7 @@ void EditorApp::openWorkSpace(const String& path)
 	//_main_window->showMaximized();
 }
 
-EditorApp* EditorApp::getInstance()
+EditorApp* EditorApp::GetInstance()
 {
     if (_instance == nullptr)
     {
@@ -323,7 +323,7 @@ void EditorApp::Clear()
    
 }
 
-void EditorApp::setCurTool(const String& name) 
+void EditorApp::SetCurTool(const String& name) 
 {
     GetSubsystem<Graphics>()->MakeCurrent();
     if (cam_ctrl_ == nullptr)
@@ -357,27 +357,27 @@ void EditorApp::setCurTool(const String& name)
     }
 }
 
-Node* EditorApp::getRootNode() 
+Node* EditorApp::GetRootNode() 
 {
 	return SceneCtrl::getInstance()->rttSceneRoot_; 
 }
 
-Scene* EditorApp::getScene() 
+Scene* EditorApp::GetScene() 
 { 
 	return SceneCtrl::getInstance()->rttScene_; 
 }
 
-String EditorApp::getWorkSpace() 
+String EditorApp::GetWorkSpace() 
 { 
 	return _work_space; 
 }
 
-String EditorApp::getAssetRoot() 
+String EditorApp::GetAssetRoot() 
 {
     return _work_space + "/assets";
 }
 
-void EditorApp::showSceneView(bool show) 
+void EditorApp::ShowSceneView(bool show) 
 { 
     if (show)
         _sceneView->Show();

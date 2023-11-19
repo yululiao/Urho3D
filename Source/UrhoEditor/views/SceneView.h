@@ -13,14 +13,14 @@ public:
     }
     virtual ~SceneView();
     void Update() override;
-    void genGpuTex();
-    void delteGpuTex();
-    void onIO();
-    void wheelEvent(float deta);
-    void mouseHoverEvent(Vector2 pos);
-    void mouseMoveEvent(Vector2 pos);
-    void mouseReleaseEvent(Vector2 pos);
-    void mousePressEvent(Vector2 pos);
+    void GenGpuTex();
+    void DelteGpuTex();
+    void OnIO();
+    void WheelEvent(float deta);
+    void MouseHoverEvent(Vector2 pos);
+    void MouseMoveEvent(Vector2 pos);
+    void MouseReleaseEvent(Vector2 pos);
+    void MousePressEvent(Vector2 pos);
 
 protected:
     GLuint rttTexID = 0;

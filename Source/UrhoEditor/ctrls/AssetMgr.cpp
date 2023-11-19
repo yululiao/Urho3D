@@ -27,7 +27,7 @@ AssetMgr* AssetMgr::getInstance()
 { 
 	if (!_instance)
     {
-        _instance = new AssetMgr(EditorApp::getInstance()->GetContext());
+        _instance = new AssetMgr(EditorApp::GetInstance()->GetContext());
 
     }
     return _instance;
@@ -57,7 +57,7 @@ String AssetMgr::getFilePath(const String& path)
 
 String AssetMgr::pathToRelative(const String& path) 
 { 
-   String workSpace = EditorApp::getInstance()->getWorkSpace();
+   String workSpace = EditorApp::GetInstance()->GetWorkSpace();
     if (path.Find(workSpace) != 0)
     {
         throw("Application::pathToRelative: fullPath is not a FullPath!");
@@ -69,7 +69,7 @@ String AssetMgr::pathToRelative(const String& path)
 
 String AssetMgr::pathToFull(const String& path)
 {
-    String workSpace = EditorApp::getInstance()->getWorkSpace();
+    String workSpace = EditorApp::GetInstance()->GetWorkSpace();
     return workSpace + "/" + path;
 }
 
@@ -134,8 +134,8 @@ int AssetMgr::getImguiTex(const String& path)
     
     if (_texMap.find(path) == _texMap.end())
     {
-        Image* img = new Image(EditorApp::getInstance()->getContext());
-        File file(EditorApp::getInstance()->getContext(), path);
+        Image* img = new Image(EditorApp::GetInstance()->GetContext());
+        File file(EditorApp::GetInstance()->GetContext(), path);
         img->BeginLoad(file);
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_2D, texID);

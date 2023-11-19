@@ -18,7 +18,7 @@ void TransformInspector::Update()
 	/*ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;*/
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
-	Node* selectedNode = EditorApp::getInstance()->GetSelectNode();
+	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
 	if(!selectedNode)
 		return;
 	_pos = selectedNode->GetPosition();

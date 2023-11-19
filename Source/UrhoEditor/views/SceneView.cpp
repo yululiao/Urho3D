@@ -8,15 +8,15 @@ namespace Urho3DEditor
 {
 
 SceneView::~SceneView() {
-    delteGpuTex();
+    DelteGpuTex();
 }
 
-void SceneView::wheelEvent(float deta) {
-    EditorApp::getInstance()->cam_ctrl_->onWheel(deta * 50);
+void SceneView::WheelEvent(float deta) {
+    EditorApp::GetInstance()->cam_ctrl_->onWheel(deta * 50);
 }
 
-void SceneView::mousePressEvent(Vector2 pos) {
-    auto _app = EditorApp::getInstance();
+void SceneView::MousePressEvent(Vector2 pos) {
+    auto _app = EditorApp::GetInstance();
     _is_mouse_pressed = true;
     _is_mouse_moved = false;
     if (_app->_curent_tool == "camera") {
@@ -30,8 +30,8 @@ void SceneView::mousePressEvent(Vector2 pos) {
     }
 }
 
-void SceneView::mouseHoverEvent(Vector2 pos) {
-    auto _app = EditorApp::getInstance();
+void SceneView::MouseHoverEvent(Vector2 pos) {
+    auto _app = EditorApp::GetInstance();
     if (!_is_mouse_pressed) {
         if (_app->_curent_tool != "camera") {
             _app->gizmoCtrl_->onPointerHover(pos.x_ / winSize.x, pos.y_ / winSize.y);
@@ -39,8 +39,8 @@ void SceneView::mouseHoverEvent(Vector2 pos) {
     }
 }
 
-void SceneView::mouseMoveEvent(Vector2 pos) {
-    auto _app = EditorApp::getInstance();
+void SceneView::MouseMoveEvent(Vector2 pos) {
+    auto _app = EditorApp::GetInstance();
     if (!_is_mouse_pressed) {
         return;
     }
@@ -55,8 +55,8 @@ void SceneView::mouseMoveEvent(Vector2 pos) {
         }
     }
 }
-void SceneView::mouseReleaseEvent(Vector2 pos) {
-    auto _app = EditorApp::getInstance();
+void SceneView::MouseReleaseEvent(Vector2 pos) {
+    auto _app = EditorApp::GetInstance();
     _is_mouse_pressed = false;
     if (_app->_curent_tool == "camera") {
         _app->cam_ctrl_->onPointerUp(pos.x_, pos.y_);
@@ -80,7 +80,7 @@ void SceneView::mouseReleaseEvent(Vector2 pos) {
 }
 
 
-void SceneView::onIO() {
+void SceneView::OnIO() {
     ImGuiIO& io = ImGui::GetIO();
     Vector2 mousePos(io.MousePos.x, io.MousePos.y);
     ImVec2 winPos = ImGui::GetWindowPos();
@@ -95,21 +95,21 @@ void SceneView::onIO() {
         return;
     }
     if (io.MouseWheel != 0.0) {
-        wheelEvent(io.MouseWheel);
+        WheelEvent(io.MouseWheel);
     }
     if (-mousePos.x_ != FLT_MAX) {
         if (curMousePos != mousePos) {
-            mouseHoverEvent(mousePos);
+            MouseHoverEvent(mousePos);
         }
     }
     if(ImGui::IsWindowFocused()){
         if ((io.MouseDown[0] && io.MouseDown[0] != mousePresed) || (io.MouseDown[1] && io.MouseDown[1] != mousePresed)) {
-            mousePressEvent(mousePos);
+            MousePressEvent(mousePos);
         }
         mousePresed = io.MouseDown[0] || io.MouseDown[1];
         if (-mousePos.x_ != FLT_MAX) {
             if (curMousePos != mousePos) {
-                mouseMoveEvent(mousePos);
+                MouseMoveEvent(mousePos);
             }
         }
     }
@@ -117,7 +117,7 @@ void SceneView::onIO() {
     if (ImGui::IsWindowFocused()) {
         if ((io.MouseReleased[0] && (io.MouseReleased[0] != mouseRelease)) ||
             (io.MouseReleased[1] && (io.MouseReleased[1] != mouseRelease))) {
-            mouseReleaseEvent(mousePos);
+            MouseReleaseEvent(mousePos);
         }
         mouseRelease = io.MouseReleased[0] || io.MouseReleased[1];
     }
@@ -130,7 +130,7 @@ void SceneView::Update() {
         ImGui::Begin(title.c_str(), &showing);
         ///ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
         //winSize = ImGui::GetWindowSize();
-        onIO();
+        OnIO();
         ImVec2 newSize = ImGui::GetWindowSize();
         newSize.x = newSize.x - 14;
         newSize.y = newSize.y - 37;
@@ -138,7 +138,7 @@ void SceneView::Update() {
             winSize = newSize;
             SceneCtrl::getInstance()->OnResizeView(winSize.x, winSize.y);
         }
-        genGpuTex();
+        GenGpuTex();
         ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         if (ImGui::BeginDragDropTarget()) {
             //void* data = ImGui::AcceptDragDropPayload("drag_res")->Data;
@@ -160,7 +160,7 @@ void SceneView::Update() {
         ImGui::End();
     }
 }
-void SceneView::genGpuTex() {
+void SceneView::GenGpuTex() {
     if (!rttTexID) {
         glGenTextures(1, &rttTexID);
     }
@@ -176,7 +176,7 @@ void SceneView::genGpuTex() {
 
 }
 
-void SceneView::delteGpuTex() {
+void SceneView::DelteGpuTex() {
     if (rttTexID) {
         glDeleteTextures(1, &rttTexID);
         rttTexID = 0;

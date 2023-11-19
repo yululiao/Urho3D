@@ -65,7 +65,7 @@ void MainWindow::Resize(int width, int height) {
     glViewport(0, 0, width, height);
 }
 
-GLFWwindow* MainWindow::getRawWindow() {
+GLFWwindow* MainWindow::GetRawWindow() {
     return window;
 }
 
@@ -108,7 +108,7 @@ void MainWindow::UpdateDockerSpace()
     ImGui::Begin("###DockSpace", &_showingDocker, window_flags);
     ImGui::PopStyleVar();
     //_menuBarUpdater->update();//todo
-    if (EditorApp::getInstance()->_isStartView)
+    if (EditorApp::GetInstance()->_isStartView)
     {
         _startView->Update();
     }
@@ -135,7 +135,7 @@ void MainWindow::Update()
     glfwMakeContextCurrent(glfwGetCurrentContext());
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
-    imguiUpdate();
+    ImguiUpdate();
     ImGuiIO& io = ImGui::GetIO();
     (void)io;
     Draw();
@@ -148,7 +148,7 @@ void MainWindow::Update()
     }
 }
 
-void MainWindow::imguiUpdate() {
+void MainWindow::ImguiUpdate() {
     ImGui::NewFrame();
     ImGuiIO& io = ImGui::GetIO();
     bool show = true;
@@ -166,7 +166,7 @@ void MainWindow::imguiUpdate() {
     ImGui::Render();
 }
 
-void MainWindow::maxSize() {
+void MainWindow::MaxSize() {
     glfwMaximizeWindow(window);
 }
 

@@ -18,25 +18,25 @@ class EditorApp :public Object
 public:
 	EditorApp(Context* context);
 	~EditorApp();
-	void run();
-	void openWorkSpace(const String& path);
-	Context* getContext() { return _context; }
-    static EditorApp* getInstance();
-	void createEngine(void* win_ptr);
-	void runFrame();
-	void resizeWwindow(int w,int h);
-    MainWindow* mainWindow = nullptr;
-    void setCurTool(const String& name);
+	void Run();
+	void OpenWorkSpace(const String& path);
+	Context* GetContext() { return _context; }
+    static EditorApp* GetInstance();
+	void CreateEngine(void* win_ptr);
+	void RunFrame();
+	void ResizeWwindow(int w,int h);
+   
+    void SetCurTool(const String& name);
     String GetCurTool(){return _curent_tool;}
-    Node* getRootNode();
-    Scene* getScene();
-    String getWorkSpace(); //{ return _work_space; }
-    String getAssetRoot(); //{ return _work_space + "/assets"; }
-    void showSceneView(bool show);
-    void startGame();
-    String dialogSelectPath();
-    String dialogOpenFile(Urho3D::Vector<String> filer);
-    void dialogSaveFile();
+    Node* GetRootNode();
+    Scene* GetScene();
+    String GetWorkSpace(); //{ return _work_space; }
+    String GetAssetRoot(); //{ return _work_space + "/assets"; }
+    void ShowSceneView(bool show);
+    void StartGame();
+    String DialogSelectPath();
+    String DialogOpenFile(Urho3D::Vector<String> filer);
+    void DialogSaveFile();
     void Clear();
     /// <summary>
     /// 执行一个命令行
@@ -45,17 +45,17 @@ public:
     /// <param name="pRetMsg">执行返回值</param>
     /// <param name="msg_len"></param>
     /// <returns></returns>
-    int system(const char* cmd, char* pRetMsg, int msg_len);
+    int System(const char* cmd, char* pRetMsg, int msg_len);
     Node* GetSceneRoot();
     void SelectNode(Node* node);
     Node* GetSelectNode();
     void MakeCurent();
 protected:
-	void handleLogMessage(StringHash eventType, VariantMap& eventData);
+	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
 
-	void setup();
-	void start();
+	void Setup();
+	void Start();
     static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
 private:
@@ -71,6 +71,7 @@ private:
     bool _gameStarted = false;
     Node* _selectedNode = nullptr;
 public:
+    MainWindow* mainWindow = nullptr;
 	CameraCtrl* cam_ctrl_ = nullptr;
    // SharedPtr<TransformCtrl> _gizmoCtrl = nullptr;
 	TransformCtrl* gizmoCtrl_ = nullptr;

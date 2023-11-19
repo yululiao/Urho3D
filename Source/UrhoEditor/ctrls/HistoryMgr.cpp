@@ -10,7 +10,7 @@ namespace Urho3DEditor
 {
 HistoryMgr::HistoryMgr()
 {
-	_history_data = new ProjHistory(EditorApp::getInstance()->getContext());
+	_history_data = new ProjHistory(EditorApp::GetInstance()->GetContext());
 	open();
 }
 
@@ -46,7 +46,7 @@ void HistoryMgr::save()
 {
 	JSONValue json;
 	_history_data->SaveJSON(json);
-	JSONFile j_file(EditorApp::getInstance()->getContext());
+	JSONFile j_file(EditorApp::GetInstance()->GetContext());
 	j_file.GetRoot() = json;
 
 	String j_str = j_file.ToString();
@@ -61,7 +61,7 @@ void HistoryMgr::save()
 void HistoryMgr::open()
 {
 
-	JSONFile j_file(EditorApp::getInstance()->getContext());
+	JSONFile j_file(EditorApp::GetInstance()->GetContext());
 	//将文件读入到ostringstream对象buf中
 	std::ifstream ifile(_history_file.CString());
 	std::ostringstream buf;

@@ -15,7 +15,7 @@ void NodeTree::Update()
 	if(!showing)
 		return;
 	ImGui::Begin("NodeTree",&showing);
-	DrawNode(EditorApp::getInstance()->GetSceneRoot());
+	DrawNode(EditorApp::GetInstance()->GetSceneRoot());
 	/*if(ImGui::BeginPopupContextWindow("context"),1)
 	{
 		ImGui::MenuItem("create","",false,true);
@@ -25,7 +25,7 @@ void NodeTree::Update()
 }
 void NodeTree::OnClicked(Node* node)
 {
-	EditorApp::getInstance()->SelectNode(node);
+	EditorApp::GetInstance()->SelectNode(node);
 }
 void NodeTree::OnDoubleClicked() 
 {
@@ -36,7 +36,7 @@ void NodeTree::DrawNode(Node* node)
 	String nodeName = node->GetName();
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	auto children = node->GetChildren(false);
-	auto selecednode = EditorApp::getInstance()->GetSelectNode();
+	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
 	if(selecednode && node->GetID()== selecednode->GetID())
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;

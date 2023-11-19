@@ -27,7 +27,7 @@ void Urho3DEditor::AniModelInspector::Update()
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
-	Node* selectedNode = EditorApp::getInstance()->GetSelectNode();
+	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
 	if (!selectedNode || !selectedNode->HasComponent<AnimatedModel>())
 		return;
 	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();

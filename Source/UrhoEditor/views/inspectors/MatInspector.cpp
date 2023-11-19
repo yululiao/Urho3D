@@ -26,7 +26,7 @@ MatInspector::~MatInspector()
 
 void MatInspector::Update() 
 {
-	Node* selectedNode = EditorApp::getInstance()->GetSelectNode();
+	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
 	if (!selectedNode || !selectedNode->HasComponent<AnimatedModel>())
 		return;
 	auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
@@ -46,12 +46,12 @@ void MatInspector::Update()
 	}
 	if(matPath == "Materials/Default.xml" || matPath == "")//默认材质不允许编辑
 		return;
-	if(ImGui::Button("Save"))
-	{
-		mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
-	}
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
+		ImGui::SameLine();
+		if (ImGui::Button("Save")) {
+			mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+		}
 		auto textures = mat->GetTextures();
 		for (auto item : textures) {
 			Urho3D::String name = mat->GetTextureUnitName(item.first_);

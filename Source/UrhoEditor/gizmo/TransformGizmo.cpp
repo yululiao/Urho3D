@@ -22,7 +22,7 @@ TransformGizmo::~TransformGizmo()
 
 void TransformGizmo::init()
 {
-	Context* ctx = EditorApp::getInstance()->getContext();
+	Context* ctx = EditorApp::GetInstance()->GetContext();
 	this->handles = new Node(ctx);
 	this->pickers = new Node(ctx);
 	this->planes = new Node(ctx);
@@ -53,7 +53,7 @@ void TransformGizmo::init()
 
 void TransformGizmo::setupGizmos(std::map<std::string, std::vector<GizmogeoInfo*>> gizmoMap, Node * parent)
 {
-	Context* ctx = EditorApp::getInstance()->getContext();
+	Context* ctx = EditorApp::GetInstance()->GetContext();
 	for (auto it = gizmoMap.begin(); it != gizmoMap.end(); it++)
 	{
 		for (int i = 0; i < it->second.size(); ++i)
