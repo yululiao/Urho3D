@@ -23,8 +23,10 @@ public:
 	Context* GetContext() { return _context; }
     static EditorApp* GetInstance();
 	void CreateEngine(void* win_ptr);
-	void RunFrame();
+	void RunEngineFrame();
 	void ResizeWwindow(int w,int h);
+
+    void EditorOneFrame();
    
     void SetCurTool(const String& name);
     String GetCurTool(){return _curent_tool;}
@@ -50,6 +52,9 @@ public:
     void SelectNode(Node* node);
     Node* GetSelectNode();
     void MakeCurent();
+    int GetFps(){
+        return _fps;
+    }
 protected:
 	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -70,6 +75,8 @@ private:
     SceneView* _sceneView = nullptr;
     bool _gameStarted = false;
     Node* _selectedNode = nullptr;
+    time_t _lastTime = -1;
+    int _fps = 60;
 public:
     MainWindow* mainWindow = nullptr;
 	CameraCtrl* cam_ctrl_ = nullptr;
@@ -78,6 +85,7 @@ public:
 	String  _curent_tool;
     static  String _getPathResult;
     bool _isStartView = true;
+   
 };
 }
 

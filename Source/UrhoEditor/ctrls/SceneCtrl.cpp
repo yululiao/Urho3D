@@ -78,6 +78,12 @@ namespace Urho3DEditor
         modelObject->SetMaterial(defMat);
     }
 
+    void SceneCtrl::AddEmptyNode() 
+    {
+        GetSubsystem<Graphics>()->MakeCurrent();
+        Node* modelNode = rttSceneRoot_->CreateChild("emptyNode");
+    }
+
     void SceneCtrl::GenRttTex()
     {
         if (!renderTexture)

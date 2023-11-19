@@ -142,13 +142,11 @@ void SceneView::Update() {
         GenGpuTex();
         ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         if (ImGui::BeginDragDropTarget()) {
-            //void* data = ImGui::AcceptDragDropPayload("drag_res")->Data;
             if (ImGui::IsMouseReleased(0)) {
                 auto data = ImGui::AcceptDragDropPayload("drag_res");
                 if (data) {
                     char path[200] = { 0 };
                     memcpy(path, data->Data, data->DataSize);
-                    //std::string strpath = path;
                     SceneCtrl::getInstance()->AddModel(path);
                     std::cout << "onDrop" << std::endl;
                 }
@@ -157,6 +155,9 @@ void SceneView::Update() {
 
             ImGui::EndDragDropTarget();
         }
+        ImVec2 fpsPos(_winPos.x + 15, _winPos.y + winSize.y - 15);
+        ImGui::SetCursorScreenPos(fpsPos);
+        ImGui::Text("Fps:%d", EditorApp::GetInstance()->GetFps());
         //ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         ImGui::End();
     }

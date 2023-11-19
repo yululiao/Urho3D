@@ -36,6 +36,7 @@ public:
 	void Update();
 	Node* Select(float x, float y);
     void AddModel(const String& path);
+    void AddEmptyNode();
     Node* GetRoot() { return rttSceneRoot_; }
     Node* GetEditorRoot() { return editorRoot_; }
     void GenRttTex();

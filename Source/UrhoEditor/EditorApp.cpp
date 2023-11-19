@@ -106,7 +106,7 @@ int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
     return 0;
 }
 
-void EditorApp::RunFrame()
+void EditorApp::RunEngineFrame()
 {
 	SceneCtrl::getInstance()->Update();
 	_engine->RunFrame();
@@ -264,6 +264,34 @@ void EditorApp::StartGame()
     _isStartView = false;
 };
 
+
+static int gFpsFrameCount = 0;//30次取一次平均
+int gAllFps = 0;
+void EditorApp::EditorOneFrame()
+{
+    time_t nowTime = GetTickCount64();
+    if(_lastTime > 0 && nowTime >_lastTime)
+    {
+        int tmpFps = (int)(1000.0f/(nowTime - _lastTime));
+        if(gFpsFrameCount < 30)
+        {
+            gAllFps += tmpFps;
+        }
+        else
+        {
+            _fps = (int)(gAllFps /30.0f);
+            gFpsFrameCount = 0;
+            gAllFps = 0;
+        }
+    }
+    _lastTime = nowTime;
+    mainWindow->Update();
+    if (_gameStarted) {
+        RunEngineFrame();
+    }
+    ++gFpsFrameCount;
+}
+
 void EditorApp::Run() 
 {
 	/*_start_ui = new start_view();
@@ -276,11 +304,7 @@ void EditorApp::Run()
     CreateEngine(nullptr);
     while (!mainWindow->ShouldClose())
     {
-        mainWindow->Update();
-        if (_gameStarted)
-        {
-            RunFrame();
-        }
+       EditorOneFrame();
     }
     //return 0;
 }
