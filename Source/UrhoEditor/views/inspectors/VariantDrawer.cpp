@@ -220,17 +220,17 @@ void VariantDrawer::DrawVec3d(const Urho3D::String& name, Urho3D::Vector3& data)
 	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::PushID((name + "_x").CString());
-	ImGui::InputFloat("x", &data.x_, 0, 0, "%.4f");
+	ImGui::DragFloat("x", &data.x_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine(); 
 	ImGui::PushID((name + "_y").CString());
-	ImGui::InputFloat("y", &data.y_, 0, 0, "%.4f");
+	ImGui::DragFloat("y", &data.y_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine(); 
 	ImGui::PushID((name + "_z").CString());
-	ImGui::InputFloat("z", &data.z_, 0, 0, "%.4f");
+	ImGui::DragFloat("z", &data.z_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine();
@@ -245,21 +245,22 @@ void VariantDrawer::DrawVec4d(const Urho3D::String& name, Urho3D::Vector4& data)
 	ImGui::PushItemWidth(width / 7.0f);
 
 	ImGui::PushID((name + "_x").CString());
-	ImGui::InputFloat("x", &data.x_, 0, 0, "%.4f");
+	ImGui::DragFloat("x", &data.x_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine(); 
 	ImGui::PushID((name + "_y").CString());
-	ImGui::InputFloat("y", &data.y_, 0, 0, "%.4f");
+	ImGui::DragFloat("y", &data.y_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine(); 
 	ImGui::PushID((name + "_z").CString());
-	ImGui::InputFloat("z", &data.z_, 0, 0, "%.4f");
+	ImGui::DragFloat("z", &data.z_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine(); ImGui::PushID((name + "_w").CString());
-	ImGui::InputFloat("w", &data.w_, 0, 0, "%.4f");
+	//ImGui::InputFloat("w", &data.w_, 0.1, 1, "%.4f");
+	ImGui::DragFloat("w", &data.w_, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 
 	ImGui::SameLine();

@@ -71,7 +71,11 @@ void MatInspector::Update()
 			VariantDrawer::DrawVariant(name,value);
 			if(value != item.second_.value_)
 			{
-				DoMatModify(Utils::GenGuid().c_str(), mat,name,value);
+				String cmdGuid = EditorApp::GetInstance()->GetLastCmdGuid();
+				if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+					cmdGuid = String(Utils::GenGuid().c_str());
+				}
+				DoMatModify(cmdGuid, mat, name, value);//鼠标拖拽弹起做为一次操作
 			}
 			
 		}

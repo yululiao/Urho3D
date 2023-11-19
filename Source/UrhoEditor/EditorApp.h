@@ -55,6 +55,11 @@ public:
     int GetFps(){
         return _fps;
     }
+    String GetLastCmdGuid()
+    {
+        return _lastCmdGuid;
+    }
+    void UpdateCmdGuid();
 protected:
 	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -77,6 +82,7 @@ private:
     Node* _selectedNode = nullptr;
     time_t _lastTime = -1;
     int _fps = 60;
+    String _lastCmdGuid;
 public:
     MainWindow* mainWindow = nullptr;
 	CameraCtrl* cam_ctrl_ = nullptr;

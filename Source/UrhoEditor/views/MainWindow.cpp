@@ -132,6 +132,12 @@ void MainWindow::UpdateDockerSpace()
 
 void MainWindow::Update() 
 {
+    if(ImGui::IsMouseDown(ImGuiMouseButton_Left) && !_lastLeftMouseDown)
+    {
+        //Êó±êÇÐ»»×´Ì¬
+        EditorApp::GetInstance()->UpdateCmdGuid();
+    }
+    _lastLeftMouseDown = ImGui::IsMouseDown(ImGuiMouseButton_Left);
     glfwMakeContextCurrent(glfwGetCurrentContext());
     //¿ªÆôÈ«¾ÖÔ²½Ç
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding

@@ -55,6 +55,7 @@ private:
     bool done = false;
     bool _showDemo = false;
     bool _showingDocker = true;
+    bool _lastLeftMouseDown = false;
 
 };
 

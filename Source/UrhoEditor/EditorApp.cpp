@@ -23,6 +23,7 @@
 #endif // _WIN32
 #include <ndf/nfd.h>
 #include "ctrls/AssetMgr.h"
+#include "Utils.h"
 
 
 namespace Urho3DEditor {
@@ -33,6 +34,7 @@ EditorApp::EditorApp(Context* context)
 {
     _context = context;
     SceneCtrl::_ctx = _context;
+    _lastCmdGuid = String(Utils::GenGuid().c_str());
 }
 
 EditorApp::~EditorApp() 
@@ -235,6 +237,11 @@ Node* EditorApp::GetSelectNode()
 void EditorApp::MakeCurent() 
 {
     GetSubsystem<Graphics>()->MakeCurrent();
+}
+
+void EditorApp::UpdateCmdGuid()
+{
+    _lastCmdGuid = String(Utils::GenGuid().c_str());
 }
 
 void EditorApp::HandleLogMessage(StringHash eventType, VariantMap& eventData)

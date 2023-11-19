@@ -7,6 +7,7 @@
 
 namespace Urho3DEditor 
 {
+
 TransformInspector::TransformInspector() 
 {
 }
@@ -35,18 +36,27 @@ void TransformInspector::Update()
 		ImGui::TreePop();
 	}
 	
-
+	String cmdGuid = EditorApp::GetInstance()->GetLastCmdGuid();
 	if(_pos != selectedNode->GetPosition())
 	{
-		DoModify(Utils::GenGuid().c_str(), selectedNode, "Position", _pos);
+		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			cmdGuid = String(Utils::GenGuid().c_str());
+		}
+		DoModify(cmdGuid, selectedNode, "Position", _pos);
 	}
 	if (_rot != selectedNode->GetRotation().EulerAngles()) 
 	{
-		DoModify(Utils::GenGuid().c_str(), selectedNode, "Rotation",Quaternion(_rot));
+		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			cmdGuid = String(Utils::GenGuid().c_str());
+		}
+		DoModify(cmdGuid, selectedNode, "Rotation",Quaternion(_rot));
 	}
 	if (_scale != selectedNode->GetScale()) 
 	{
-		DoModify(Utils::GenGuid().c_str(), selectedNode, "Scale", _scale);
+		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+			cmdGuid = String(Utils::GenGuid().c_str());
+		}
+		DoModify(cmdGuid, selectedNode, "Scale", _scale);
 	}
 }
 }
