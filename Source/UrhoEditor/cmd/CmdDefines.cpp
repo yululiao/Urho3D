@@ -54,7 +54,6 @@ CmdModifyMat::~CmdModifyMat() {
 }
 
 void CmdModifyMat::ToDo() {
-	SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 	if(_type == 0)
 	{
 		Variant oldValue = _mat->GetShaderParameter(_attrName);
@@ -63,6 +62,7 @@ void CmdModifyMat::ToDo() {
 	}
 	else if(_type == 1)
 	{
+		SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 		String oldPath = _mat->GetTexture((TextureUnit)_texUnit)->GetName();
 		auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
 		Urho3D::Texture2D* newTex = cache->GetResource<Urho3D::Texture2D>(_value.GetString());
