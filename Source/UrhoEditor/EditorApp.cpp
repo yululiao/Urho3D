@@ -24,6 +24,7 @@
 #include <ndf/nfd.h>
 #include "ctrls/AssetMgr.h"
 #include "Utils.h"
+#include "ctrls/EditorFileWatch.h"
 
 
 namespace Urho3DEditor {
@@ -40,6 +41,7 @@ EditorApp::EditorApp(Context* context)
 EditorApp::~EditorApp() 
 { 
    NFD_Quit(); 
+   EditorFileWatch::StopWatch();
 }
 
 void EditorApp::CreateEngine(void* win_ptr)
@@ -51,6 +53,10 @@ void EditorApp::CreateEngine(void* win_ptr)
 	// Subscribe to log messages so that can show errors if ErrorExit() is called with empty message
 	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, HandleLogMessage));
 	Setup();
+    //开启自动重载资源，比如材质、shader修改时场景中的prefab自动重载
+    //编辑器也监听了整个工程目录，如果性能出现问题可在编辑器层监听到变化时处理
+    auto* cache = GetSubsystem<ResourceCache>();
+    cache->SetAutoReloadResources(true);
 	if (!_engine->Initialize(_engineParameters))
 	{
 		return;
@@ -320,6 +326,7 @@ void EditorApp::Run()
 void EditorApp::OpenWorkSpace(const String& path)
 {
 	_work_space = path;
+    EditorFileWatch::WatchAssetPath(_work_space);
 	//work_space::get_instance()->set_workspace(path);
 	//std::string title = "urho3d   " + path + "*";
 	//render_view* render_v = new render_view(nullptr);

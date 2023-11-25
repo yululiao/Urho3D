@@ -2,9 +2,14 @@
 #include "ctrls/AssetMgr.h"
 #include "EditorApp.h"
 #include "Urho3D/IO/FileSystem.h"
+#include "Urho3D/Container/HashSet.h"
 
 namespace Urho3DEditor 
 {
+static Urho3D::HashSet<String> SurportExtSet={
+	".fbx",".xml",".json",".umaterial",".scene",
+	".png",".tga",".jpg",".dds",".uprefab",".uscene"
+};
 ResTree::ResTree() 
 {
 }
@@ -61,10 +66,18 @@ void ResTree::DrawResNode(const String& path)
 		return;
 	auto name = pathItems[pathItems.Size()-1];
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	bool needDraw = true;
 	if(dirs.Size() == 0)
 	{
+		String lowerExt = GetExtension(name, true);
+		if(!SurportExtSet.Contains(lowerExt))
+		{
+			needDraw = false;
+		}
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
+	if(!needDraw)
+		return;
 	if(_selected == path)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;

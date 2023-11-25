@@ -1,6 +1,7 @@
 #include "Inspector.h"
 #include "EditorApp.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
+#include "views/inspectors/VariantDrawer.h"
 
 namespace Urho3DEditor 
 {
@@ -21,7 +22,7 @@ void Inspector::Update()
 	if(selectedNode)
 	{
 		_nodeEnable = selectedNode->IsEnabled();
-		ImGui::Checkbox("Enable",&_nodeEnable);
+		VariantDrawer::DrawBool("  Enable", _nodeEnable);
 		_transformIns->Update();
 		if(selectedNode->HasComponent<AnimatedModel>())
 		{

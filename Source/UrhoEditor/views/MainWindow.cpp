@@ -106,7 +106,7 @@ void MainWindow::UpdateDockerSpace()
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     ImGui::Begin("###DockSpace", &_showingDocker, window_flags);
-    ImGui::PopStyleVar();
+    ImGui::PopStyleVar(1);
     //_menuBarUpdater->update();//todo
     if (EditorApp::GetInstance()->_isStartView)
     {
@@ -155,6 +155,7 @@ void MainWindow::Update()
         ImGui::RenderPlatformWindowsDefault();
         glfwMakeContextCurrent(backup_current_context);
     }
+    ImGui::PopStyleVar(1);
 }
 
 void MainWindow::ImguiUpdate() {
