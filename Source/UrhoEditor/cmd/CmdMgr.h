@@ -30,7 +30,7 @@ protected:
 
 private:
 	list<EditCmd*> editNodeList;
-	int currentNodeId;
+	int currentNodeId = -1;
 	static CmdMgr* _instance;
 public:
 	static CmdMgr* Instance();

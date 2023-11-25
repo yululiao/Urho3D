@@ -8,8 +8,7 @@ namespace Urho3DEditor
 CmdMgr* CmdMgr::_instance = nullptr;
 CmdMgr::CmdMgr()
 {
-	currentNodeId = -1;
-
+	
 }
 
 CmdMgr::~CmdMgr()
