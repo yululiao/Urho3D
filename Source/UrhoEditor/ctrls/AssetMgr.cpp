@@ -178,7 +178,7 @@ void AssetMgr::SavePrefab(Node* node,const String& path)
 
 void AssetMgr::OpenScene(const String& path)
 { 
-    if (GetExt(path) != ".scene")
+    if (GetExt(path) != ".uscene")
         return;
     SceneCtrl::getInstance()->OpenScene(path);
 }

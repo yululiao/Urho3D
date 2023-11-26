@@ -71,17 +71,22 @@ void MatInspector::Update()
 	{
 		matPath = mat->GetName();
 	}
-	if(matPath == "Materials/Default.xml" || matPath == "")//默认材质不允许编辑
-		return;
+	bool isDefaultMat = matPath == "Materials/Default.xml" || matPath == "";
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
-		ImGui::SameLine();
-		if (ImGui::Button("Save")) {
-			mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+		if(!isDefaultMat){
+			ImGui::SameLine();
+			if (ImGui::Button("Save")) {
+				mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+			}
 		}
 		VariantDrawer::DrawPath("MatPath", matPath, { "Mat Files", "xml" }, false);
 		if (matPath != mat->GetName()) {
 			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath, CmdModifyResPath::ResType::MAT);
+			ImGui::TreePop();
+			return;
+		}
+		if(isDefaultMat){
 			ImGui::TreePop();
 			return;
 		}

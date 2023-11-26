@@ -7,7 +7,7 @@
 namespace Urho3DEditor 
 {
 static Urho3D::HashSet<String> SurportExtSet={
-	".fbx",".xml",".json",".umaterial",".scene",
+	".fbx",".xml",".json",".umaterial",
 	".png",".tga",".jpg",".dds",".uprefab",".uscene"
 };
 ResTree::ResTree() 
@@ -41,11 +41,8 @@ void ResTree::OnImport(const String& path)
 }
 void ResTree::OnItemDoubleClicked(const String& path)
 {
-	if(path.Find(String(".scene"))!= String::NPOS)
-	{
-		AssetMgr::getInstance()->OpenScene(path);
-		EditorApp::GetInstance()->SetCurTool("move");
-	}
+	AssetMgr::getInstance()->OpenScene(path);
+	EditorApp::GetInstance()->SetCurTool("move");
 }
 
 void ResTree::DrawNodeNoInWindows(int itemH)

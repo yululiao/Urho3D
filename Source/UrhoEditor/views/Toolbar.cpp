@@ -113,7 +113,7 @@ void Toolbar::Init()
 void Toolbar::OnSave() 
 {
 	String assetRoot = EditorApp::GetInstance()->GetAssetRoot();
-	AssetMgr::getInstance()->SaveScene(assetRoot + "/test.scene");
+	AssetMgr::getInstance()->SaveScene(assetRoot + "/test.uscene");
 	CmdMgr::Instance()->OnSave();
 }
 void Toolbar::OnRedo() 
