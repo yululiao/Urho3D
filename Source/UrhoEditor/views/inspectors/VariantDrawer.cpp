@@ -120,11 +120,16 @@ void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& val
 		break;
 	}
 }
-void VariantDrawer::DrawBool(const Urho3D::String& name, bool& data)
-{
+
+void AdaptItemSize(int itemCount) {
 	ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
+	ImGui::PushItemWidth(width / itemCount);
+}
+
+void VariantDrawer::DrawBool(const Urho3D::String& name, bool& data)
+{
+	AdaptItemSize(2);
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
 	ImGui::PushID(name.CString());
@@ -134,9 +139,7 @@ void VariantDrawer::DrawBool(const Urho3D::String& name, bool& data)
 }
 void VariantDrawer::DrawFloat(const Urho3D::String& name, float& data, float min, float max)
 {
-	ImVec2 winSize = ImGui::GetWindowSize();
-	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
+	AdaptItemSize(2);
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
 	ImGui::PushID(name.CString());
@@ -146,9 +149,7 @@ void VariantDrawer::DrawFloat(const Urho3D::String& name, float& data, float min
 }
 void VariantDrawer::DrawInt(const Urho3D::String& name, int& data, int min, int max)
 {
-	ImVec2 winSize = ImGui::GetWindowSize();
-	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
+	AdaptItemSize(2);
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
 	ImGui::PushID(name.CString());
@@ -158,29 +159,37 @@ void VariantDrawer::DrawInt(const Urho3D::String& name, int& data, int min, int 
 }
 void VariantDrawer::DrawStr(const Urho3D::String& name, Urho3D::String& value) 
 {
+	AdaptItemSize(2);
 	char texBuf[99];
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
 	ImGui::InputText("", &texBuf[0],99);
 	value = Urho3D::String(&texBuf[0]);
+	ImGui::PopItemWidth();
 
 }
 void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, Urho3D::Vector<Urho3D::String> filter,
                              bool readOnly)
 {
+	AdaptItemSize(3);
 	char texBuf[256];
 	strcpy(texBuf,path.CString());
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
 	if(readOnly)
 	{
-		ImGui::InputText(name.CString(), &texBuf[0], 256, ImGuiInputTextFlags_ReadOnly);
+		ImGui::PushID(name.CString());
+		ImGui::InputText("", &texBuf[0], 256, ImGuiInputTextFlags_ReadOnly);
+		ImGui::PopID();
+		ImGui::PopItemWidth();
 		return;
 	}
+	ImGui::PushID(name.CString());
 	if (ImGui::InputText("", &texBuf[0], 256, ImGuiInputTextFlags_EnterReturnsTrue))
 	{
 		path = Urho3D::String(texBuf);
 	}
+	ImGui::PopID();
 	ImGui::SameLine();
 	if (ImGui::Button("...", ImVec2(30, 25))) {
 		String resultPath = EditorApp::GetInstance()->DialogOpenFile(filter);
@@ -189,6 +198,7 @@ void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, U
 			path = resultPath;
 		}
 	}
+	ImGui::PopItemWidth();
 }
 void VariantDrawer::DrawPathVec(const Urho3D::Vector<Urho3D::String>& paths, Urho3D::Vector<Urho3D::String> filer,
                                 bool readOnly)
@@ -206,48 +216,38 @@ void GrawVecItem(const Urho3D::String& name, const Urho3D::String& itemName,floa
 	ImGui::DragFloat("", &itemValue, 0.1f, 0, 0, "%.4f");
 	ImGui::PopID();
 }
+
 void VariantDrawer::DrawVec2d(const Urho3D::String& name, Urho3D::Vector2& data)
 {
-	ImVec2 winSize = ImGui::GetWindowSize();
-	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
-
+	AdaptItemSize(5);
 	ImGui::Text(name.CString());
 	GrawVecItem(name,"x", data.x_);
 	GrawVecItem(name, "y", data.y_);
-
 	ImGui::PopItemWidth();
 }
 void VariantDrawer::DrawVec3d(const Urho3D::String& name, Urho3D::Vector3& data)
 {
-	ImVec2 winSize = ImGui::GetWindowSize();
-	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
-
+	AdaptItemSize(7);
 	ImGui::Text(name.CString());
 	GrawVecItem(name, "x", data.x_);
 	GrawVecItem(name, "y", data.y_);
 	GrawVecItem(name, "z", data.z_);
-	
 	ImGui::PopItemWidth();
 	
 }
 void VariantDrawer::DrawVec4d(const Urho3D::String& name, Urho3D::Vector4& data)
 {
-	ImVec2 winSize = ImGui::GetWindowSize();
-	float width = winSize.x;
-	ImGui::PushItemWidth(width / 7.0f);
-
+	AdaptItemSize(9);
 	ImGui::Text(name.CString());
 	GrawVecItem(name, "x", data.x_);
 	GrawVecItem(name, "y", data.y_);
 	GrawVecItem(name, "z", data.z_);
 	GrawVecItem(name, "w", data.w_);
-	
 	ImGui::PopItemWidth();
 }
 void VariantDrawer::DrawColor4(const Urho3D::String& name, Urho3D::Color& data)
 {
+	AdaptItemSize(2);
 	float color_vec[4] = {data.r_,data.g_,data.b_,data.a_};
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
@@ -255,9 +255,11 @@ void VariantDrawer::DrawColor4(const Urho3D::String& name, Urho3D::Color& data)
 	ImGui::ColorEdit4("",color_vec);
 	ImGui::PopID();
 	data = Urho3D::Color(color_vec);
-
+	ImGui::PopItemWidth();
 }
-void VariantDrawer::DrawColor3(const Urho3D::String& name, Urho3D::Color& data) {
+void VariantDrawer::DrawColor3(const Urho3D::String& name, Urho3D::Color& data)
+{
+	AdaptItemSize(2);
 	float color_vec[3] = { data.r_,data.g_,data.b_};
 	ImGui::Text(name.CString());
 	ImGui::SameLine();
@@ -265,5 +267,6 @@ void VariantDrawer::DrawColor3(const Urho3D::String& name, Urho3D::Color& data) 
 	ImGui::ColorEdit3("", color_vec);
 	ImGui::PopID();
 	data = Urho3D::Color(color_vec[0], color_vec[1], color_vec[2]);
+	ImGui::PopItemWidth();
 }
 }
