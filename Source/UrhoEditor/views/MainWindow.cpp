@@ -36,7 +36,8 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #ifdef _WIN32
     dpi = GetDpiForSystem();
 #endif // _WIN32
-    float fontSize = dpi / 96.0f * 15.0f;
+    float dpiScale = dpi / 96.0f;
+    float fontSize = dpiScale * 15.0f;
     io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\simfang.ttf", fontSize, nullptr,
                                  io.Fonts->GetGlyphRangesChineseFull());
 #ifdef GLFW_EXPOSE_NATIVE_WIN32
@@ -57,7 +58,7 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 410";
     ImGui_ImplOpenGL3_Init(glsl_version);
-    glfwSetWindowSize(window, 800, 600);
+    glfwSetWindowSize(window, dpiScale * 800, dpiScale*600);
     glfwSetWindowPos(window, 300, 200);
     //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
