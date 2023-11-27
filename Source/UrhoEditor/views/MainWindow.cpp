@@ -1,7 +1,13 @@
 #include "MainWindow.h"
 #include "imgui_impl_opengl3.h"
-#include "GLFW/glfw3native.h"
+#include "GLFW/glfw3.h"
+#ifdef _WIN32
+#undef APIENTRY
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>   // for glfwGetWin32Window
+#endif
 #include "EditorApp.h"
+
 
 namespace Urho3DEditor
 {
@@ -15,7 +21,7 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
-    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\simfang.ttf", 15.0f, nullptr, io.Fonts->GetGlyphRangesChineseFull());
+   
     //simfang.ttf
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -25,18 +31,25 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
-
     window = glfwCreateWindow(width, height, "Urho3D", NULL, NULL);
+    int dpi = 96;
+#ifdef _WIN32
+    dpi = GetDpiForSystem();
+#endif // _WIN32
+    float fontSize = dpi / 96.0f * 15.0f;
+    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\simfang.ttf", fontSize, nullptr,
+                                 io.Fonts->GetGlyphRangesChineseFull());
+#ifdef GLFW_EXPOSE_NATIVE_WIN32
+    // HWND hwnd = glfwGetWin32Window(window);
+    // LONG style = GetWindowLong(hwnd, GWL_STYLE);
+    // SetWindowLong(hwnd, GWL_STYLE, style ^ WS_CAPTION);
+#endif // GLFW_EXPOSE_NATIVE_WIN32
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return;
     }
-#ifdef GLFW_EXPOSE_NATIVE_WIN32
-    HWND hwnd = glfwGetWin32Window(window);
-    LONG style = GetWindowLong(hwnd, GWL_STYLE);
-    //SetWindowLong(hwnd, GWL_STYLE, style ^ WS_CAPTION);
-#endif // GLFW_EXPOSE_NATIVE_WIN32
+
     //menuBar = new WinMainMenu(hwnd);
     glfwMakeContextCurrent(window);
     //wglShareLists(g_HGLRC, data->hGLRC);

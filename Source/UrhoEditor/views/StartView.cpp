@@ -31,7 +31,7 @@ void StartView::RenderHistoryList()
 		ImGui::SameLine();
 		ImGui::PushStyleColor(ImGuiCol_Button,0x00ffffff);
 		ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
-		if(ImGui::Button(item.CString(),ImVec2(300,25)))
+		if(ImGui::Button(item.CString()))
 		{
 			EditorApp::GetInstance()->OpenWorkSpace(item);
 			EditorApp::GetInstance()->StartGame();
@@ -39,7 +39,7 @@ void StartView::RenderHistoryList()
 		}
 		ImGui::PopStyleVar(1);
 		ImGui::SameLine();
-		if( ImGui::Button("x",ImVec2(25,25)))
+		if( ImGui::Button("x"))
 		{
 			_historyMgr->delete_history(item);
 			_historyMgr->save();
@@ -57,7 +57,7 @@ void StartView::Update()
 	ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
 	ImGui::Text("");
 	ImGui::SameLine();
-	if (ImGui::Button("Open...",ImVec2(80,25)))
+	if (ImGui::Button("Open..."))
 	{
 		String path = EditorApp::GetInstance()->DialogSelectPath();
 		if(path != "")
