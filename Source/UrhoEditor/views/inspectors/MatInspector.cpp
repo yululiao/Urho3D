@@ -64,29 +64,29 @@ void MatInspector::Update()
 		return;
 	auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
 	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();
-	SharedPtr<Material> mat(aniModel->GetMaterial());
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
+	SharedPtr<Material> mat(aniModel->GetMaterial());
 	Urho3D::String matPath = "";
 	if(mat)
 	{
 		matPath = mat->GetName();
+		
 	}
 	bool isDefaultMat = matPath == "Materials/Default.xml" || matPath == "";
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
-		if(!isDefaultMat){
-			ImGui::SameLine();
-			if (ImGui::Button("Save")) {
-				mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
-			}
-		}
-		VariantDrawer::DrawPath("MatPath", matPath, { "Mat Files", "xml" }, false);
-		if (matPath != mat->GetName()) {
-			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath, CmdModifyResPath::ResType::MAT);
+		if (isDefaultMat) {
 			ImGui::TreePop();
 			return;
 		}
-		if(isDefaultMat){
+		ImGui::SameLine();
+		if (ImGui::Button("Save")) {
+			mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+		}
+		ImGui::SameLine();
+		VariantDrawer::DrawPath("MatPath", matPath, { "Mat Files", "xml" }, false);
+		if (matPath != mat->GetName()) {
+			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath, CmdModifyResPath::ResType::MAT);
 			ImGui::TreePop();
 			return;
 		}
