@@ -58,7 +58,9 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 410";
     ImGui_ImplOpenGL3_Init(glsl_version);
-    glfwSetWindowSize(window, dpiScale * 800, dpiScale*600);
+    this->width = width * dpiScale;
+    this->height = height * dpiScale;
+    glfwSetWindowSize(window, this->width, this->height);
     glfwSetWindowPos(window, 300, 200);
     //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
