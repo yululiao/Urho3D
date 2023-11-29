@@ -64,7 +64,7 @@ void MatInspector::Update()
 		return;
 	auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
 	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();
-	int flags = ImGuiTreeNodeFlags_DefaultOpen;
+	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen;
 	SharedPtr<Material> mat(aniModel->GetMaterial());
 	Urho3D::String matPath = "";
 	if(mat)
@@ -84,7 +84,9 @@ void MatInspector::Update()
             }
 		}
 		ImGui::SameLine();
-		VariantDrawer::DrawPath("MatPath", matPath, { "Mat Files", "xml" }, false);
+		ImGui::PushID("MatPath");
+		VariantDrawer::DrawPath("", matPath, { "Mat Files", "xml" }, false);
+		ImGui::PopID();
 		if (matPath != mat->GetName()) {
 			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath, CmdModifyResPath::ResType::MAT);
 			ImGui::TreePop();
