@@ -75,13 +75,13 @@ void MatInspector::Update()
 	bool isDefaultMat = matPath == "Materials/Default.xml" || matPath == "";
 	if (mat && ImGui::TreeNodeEx("Material", flags))
 	{
-		if (isDefaultMat) {
-			ImGui::TreePop();
-			return;
-		}
-		ImGui::SameLine();
-		if (ImGui::Button("Save")) {
-			mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+		if (!isDefaultMat)
+		{
+            ImGui::SameLine();
+            if (ImGui::Button("Save"))
+            {
+                mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+            }
 		}
 		ImGui::SameLine();
 		VariantDrawer::DrawPath("MatPath", matPath, { "Mat Files", "xml" }, false);
@@ -90,6 +90,11 @@ void MatInspector::Update()
 			ImGui::TreePop();
 			return;
 		}
+        if (isDefaultMat)
+        {
+            ImGui::TreePop();
+            return;
+        }
 		int longLen = CalLongestName(mat);
 		auto textures = mat->GetTextures();
 		for (auto item : textures) {
