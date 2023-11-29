@@ -33,24 +33,25 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #endif
     window = glfwCreateWindow(width, height, "Urho3D", NULL, NULL);
     int dpi = 96;
-#ifdef _WIN32
-    dpi = GetDpiForSystem();
-#endif // _WIN32
-    float dpiScale = dpi / 96.0f;
-    float fontSize = dpiScale * 15.0f;
-    io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\simfang.ttf", fontSize, nullptr,
-                                 io.Fonts->GetGlyphRangesChineseFull());
-#ifdef GLFW_EXPOSE_NATIVE_WIN32
+#ifdef WIN32
     // HWND hwnd = glfwGetWin32Window(window);
     // LONG style = GetWindowLong(hwnd, GWL_STYLE);
     // SetWindowLong(hwnd, GWL_STYLE, style ^ WS_CAPTION);
-#endif // GLFW_EXPOSE_NATIVE_WIN32
+    dpi = GetDpiForSystem();
+#elif APPLE
+
+#elif UNIX
+
+#endif
+    float dpiScale = dpi / 96.0f;
+    float fontSize = dpiScale * 15.0f;
+    io.Fonts->AddFontFromFileTTF("res/simfang.ttf", fontSize, nullptr,
+        io.Fonts->GetGlyphRangesChineseFull());
     if (window == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         return;
     }
-
     //menuBar = new WinMainMenu(hwnd);
     glfwMakeContextCurrent(window);
     //wglShareLists(g_HGLRC, data->hGLRC);
