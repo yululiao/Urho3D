@@ -31,7 +31,6 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // uncomment this statement to fix compilation on OS X
 #endif
-    window = glfwCreateWindow(width, height, "Urho3D", NULL, NULL);
     int dpi = 96;
 #ifdef WIN32
     // HWND hwnd = glfwGetWin32Window(window);
@@ -43,8 +42,16 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #elif UNIX
 
 #endif
+    EditorApp::GetInstance()->SetDpi(dpi);
+    _toolBar->IntItemSize();
     float dpiScale = dpi / 96.0f;
     float fontSize = dpiScale * 15.0f;
+    this->width = width * dpiScale;
+    this->height = height * dpiScale;
+    window = glfwCreateWindow(this->width, this->height, "Urho3D", NULL, NULL);
+    
+    glfwSetWindowSize(window, this->width, this->height);
+    glfwSetWindowPos(window, 300, 200);
     io.Fonts->AddFontFromFileTTF("res/simfang.ttf", fontSize, nullptr,
         io.Fonts->GetGlyphRangesChineseFull());
     if (window == NULL) {
@@ -59,10 +66,7 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     const char* glsl_version = "#version 410";
     ImGui_ImplOpenGL3_Init(glsl_version);
-    this->width = width * dpiScale;
-    this->height = height * dpiScale;
-    glfwSetWindowSize(window, this->width, this->height);
-    glfwSetWindowPos(window, 300, 200);
+    
     //glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 }
 MainWindow::~MainWindow() {

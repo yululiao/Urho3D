@@ -16,11 +16,12 @@ public:
 	Toolbar();
 	~Toolbar();
 	void Update();
+    void IntItemSize();
 private:
 	void DrawTransformTool();
 	void DrawTrigerTool();
 	void Init();
-
+    
 	static void OnSave();
 	static void OnRedo();
 	static void OnUndo();

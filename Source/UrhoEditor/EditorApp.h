@@ -60,6 +60,19 @@ public:
         return _lastCmdGuid;
     }
     void UpdateCmdGuid();
+    void SetDpi(int dpi) 
+    {
+        _dpi = dpi;
+    }
+    int GetDpi()
+    { 
+        return _dpi;
+    }
+    float GetDpiScale() 
+    { 
+        return _dpi / 96.0f;
+    }
+
 protected:
 	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -83,6 +96,8 @@ private:
     time_t _lastTime = -1;
     int _fps = 60;
     String _lastCmdGuid;
+    int _dpi = 96;
+
 public:
     MainWindow* mainWindow = nullptr;
 	CameraCtrl* cam_ctrl_ = nullptr;

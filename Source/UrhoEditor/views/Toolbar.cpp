@@ -109,6 +109,11 @@ void Toolbar::Init()
 {
 	//curToolName = "camera";
 	EditorApp::GetInstance()->GetCurTool();
+   
+}
+void Toolbar::IntItemSize() 
+{ 
+	this->itemSize = (int) (this->itemSize * EditorApp::GetInstance()->GetDpiScale() );
 }
 void Toolbar::OnSave() 
 {
