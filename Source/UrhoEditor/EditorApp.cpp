@@ -312,7 +312,7 @@ void EditorApp::Run()
 	_start_ui->show();*/
 	//UMainWindow ui(800, 600);
     NFD_Init();
-    mainWindow = new MainWindow(800,600);
+    mainWindow = new MainWindow(800,520);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
     //mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
     CreateEngine(nullptr);

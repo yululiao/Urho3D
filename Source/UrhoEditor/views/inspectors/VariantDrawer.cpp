@@ -39,7 +39,8 @@ void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& val
 		break;
 	case Urho3D::VAR_VECTOR3:
 	{
-		if(!name.Contains("Color"))
+        String nameLower = name.ToLower();
+        if (!nameLower.Contains("color"))
 		{
 			Vector3 vec3_value = value.GetVector3();
 			DrawVec3d(name, vec3_value);
@@ -56,7 +57,8 @@ void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& val
 	}
 	case Urho3D::VAR_VECTOR4:
 	{
-		if (!name.Contains("Color"))
+        String nameLower = name.ToLower();
+        if (!nameLower.Contains("color"))
 		{
 			Vector4 vec4_value = value.GetVector4();
 			DrawVec4d(name, vec4_value);
