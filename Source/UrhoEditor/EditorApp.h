@@ -72,7 +72,14 @@ public:
     { 
         return _dpi / 96.0f;
     }
-
+    void SetFontSize(int fontSize)
+    {
+        _fontSize = fontSize;
+    }
+    int GetFontSize()
+    {
+        return _fontSize;
+    }
 protected:
 	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
 	Context* _context = nullptr;
@@ -97,6 +104,7 @@ private:
     int _fps = 60;
     String _lastCmdGuid;
     int _dpi = 96;
+    int _fontSize = 15;
 
 public:
     MainWindow* mainWindow = nullptr;

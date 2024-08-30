@@ -133,8 +133,11 @@ void SceneView::Update() {
         //winSize = ImGui::GetWindowSize();
         OnIO();
         ImVec2 newSize = ImGui::GetWindowSize();
-        newSize.x = newSize.x - 14;
-        newSize.y = newSize.y - 37;
+        int fontSize = EditorApp::GetInstance()->GetFontSize();
+        int boderX = fontSize/2;
+        int boderY = (int)(fontSize * 1.8);
+        newSize.x = newSize.x - boderX;
+        newSize.y = newSize.y - boderY;
         if (newSize.x != winSize.x || newSize.y != winSize.y) {
             winSize = newSize;
             SceneCtrl::getInstance()->OnResizeView(winSize.x, winSize.y);
