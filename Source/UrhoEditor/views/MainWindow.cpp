@@ -11,7 +11,7 @@
 
 namespace Urho3DEditor
 {
-void MainWindowMaxMinCallBack(GLFWwindow* window, int width, int height)
+void MainWindowSizeCallBack(GLFWwindow* window, int width, int height)
 {
     if(width == 0)
     {
@@ -65,8 +65,7 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     this->width = width * dpiScale;
     this->height = height * dpiScale;
     window = glfwCreateWindow(this->width, this->height, "Urho3D", NULL, NULL);
-    //glfwSetWindowMaximizeCallback(window, MainWindowMaxMinCallBack);
-    glfwSetWindowSizeCallback(window, MainWindowMaxMinCallBack);
+    glfwSetWindowSizeCallback(window, MainWindowSizeCallBack);
     glfwSetWindowSize(window, this->width, this->height);
     glfwSetWindowPos(window, 300, 200);
     io.Fonts->AddFontFromFileTTF("res/simfang.ttf", fontSize, nullptr,
