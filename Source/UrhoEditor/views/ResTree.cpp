@@ -20,14 +20,18 @@ void ResTree::Update()
 {
 	if(!showing)
 		return;
+	auto rootPath = EditorApp::GetInstance()->GetAssetRoot();
+	if(_cacheDirty){
+		RefreshNodeCahce(rootPath);
+		_cacheDirty = false;
+	}
 	ImGui::Begin("ResTree",&showing);
 	ImVec2 newSize = ImGui::GetWindowSize();
 	_winPos = ImGui::GetWindowPos();
 	if (newSize.x != winSize.x || newSize.y != winSize.y) {
 		winSize = newSize;
 	}
-	auto root = EditorApp::GetInstance()->GetAssetRoot();
-	DrawResNode(root);
+	DrawResNode(rootPath,true);
 	ImGui::End();
 }
 void ResTree::OnDrag() 
@@ -45,29 +49,21 @@ void ResTree::OnItemDoubleClicked(const String& path)
 	EditorApp::GetInstance()->SetCurTool("move");
 }
 
-void ResTree::DrawNodeNoInWindows(int itemH)
+void ResTree::DrawNodeNoInWindows(int itemH,const String& name)
 {
-	//Draw nothing
+	//Draw nothing,just jump
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
 	curPos.y = curPos.y + itemH;
 	ImGui::SetCursorScreenPos(curPos);
 }
 
-void ResTree::DrawResNode(const String& path)
+void ResTree::DrawResNode(const String& path, bool forceDraw)
 {
-	auto fileSystem = EditorApp::GetInstance()->GetSubsystem<FileSystem>();
-	StringVector dirs;
-	fileSystem->ScanDir(dirs,path,".*",SCAN_DIRS|SCAN_FILES,false);
-	auto pathItems = path.Split('/');
-	if(pathItems.Size() == 0)
-		return;
-	auto name = pathItems[pathItems.Size()-1];
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	bool needDraw = true;
-	if(dirs.Size() == 0)
+	if(_nodeCache[path].dirs.Size() == 0)
 	{
-		String lowerExt = GetExtension(name, true);
-		if(!SurportExtSet.Contains(lowerExt))
+		if(!SurportExtSet.Contains(_nodeCache[path].ext))
 		{
 			needDraw = false;
 		}
@@ -79,9 +75,12 @@ void ResTree::DrawResNode(const String& path)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
-	if(IsInWindow(ImGui::GetCursorScreenPos()))
+	bool isInWindow = IsInWindow(ImGui::GetCursorScreenPos());
+	if(isInWindow ||forceDraw)
 	{
-		bool open_node = ImGui::TreeNodeEx(name.CString(), flags);
+		bool open_node = ImGui::TreeNodeEx(_nodeCache[path].name.CString(), flags);
+		if(_nodeHeight == 0)
+			_nodeHeight = ImGui::GetItemRectSize().y;
 		if (ImGui::BeginDragDropSource(0)) {
 			ImGui::SetDragDropPayload("drag_res", path.CString(), path.Length());
 			OnDrag();
@@ -93,37 +92,45 @@ void ResTree::DrawResNode(const String& path)
 		else if (ImGui::IsItemClicked()) {
 			_selected = path;
 		}
+		_nodeCache[path].fold = !open_node;
 		if (open_node) {
-			if (dirs.Size() > 0) {
-				_foldState[path] = true;
-			}
 			if (ImGui::BeginPopupContextItem("ResContext", 1)) {
 				if (ImGui::MenuItem("Import")) {
 					OnImport(path);
 				}
 				ImGui::EndPopup();
 			}
-			for (auto item : dirs) {
-				if (item != "." && item != "..") {
-					DrawResNode(path + "/" + item);
-				}
+			for (auto &item : _nodeCache[path].dirs) {
+				DrawResNode(path + "/" + item,false);
 			}
 			ImGui::TreePop();
 		}
 	}
 	else
 	{
-		DrawNodeNoInWindows(ImGui::GetItemRectSize().y);
-		if(_foldState.Contains(path)&&_foldState[path])
-		{
-			for (auto item : dirs) {
-				if (item != "." && item != "..") {
-					DrawResNode(path + "/" + item);
-				}
+		DrawNodeNoInWindows(_nodeHeight, _nodeCache[path].name);
+		if (!_nodeCache[path].fold) {
+			for (auto& item : _nodeCache[path].dirs) {
+				DrawResNode(path + "/" + item,false);
 			}
 		}
 	}
-	
+}
+void ResTree::RefreshNodeCahce(const String& path) {
+	auto fileSystem = EditorApp::GetInstance()->GetSubsystem<FileSystem>();
+	StringVector dirs;
+	fileSystem->ScanDir(dirs, path, ".*", SCAN_DIRS | SCAN_FILES, false);
+	for (auto &item: dirs){
+		if (item != "." && item != "..") {
+			_nodeCache[path].dirs.Push(item);
+			RefreshNodeCahce(path + "/" + item);
+		}
+	}
+	auto pathItems = path.Split('/');
+	if (pathItems.Size() == 0)
+		return;
+	_nodeCache[path].name = pathItems[pathItems.Size() - 1];
+	_nodeCache[path].ext = GetExtension(_nodeCache[path].name, true);
 
 }
 }

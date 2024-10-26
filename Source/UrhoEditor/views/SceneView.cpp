@@ -132,12 +132,9 @@ void SceneView::Update() {
         ///ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);
         //winSize = ImGui::GetWindowSize();
         OnIO();
-        ImVec2 newSize = ImGui::GetWindowSize();
-        int fontSize = EditorApp::GetInstance()->GetFontSize();
-        int boderX = fontSize/2;
-        int boderY = (int)(fontSize * 1.8);
-        newSize.x = newSize.x - boderX;
-        newSize.y = newSize.y - boderY;
+        ImVec2 contentMax = ImGui::GetWindowContentRegionMax();
+        ImVec2 contentMin = ImGui::GetWindowContentRegionMin();
+        ImVec2 newSize(contentMax.x - contentMin.x, contentMax.y - contentMin.y);
         if (newSize.x != winSize.x || newSize.y != winSize.y) {
             winSize = newSize;
             SceneCtrl::getInstance()->OnResizeView(winSize.x, winSize.y);

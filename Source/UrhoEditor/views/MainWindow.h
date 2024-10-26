@@ -38,6 +38,15 @@ public:
         return window;
     }
     void StartGame();
+    void ShowDemo(bool show)
+    {
+        _showDemo = show;
+    }
+    bool IsShowDemo()
+    {
+        return _showDemo;
+    }
+    void MakeCurrent();
 private:
     void UpdateDockerSpace();
     std::vector<std::unique_ptr<EditorWidget>> windows;

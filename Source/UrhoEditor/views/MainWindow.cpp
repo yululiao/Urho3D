@@ -11,6 +11,21 @@
 
 namespace Urho3DEditor
 {
+void MainWindowMaxMinCallBack(GLFWwindow* window, int width, int height)
+{
+    if(width == 0)
+    {
+        EditorApp::GetInstance()->miniSize = true;
+    }
+    else
+    {
+        if(EditorApp::GetInstance()->miniSize)
+        {
+           EditorApp::GetInstance()->mainWindow->MakeCurrent();
+        }
+        EditorApp::GetInstance()->miniSize = false;
+    }
+}
 MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     ,_startView(new StartView),_menuBar(new Menubar()),_toolBar(new Toolbar())
 {
@@ -50,7 +65,8 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     this->width = width * dpiScale;
     this->height = height * dpiScale;
     window = glfwCreateWindow(this->width, this->height, "Urho3D", NULL, NULL);
-    
+    //glfwSetWindowMaximizeCallback(window, MainWindowMaxMinCallBack);
+    glfwSetWindowSizeCallback(window, MainWindowMaxMinCallBack);
     glfwSetWindowSize(window, this->width, this->height);
     glfwSetWindowPos(window, 300, 200);
     io.Fonts->AddFontFromFileTTF("res/simfang.ttf", fontSize, nullptr,
@@ -103,6 +119,10 @@ void MainWindow::StartGame()
    AddWindow(std::unique_ptr<ConsoleView>(_cosoleView));
    _resPreview = new ResPreview();
    AddWindow(std::unique_ptr<ResPreview>(_resPreview));
+}
+
+void MainWindow::MakeCurrent() {
+    glfwMakeContextCurrent(window);
 }
 
 void MainWindow::UpdateDockerSpace()

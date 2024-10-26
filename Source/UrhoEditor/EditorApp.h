@@ -114,6 +114,7 @@ public:
 	String  _curent_tool;
     static  String _getPathResult;
     bool _isStartView = true;
+    bool miniSize = false;
    
 };
 }

@@ -300,7 +300,7 @@ void EditorApp::EditorOneFrame()
     }
     _lastTime = nowTime;
     mainWindow->Update();
-    if (_gameStarted) {
+    if (_gameStarted && !miniSize) {
         RunEngineFrame();
     }
     ++gFpsFrameCount;
@@ -318,7 +318,7 @@ void EditorApp::Run()
     CreateEngine(nullptr);
     while (!mainWindow->ShouldClose())
     {
-       EditorOneFrame();
+        EditorOneFrame();
     }
     //return 0;
 }

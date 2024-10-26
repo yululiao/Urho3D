@@ -39,6 +39,7 @@ private:
 	static void ShowResPreview();
 	static void ShowSceneView();
 	static void ShowInspector();
+	static void ShowDemo();
 private:
 	std::shared_ptr<MenuNode> _menuTree;
 

@@ -1,5 +1,6 @@
 #include "Menubar.h"
 #include "imgui.h"
+#include "EditorApp.h"
 
 namespace Urho3DEditor 
 {
@@ -24,6 +25,7 @@ void Menubar::Init()
 	AddMenu("view/ResPreview",&ShowResPreview);
 	AddMenu("view/SceneView",&ShowSceneView);
 	AddMenu("view/Inspector",ShowInspector);
+	//AddMenu("test/show|hide imgui demo", ShowDemo);
 }
 
 void Menubar::AddMenu(const String& path, MenuHandle handle)
@@ -118,6 +120,11 @@ void Menubar::ShowSceneView() {
 }
 
 void Menubar::ShowInspector() {
+}
+
+void Menubar::ShowDemo() {
+	bool isShow = EditorApp::GetInstance()->mainWindow->IsShowDemo();
+	EditorApp::GetInstance()->mainWindow->ShowDemo(!isShow);
 }
 
 }
