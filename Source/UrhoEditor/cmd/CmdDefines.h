@@ -45,7 +45,7 @@ private:
 };
 
 
-class CmdModifyResPath:public EditCmd
+class CmdModifyPropPtr:public EditCmd
 {
 public:
 	enum ResType
@@ -53,21 +53,20 @@ public:
 		FBX,
 		MAT
 	};
-	CmdModifyResPath(const String& id,Serializable* obj,const String& path,ResType type);
-	~CmdModifyResPath();
+	CmdModifyPropPtr(const String& id,Serializable* obj, Object* prop);
+	~CmdModifyPropPtr();
 	void ToDo() override;
 	void UnDo() override;
 private:
 	SharedPtr<Serializable> _obj;
-	String _path;
-	ResType _resType;
+	SharedPtr<Object> _objProp;
 };
 
 
 void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value);
 void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value);
 void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value);
-void DoResPathModify(const String& id, Serializable* obj, const String& path, CmdModifyResPath::ResType type);
+void DoObjModifyPropPtr(const String& id, Serializable* obj, Object* prop);
 
 }
 

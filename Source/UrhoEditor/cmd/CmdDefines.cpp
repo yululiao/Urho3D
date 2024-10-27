@@ -75,36 +75,28 @@ void CmdModifyMat::UnDo() {
 	ToDo();
 }
 
-CmdModifyResPath::CmdModifyResPath(const String& id, Serializable* obj, const String& path, ResType type)
+CmdModifyPropPtr::CmdModifyPropPtr(const String& id, Serializable* obj, Object* objProp)
 	:EditCmd(id)
 {
 	_obj = obj;
-	_path = path;
-	_resType = type;
+	_objProp = objProp;
 }
 
-CmdModifyResPath::~CmdModifyResPath() {
+CmdModifyPropPtr::~CmdModifyPropPtr() {
 
 }
 
-void CmdModifyResPath::ToDo() {
-	if(_resType == ResType::MAT)
-	{
-		auto cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
-		auto aniModel = dynamic_cast<StaticModel*>(_obj.Get());
-		if(aniModel)
-		{
-			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
-			SharedPtr<Material> mat(aniModel->GetMaterial());
-			String oldPath = mat->GetName();
-			mat = cache->GetResource<Urho3D::Material>(_path);
-			aniModel->SetMaterial(mat);
-			_path = oldPath;
-		}
+void CmdModifyPropPtr::ToDo() {
+	auto aniModel = dynamic_cast<StaticModel*>(_obj.Get());
+	if (aniModel) {
+		SharedPtr<Material> oldmat(aniModel->GetMaterial());
+		SharedPtr<Material> newMat((Material*)_objProp.Get());
+		aniModel->SetMaterial(newMat);
+		_objProp = oldmat;
 	}
 }
 
-void CmdModifyResPath::UnDo() {
+void CmdModifyPropPtr::UnDo() {
 	ToDo();
 }
 
@@ -123,8 +115,8 @@ void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant v
 	CmdMgr::Instance()->ToDo(cmd);
 }
 
-void DoResPathModify(const String& id, Serializable* obj, const String& path, CmdModifyResPath::ResType type) {
-	CmdModifyResPath* cmd = new CmdModifyResPath(id, obj, path,type);
+void DoObjModifyPropPtr(const String& id, Serializable* obj, Object* prop) {
+	CmdModifyPropPtr* cmd = new CmdModifyPropPtr(id, obj, prop);
 	CmdMgr::Instance()->ToDo(cmd);
 }
 

@@ -88,7 +88,10 @@ void MatInspector::Update()
 		VariantDrawer::DrawPath("", matPath, { "Mat Files", "xml" }, false);
 		ImGui::PopID();
 		if (matPath != mat->GetName()) {
-			DoResPathModify(Utils::GenGuid().c_str(), aniModel, matPath, CmdModifyResPath::ResType::MAT);
+			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
+			auto cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
+			SharedPtr<Material> mat(cache->GetResource<Material>(matPath));
+			DoObjModifyPropPtr(Utils::GenGuid().c_str(), aniModel, mat.Get());
 			ImGui::TreePop();
 			return;
 		}
