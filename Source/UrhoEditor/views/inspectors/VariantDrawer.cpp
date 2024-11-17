@@ -67,7 +67,7 @@ void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& val
 		else
 		{
 			Color vec_color4(value.GetVector4());
-			DrawColor3(name, vec_color4);
+			DrawColor4(name, vec_color4);
 			value = vec_color4.ToVector4();
 		}
 		break;
