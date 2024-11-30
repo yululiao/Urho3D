@@ -3,6 +3,7 @@
 #include "EditorApp.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
+#include "ctrls/AssetMgr.h"
 
 namespace Urho3DEditor 
 {
@@ -145,10 +146,14 @@ void SceneView::Update() {
             if (ImGui::IsMouseReleased(0)) {
                 auto data = ImGui::AcceptDragDropPayload("drag_res");
                 if (data) {
-                    char path[200] = { 0 };
-                    memcpy(path, data->Data, data->DataSize);
-                    SceneCtrl::getInstance()->AddModel(path);
-                    std::cout << "onDrop" << std::endl;
+                    String path;
+                    path.Resize(data->DataSize);
+                    memcpy((void*)path.CString(), data->Data, data->DataSize);
+                    if(AssetMgr::getInstance()->IsModelFile(path))
+                    {
+                        SceneCtrl::getInstance()->AddModel(path);
+                    }
+                    std::cout << "onDrop:drag_res" << std::endl;
                 }
 
             }

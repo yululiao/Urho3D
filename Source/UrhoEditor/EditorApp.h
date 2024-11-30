@@ -19,7 +19,6 @@ public:
 	EditorApp(Context* context);
 	~EditorApp();
 	void Run();
-	void OpenWorkSpace(const String& path);
 	Context* GetContext() { return _context; }
     static EditorApp* GetInstance();
 	void CreateEngine(void* win_ptr);
@@ -32,8 +31,6 @@ public:
     String GetCurTool(){return _curent_tool;}
     Node* GetRootNode();
     Scene* GetScene();
-    String GetWorkSpace(); //{ return _work_space; }
-    String GetAssetRoot(); //{ return _work_space + "/assets"; }
     void ShowSceneView(bool show);
     void StartGame();
     String DialogSelectPath();
@@ -96,7 +93,6 @@ private:
 	VariantMap _engineParameters;
 	String _startupErrors;
 	void* _window_ptr = nullptr;
-    String _work_space;
     SceneView* _sceneView = nullptr;
     bool _gameStarted = false;
     Node* _selectedNode = nullptr;

@@ -9,6 +9,7 @@
 #include "Inspector.h"
 #include "ConsoleView.h"
 #include "ResPreview.h"
+#include "FolderFiles.h"
 
 namespace Urho3DEditor
 {
@@ -61,6 +62,7 @@ private:
     Inspector* _inspector = nullptr;
     ResPreview* _resPreview = nullptr;
     ConsoleView* _cosoleView = nullptr;
+    FolderFiles* _folderFiles = nullptr;
     bool done = false;
     bool _showDemo = false;
     bool _showingDocker = true;

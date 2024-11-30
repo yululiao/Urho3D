@@ -8,9 +8,23 @@
 #include "AssetImporter.h"
 #include "Urho3D/IO/FileSystem.h"
 #include "SceneCtrl.h"
+#include <Urho3D/Resource/ResourceCache.h>
+#include "ctrls/EditorFileWatch.h"
 
 namespace Urho3DEditor {
 AssetMgr* AssetMgr::_instance = nullptr;
+Urho3D::HashSet<String> AssetMgr::SurportExtSet = {
+   ".fbx",".xml",".json",".umaterial",
+   ".png",".tga",".jpg",".uprefab",".uscene",
+   ".dds"
+};
+Urho3D::HashSet<String> AssetMgr::ImgExtSet = {
+    ".png",".tga",".jpg"//,".dds"
+};
+
+Urho3D::HashSet<String> AssetMgr::CanDragExtSet = {
+    ".uprefab",".uscene",".fbx"
+};
 
 AssetMgr::AssetMgr(Context* ctx)
     :Object(ctx)
@@ -20,7 +34,7 @@ AssetMgr::AssetMgr(Context* ctx)
 
 AssetMgr::~AssetMgr()
 {
-
+    EditorFileWatch::StopWatch();
 }
 
 AssetMgr* AssetMgr::getInstance() 
@@ -57,20 +71,18 @@ String AssetMgr::getFilePath(const String& path)
 
 String AssetMgr::pathToRelative(const String& path) 
 { 
-   String workSpace = EditorApp::GetInstance()->GetWorkSpace();
-    if (path.Find(workSpace) != 0)
+    if (path.Find(_work_space) != 0)
     {
         throw("Application::pathToRelative: fullPath is not a FullPath!");
         return "";
     }
-    String ralativePath = path.Substring(workSpace.Length() + 1);
+    String ralativePath = path.Substring(_work_space.Length() + 1);
     return ralativePath;
 }
 
 String AssetMgr::pathToFull(const String& path)
 {
-    String workSpace = EditorApp::GetInstance()->GetWorkSpace();
-    return workSpace + "/" + path;
+    return _work_space + "/" + path;
 }
 
 String AssetMgr::GetExt(const String& path) 
@@ -137,6 +149,11 @@ int AssetMgr::getImguiTex(const String& path)
         Image* img = new Image(EditorApp::GetInstance()->GetContext());
         File file(EditorApp::GetInstance()->GetContext(), path);
         img->BeginLoad(file);
+        if(!img->GetData())
+        {
+            delete img;
+            return texID;
+        }
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_2D, texID);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -148,7 +165,11 @@ int AssetMgr::getImguiTex(const String& path)
             format = GL_RGB;
         glTexImage2D(GL_TEXTURE_2D, 0, format, img->GetWidth(), img->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
                      img->GetData());
-        //glGenerateMipmap(GL_TEXTURE_2D);
+       /* auto* cache = GetSubsystem<ResourceCache>();
+        SharedPtr<Urho3D::Texture2D> newTex(cache->GetResource<Urho3D::Texture2D>(path));
+        if(!newTex)
+            return texID;
+        texID = newTex->GetGPUObjectName();*/
         ImguiTexInfo* info = new ImguiTexInfo(this->GetContext());
         info->id = texID;
         info->img = img;
@@ -186,6 +207,68 @@ void AssetMgr::OpenScene(const String& path)
 void AssetMgr::OpenNewScene() 
 { 
     SceneCtrl::getInstance()->OpenNewScene();
+}
+void AssetMgr::RefreshResCache(const String& path,bool recursive) {
+    auto fileSystem = EditorApp::GetInstance()->GetSubsystem<FileSystem>();
+    bool isFile = fileSystem->FileExists(path);
+    String relativePath = pathToRelative(path);
+    nodeCache[relativePath].isFile = isFile;
+    auto pathItems = path.Split('/');
+    if (pathItems.Size() >= 2) {
+        nodeCache[relativePath].name = pathItems[pathItems.Size() - 1];
+    }
+    if(!isFile)
+    {
+        StringVector dirs;
+        fileSystem->ScanDir(dirs, path, ".*", SCAN_DIRS, false);
+        
+        for (auto& item : dirs) {
+            if (item != "." && item != "..") {
+                nodeCache[relativePath].childDirs.Push(item);
+                if (recursive) {
+                    RefreshResCache(path + "/" + item, recursive);
+                }
+            }
+        }
+        StringVector files;
+        fileSystem->ScanDir(files, path, ".*", SCAN_FILES, false);
+        for (auto& item : files) {
+            nodeCache[relativePath].childFiles.Push(item);
+            if (recursive) {
+                RefreshResCache(path + "/" + item, recursive);
+            }
+        }
+    }
+    else
+    {
+        nodeCache[relativePath].ext = GetExtension(nodeCache[relativePath].name, true);
+    }
+}
+String& AssetMgr::GetWorkSpace() {
+    return _work_space;
+}
+String& AssetMgr::GetAssetRoot() {
+    return _asset_root;
+}
+String& AssetMgr::GetRelativeAssetRoot() {
+    return _relative_asset_root;
+}
+void AssetMgr::SetWorkSpace(const String& path) {
+    _work_space = path;
+    _relative_asset_root = "assets";
+    _asset_root = _work_space + "/"+_relative_asset_root;
+    EditorFileWatch::WatchAssetPath(path);
+}
+bool AssetMgr::IsModelFile(const String& r_path) {
+    if(!nodeCache.Contains(r_path))
+    {
+        return false;
+    }
+    if(nodeCache[r_path].ext == ".fbx")
+    {
+        return true;
+    }
+    return false;
 }
 }
 

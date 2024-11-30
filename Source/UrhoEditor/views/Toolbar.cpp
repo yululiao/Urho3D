@@ -117,7 +117,7 @@ void Toolbar::IntItemSize()
 }
 void Toolbar::OnSave() 
 {
-	String assetRoot = EditorApp::GetInstance()->GetAssetRoot();
+	String assetRoot = AssetMgr::getInstance()->GetAssetRoot();
 	AssetMgr::getInstance()->SaveScene(assetRoot + "/test.uscene");
 	CmdMgr::Instance()->OnSave();
 }

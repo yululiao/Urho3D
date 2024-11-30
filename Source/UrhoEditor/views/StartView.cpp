@@ -7,6 +7,7 @@
 #include "GLFW/glfw3.h"
 #include "imgui_impl_opengl3.h"
 #include "EditorApp.h"
+#include "ctrls/AssetMgr.h"
 
 namespace Urho3DEditor 
 {
@@ -33,7 +34,7 @@ void StartView::RenderHistoryList()
 		ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
 		if(ImGui::Button(item.CString()))
 		{
-			EditorApp::GetInstance()->OpenWorkSpace(item);
+			AssetMgr::getInstance()->SetWorkSpace(item);
 			EditorApp::GetInstance()->StartGame();
 			_isShow = false;
 		}
@@ -64,7 +65,7 @@ void StartView::Update()
 		{
 			_historyMgr->add_project(path);
 			_historyMgr->save();
-			EditorApp::GetInstance()->OpenWorkSpace(path);
+			AssetMgr::getInstance()->SetWorkSpace(path);
 			EditorApp::GetInstance()->StartGame();
 			_isShow = false;
 		}

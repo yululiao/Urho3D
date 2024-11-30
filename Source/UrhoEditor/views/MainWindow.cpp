@@ -118,6 +118,8 @@ void MainWindow::StartGame()
    AddWindow(std::unique_ptr<ConsoleView>(_cosoleView));
    _resPreview = new ResPreview();
    AddWindow(std::unique_ptr<ResPreview>(_resPreview));
+   _folderFiles = new FolderFiles();
+   AddWindow(std::unique_ptr<FolderFiles>(_folderFiles));
 }
 
 void MainWindow::MakeCurrent() {

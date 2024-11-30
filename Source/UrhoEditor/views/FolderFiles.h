@@ -6,20 +6,17 @@
 
 using namespace Urho3D;
 
-namespace Urho3DEditor
-{
-class NodeTree:public EditorWidget
-{
+namespace Urho3DEditor {
+class FolderFiles :public EditorWidget {
 public:
-	NodeTree();
-	virtual ~NodeTree();
+	FolderFiles();
+	virtual ~FolderFiles();
 	void Update() override;
 private:
-	void OnClicked(Node* node);
-	void OnDoubleClicked();
+	void OnItemClicked(const String& path);
 	void DrawNodeNoInWindows(int itemH);
-	void DrawNode(Node* node,bool isRoot);
-	HashMap<int, bool> _foldState;
-
+	void DrawFiles();
+	void OnDrag();
+	void OnItemDoubleClicked(const String& path);
 };
 }

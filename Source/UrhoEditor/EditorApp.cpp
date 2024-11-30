@@ -24,8 +24,6 @@
 #include <ndf/nfd.h>
 #include "ctrls/AssetMgr.h"
 #include "Utils.h"
-#include "ctrls/EditorFileWatch.h"
-
 
 namespace Urho3DEditor {
 String EditorApp::_getPathResult;
@@ -41,7 +39,6 @@ EditorApp::EditorApp(Context* context)
 EditorApp::~EditorApp() 
 { 
    NFD_Quit(); 
-   EditorFileWatch::StopWatch();
 }
 
 void EditorApp::CreateEngine(void* win_ptr)
@@ -83,10 +80,11 @@ void EditorApp::Setup()
 	if (!_engineParameters.Contains(EP_RESOURCE_PREFIX_PATHS))
     {
         //_engineParameters[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
-		//todo
-        //_work_space = "D:/Urho3D/platform/projects/test";
-        String assetsPath = "Data;CoreData;" + _work_space;
-        _engineParameters[EP_RESOURCE_PATHS] =  assetsPath;
+        String assetsPath = "Data;CoreData;";// + AssetMgr::getInstance()->GetWorkSpace();
+        _engineParameters[EP_RESOURCE_PATHS] = assetsPath;
+        //串到assetsPath后等同于AddResourceDir
+        //auto* cache = GetSubsystem<ResourceCache>();
+        //cache->AddResourceDir(AssetMgr::getInstance()->GetWorkSpace());
 
     }
 
@@ -267,13 +265,16 @@ void EditorApp::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 
 void EditorApp::StartGame() 
 { 
+    //用相对路径
+    auto assetMgr = AssetMgr::getInstance();
+    assetMgr->RefreshResCache(assetMgr->GetAssetRoot(),true);
+    auto* cache = GetSubsystem<ResourceCache>();
+    cache->AddResourceDir(AssetMgr::getInstance()->GetWorkSpace());
     _gameStarted = true;
     _sceneView = new SceneView("renderWindow");
     mainWindow->AddWindow(std::unique_ptr<SceneView>(_sceneView));
     mainWindow->StartGame();
     mainWindow->MaxSize();
-    auto* cache = GetSubsystem<ResourceCache>();
-    cache->AddResourceDir(_work_space);
     _isStartView = false;
 };
 
@@ -321,20 +322,6 @@ void EditorApp::Run()
         EditorOneFrame();
     }
     //return 0;
-}
-
-void EditorApp::OpenWorkSpace(const String& path)
-{
-	_work_space = path;
-    EditorFileWatch::WatchAssetPath(_work_space);
-	//work_space::get_instance()->set_workspace(path);
-	//std::string title = "urho3d   " + path + "*";
-	//render_view* render_v = new render_view(nullptr);
-	//render_v->show();
-
-	//_main_window = new main_window(nullptr);
-	//_main_window->setWindowTitle(title.c_str());
-	//_main_window->showMaximized();
 }
 
 EditorApp* EditorApp::GetInstance()
@@ -406,15 +393,6 @@ Scene* EditorApp::GetScene()
 	return SceneCtrl::getInstance()->rttScene_; 
 }
 
-String EditorApp::GetWorkSpace() 
-{ 
-	return _work_space; 
-}
-
-String EditorApp::GetAssetRoot() 
-{
-    return _work_space + "/assets";
-}
 
 void EditorApp::ShowSceneView(bool show) 
 { 

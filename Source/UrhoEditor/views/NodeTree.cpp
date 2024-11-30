@@ -20,7 +20,7 @@ void NodeTree::Update()
 	if (newSize.x != winSize.x || newSize.y != winSize.y) {
 		winSize = newSize;
 	}
-	DrawNode(EditorApp::GetInstance()->GetSceneRoot());
+	DrawNode(EditorApp::GetInstance()->GetSceneRoot(),true);
 	/*if(ImGui::BeginPopupContextWindow("context"),1)
 	{
 		ImGui::MenuItem("create","",false,true);
@@ -45,12 +45,16 @@ void NodeTree::DrawNodeNoInWindows(int itemH)
 	ImGui::SetCursorScreenPos(curPos);
 }
 
-void NodeTree::DrawNode(Node* node)
+void NodeTree::DrawNode(Node* node,bool isRoot)
 {
 	String nodeName = node->GetName();
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
 	auto children = node->GetChildren(false);
 	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
+	if(isRoot)
+	{
+		flags |= ImGuiTreeNodeFlags_DefaultOpen;
+	}
 	if(selecednode && node->GetID()== selecednode->GetID())
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
@@ -76,7 +80,7 @@ void NodeTree::DrawNode(Node* node)
 				_foldState[node->GetID()] = true;
 			}
 			for (auto item : children) {
-				DrawNode(item);
+				DrawNode(item,false);
 			}
 			ImGui::TreePop();
 		}
@@ -86,7 +90,7 @@ void NodeTree::DrawNode(Node* node)
 		DrawNodeNoInWindows(ImGui::GetItemRectSize().y);
 		if (_foldState.Contains(node->GetID()) && _foldState[node->GetID()]) {
 			for (auto item : children) {
-				DrawNode(item);
+				DrawNode(item,false);
 			}
 		}
 	}

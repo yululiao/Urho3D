@@ -68,11 +68,10 @@ namespace Urho3DEditor
         String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
         //加载fbx对应的mdl
         String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
-        String rpath = AssetMgr::getInstance()->pathToRelative(mdl_path);
         Node* modelNode = rttSceneRoot_->CreateChild(name);
         modelNode->SetScale(Vector3(0.01,0.01,0.01));
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
-        Model* model = cache->GetResource<Model>(rpath);
+        Model* model = cache->GetResource<Model>(mdl_path);
         modelObject->SetModel(model);
         SharedPtr<Material> defMat(cache->GetResource<Material>("Materials/Default.xml"));
         modelObject->SetMaterial(defMat);
