@@ -1146,8 +1146,14 @@ void Material::ReleaseShaders()
 SharedPtr<Material> Material::Clone(const String& cloneName) const
 {
     SharedPtr<Material> ret(new Material(context_));
-
-    ret->SetName(cloneName);
+    if(cloneName.Empty())
+    {
+        ret->SetName(GetName());
+    }
+    else
+    {
+        ret->SetName(cloneName);
+    }
     ret->techniques_ = techniques_;
     ret->vertexShaderDefines_ = vertexShaderDefines_;
     ret->pixelShaderDefines_ = pixelShaderDefines_;

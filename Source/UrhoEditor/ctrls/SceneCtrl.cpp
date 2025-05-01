@@ -26,6 +26,11 @@
 #include "AssetMgr.h"
 #include "Urho3D/IO/FileSystem.h"
 #include "EditorApp.h"
+#include "Urho3D/Urho2D/StaticSprite2D.h"
+#include "Urho3D/Urho2D/Sprite2D.h"
+#include "Urho3D/Graphics/BillboardSet.h"
+#include "gizmo/GizmoUtils.h"
+#include "Urho3D/Graphics/GeoUtils.h"
 //#include "ctrl/utils.h"
 //#include "ctrl/asset_mgr.h"
 //#include "ctrl/global_event.h"
@@ -73,14 +78,14 @@ namespace Urho3DEditor
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
         Model* model = cache->GetResource<Model>(mdl_path);
         modelObject->SetModel(model);
-        SharedPtr<Material> defMat(cache->GetResource<Material>("Materials/Default.xml"));
+        auto matRes = cache->GetResource<Material>("Materials/Default.xml");
+        SharedPtr<Material> defMat(matRes->Clone());
         modelObject->SetMaterial(defMat);
     }
-
     void SceneCtrl::AddEmptyNode() 
     {
         GetSubsystem<Graphics>()->MakeCurrent();
-        Node* modelNode = rttSceneRoot_->CreateChild("emptyNode");
+        Node* modelNode = rttSceneRoot_->CreateChild("EmptyNode");
     }
 
     void SceneCtrl::GenRttTex()
@@ -208,6 +213,7 @@ namespace Urho3DEditor
 
     void SceneCtrl::InitScene(bool hasRoot)
     {
+        auto* cache = GetSubsystem<ResourceCache>();
         if(hasRoot)
         {
             rttSceneRoot_ = rttScene_->GetChild("Root");
@@ -230,6 +236,22 @@ namespace Urho3DEditor
             light->SetLightType(LIGHT_DIRECTIONAL);
             light->SetColor(Color(0.8f, 0.8f, 0.8f));
             light->SetSpecularIntensity(1.0f);
+
+            auto* billboardObject = lightNode->CreateComponent<BillboardSet>();
+            billboardObject->SetNumBillboards(1);
+            billboardObject->SetMaterial(cache->GetResource<Material>("Materials/DirLightGizmo.xml"));
+            billboardObject->SetSorted(true);
+            billboardObject->SetFixedScreenSize(true);
+            Billboard* bb = billboardObject->GetBillboard(0);
+            bb->position_ = Vector3(0,0,0);
+            bb->size_ = Vector2(80,80);
+            bb->rotation_ = 0.0f;
+            bb->enabled_ = true;
+
+            SharedPtr<Node> dirLine(GeoUtils::create_line(context_, { Vector3(0.,0,0),Vector3(0,0,0.8) }, 0xffffff00));
+            GizmoUtils::setLineMat(dirLine, 0xffffffff);
+            lightNode->AddChild(dirLine);
+            
         }
         editorRoot_ = rttScene_->CreateChild("EditorRoot");
         editorRoot_->SetNeedSave(false);

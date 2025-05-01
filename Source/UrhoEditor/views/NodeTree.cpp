@@ -49,7 +49,7 @@ void NodeTree::DrawNode(Node* node,bool isRoot)
 {
 	String nodeName = node->GetName();
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	auto children = node->GetChildren(false);
+	auto& children_show = node->GetChildren();
 	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
 	if(isRoot)
 	{
@@ -59,41 +59,41 @@ void NodeTree::DrawNode(Node* node,bool isRoot)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
-	if(children.Size()== 0)
+	//PODVector<Node*> children_show;
+	/*for(auto citem: children)
 	{
+		if(!citem->HasTag("NotShowInNodeTree"))
+		{
+			children_show.Push(citem);
+		}
+	}*/
+	if (children_show.Size() == 0) {
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
-	if (IsInWindow(ImGui::GetCursorScreenPos()))
+	bool isInWindow = IsInWindow(ImGui::GetCursorScreenPos());
+	ImGui::PushID(node->GetID());
+	bool node_open = ImGui::TreeNodeEx(nodeName.CString(), flags);
+	if (isRoot) {
+		_itemH = ImGui::GetItemRectSize().y;
+	}
+	ImGui::PopID();
+	if(isInWindow)
 	{
-		ImGui::PushID(node->GetID());
-		bool node_open = ImGui::TreeNodeEx(nodeName.CString(), flags);
-		ImGui::PopID();
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered()) {
 			OnDoubleClicked();
 		}
 		else if (ImGui::IsItemClicked()) {
 			OnClicked(node);
 		}
-		if (node_open) {
-			if(children.Size() > 0)
-			{
-				_foldState[node->GetID()] = true;
-			}
-			for (auto item : children) {
-				DrawNode(item,false);
-			}
-			ImGui::TreePop();
-		}
 	}
-	else
-	{
-		DrawNodeNoInWindows(ImGui::GetItemRectSize().y);
-		if (_foldState.Contains(node->GetID()) && _foldState[node->GetID()]) {
-			for (auto item : children) {
-				DrawNode(item,false);
-			}
+	if (node_open) {
+		if (children_show.Size() > 0) {
+			_foldState[node->GetID()] = true;
 		}
+		for (auto item : children_show) {
+			DrawNode(item, false);
+		}
+		ImGui::TreePop();
 	}
-	
 }
 }

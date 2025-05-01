@@ -90,7 +90,7 @@ void MatInspector::Update()
 		if (matPath != mat->GetName()) {
 			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 			auto cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
-			SharedPtr<Material> mat(cache->GetResource<Material>(matPath));
+			SharedPtr<Material> mat(cache->GetResource<Material>(matPath)->Clone());
 			DoObjModifyPropPtr(Utils::GenGuid().c_str(), aniModel, mat.Get());
 			ImGui::TreePop();
 			return;

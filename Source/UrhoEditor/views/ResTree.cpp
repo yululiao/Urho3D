@@ -77,58 +77,45 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 		flags |= ImGuiTreeNodeFlags_DefaultOpen;
 	}
 	bool isInWindow =IsInWindow(ImGui::GetCursorScreenPos());
-	//if(isInWindow ||forceDraw)
-	{
-		//----------------------TreeNode-----------------------
-		ImGui::PushID(nodeCache[path].name.CString());
-		bool open_node = ImGui::TreeNodeEx("",flags);
-		if (_nodeHeight == 0)
-			_nodeHeight = ImGui::GetItemRectSize().y;
-		if(isInWindow){
-			if (ImGui::BeginDragDropSource(0)) {
-				ImGui::SetDragDropPayload("drag_folder", path.CString(), path.Length());
-				OnDrag();
-				ImGui::EndDragDropSource();
-			}
-			if (ImGui::IsItemClicked()) {
-				AssetMgr::getInstance()->selectedFolders.Clear();
-				AssetMgr::getInstance()->selectedFolders.Insert(path);
-				AssetMgr::getInstance()->lastSelectedFolder = path;
-			}
+	//----------------------TreeNode-----------------------
+	ImGui::PushID(nodeCache[path].name.CString());
+	bool open_node = ImGui::TreeNodeEx("", flags);
+	if (_nodeHeight == 0)
+		_nodeHeight = ImGui::GetItemRectSize().y;
+	if (isInWindow) {
+		if (ImGui::BeginDragDropSource(0)) {
+			ImGui::SetDragDropPayload("drag_folder", path.CString(), path.Length());
+			OnDrag();
+			ImGui::EndDragDropSource();
 		}
-		ImGui::PopID();
-		//-------------------------TreeNode End------------------------
-		if(isInWindow)
-		{
-			ImGui::SameLine();
-			ImGui::Image(_dirIconId, ImVec2(_nodeHeight, _nodeHeight));
-			ImGui::SameLine();
-			ImGui::Text(nodeCache[path].name.CString());
+		if (ImGui::IsItemClicked()) {
+			AssetMgr::getInstance()->selectedFolders.Clear();
+			AssetMgr::getInstance()->selectedFolders.Insert(path);
+			AssetMgr::getInstance()->lastSelectedFolder = path;
 		}
-		nodeCache[path].fold = !open_node;
-		if (open_node) {
-			if (ImGui::BeginPopupContextItem("ResContext", 1)) {
-				if (ImGui::MenuItem("Import")) {
-					OnImport(path);
-				}
-				ImGui::EndPopup();
-			}
-			for (auto& item : nodeCache[path].childDirs) {
-				DrawResNode(path + "/" + item, false);
-			}
-			ImGui::TreePop();
-		}
-		
 	}
-	/*else
-	{
-		DrawNodeNoInWindows(_nodeHeight, nodeCache[path].name);
-		if (!nodeCache[path].fold) {
-			for (auto& item : nodeCache[path].childDirs) {
-				DrawResNode(path + "/" + item,false);
+	ImGui::PopID();
+	//-------------------------TreeNode End------------------------
+	if (isInWindow) {
+		ImGui::SameLine();
+		ImGui::Image(_dirIconId, ImVec2(_nodeHeight, _nodeHeight));
+		ImGui::SameLine();
+		ImGui::Text(nodeCache[path].name.CString());
+	}
+	nodeCache[path].fold = !open_node;
+	if (open_node) {
+		if (ImGui::BeginPopupContextItem("ResContext", 1)) {
+			if (ImGui::MenuItem("Import")) {
+				OnImport(path);
 			}
+			ImGui::EndPopup();
 		}
-	}*/
+		for (auto& item : nodeCache[path].childDirs) {
+			DrawResNode(path + "/" + item, false);
+		}
+		ImGui::TreePop();
+
+	}
 }
 
 }

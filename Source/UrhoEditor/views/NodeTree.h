@@ -20,6 +20,7 @@ private:
 	void DrawNodeNoInWindows(int itemH);
 	void DrawNode(Node* node,bool isRoot);
 	HashMap<int, bool> _foldState;
+	float _itemH = 12;
 
 };
 }
