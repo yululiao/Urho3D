@@ -1,5 +1,5 @@
 #include "FolderFiles.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
 
 namespace Urho3DEditor{

@@ -1,7 +1,7 @@
 #include "Inspector.h"
 #include "EditorApp.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
-#include "views/inspectors/VariantDrawer.h"
+#include "view/inspectors/VariantDrawer.h"
 
 namespace Urho3DEditor 
 {

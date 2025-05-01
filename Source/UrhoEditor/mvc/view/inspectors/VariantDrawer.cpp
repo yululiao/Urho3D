@@ -2,7 +2,7 @@
 #include "VariantDrawer.h"
 #include "EditorApp.h"
 #include "Utils.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 
 
 namespace Urho3DEditor 

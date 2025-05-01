@@ -9,7 +9,7 @@
 #include <Urho3D/Graphics/Graphics.h>
 
 #include <Urho3D/LuaScript/LuaScript.h>
-#include "ctrls/SceneCtrl.h"
+#include "ctrl/scene/SceneCtrl.h"
 //#include "glfw/glfw3native.h"
 //#include "EditorLuaBinding.h"//todo
 #include "ImGuiFileBrowser.h"
@@ -21,8 +21,8 @@
 #include <sstream>
 #include <Urho3D/Resource/ResourceCache.h>
 #endif // _WIN32
-#include <ndf/nfd.h>
-#include "ctrls/AssetMgr.h"
+#include <view/ndf/nfd.h>
+#include "ctrl/res/AssetMgr.h"
 #include "Utils.h"
 
 namespace Urho3DEditor {

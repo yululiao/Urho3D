@@ -7,9 +7,9 @@
 #include "EditorApp.h"
 #include "AssetImporter.h"
 #include "Urho3D/IO/FileSystem.h"
-#include "SceneCtrl.h"
+#include "ctrl/scene/SceneCtrl.h"
 #include <Urho3D/Resource/ResourceCache.h>
-#include "ctrls/EditorFileWatch.h"
+#include "ctrl/res/EditorFileWatch.h"
 
 namespace Urho3DEditor {
 AssetMgr* AssetMgr::_instance = nullptr;

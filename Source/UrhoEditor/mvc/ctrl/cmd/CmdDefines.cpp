@@ -1,6 +1,6 @@
 #include "CmdDefines.h"
 #include "Urho3D/Scene/Node.h"
-#include "ctrls/SceneCtrl.h"
+#include "ctrl/scene/SceneCtrl.h"
 #include "Urho3D/Graphics/Texture2D.h"
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Graphics/AnimatedModel.h>

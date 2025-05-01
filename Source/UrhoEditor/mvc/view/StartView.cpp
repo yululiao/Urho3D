@@ -7,7 +7,7 @@
 #include "GLFW/glfw3.h"
 #include "imgui_impl_opengl3.h"
 #include "EditorApp.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 
 namespace Urho3DEditor 
 {

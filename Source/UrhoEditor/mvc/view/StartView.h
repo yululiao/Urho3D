@@ -1,5 +1,5 @@
 #pragma once
-#include "ctrls/HistoryMgr.h"
+#include "ctrl/res/HistoryMgr.h"
 
 namespace Urho3DEditor
 {

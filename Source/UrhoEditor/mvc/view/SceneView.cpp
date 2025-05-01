@@ -1,9 +1,9 @@
 #include "SceneView.h"
-#include "ctrls/SceneCtrl.h"
+#include "ctrl/scene/SceneCtrl.h"
 #include "EditorApp.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 
 namespace Urho3DEditor 
 {

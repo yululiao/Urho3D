@@ -1,7 +1,7 @@
 #include "Toolbar.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
-#include "cmd/CmdMgr.h"
+#include "ctrl/cmd/CmdMgr.h"
 
 namespace Urho3DEditor
 {

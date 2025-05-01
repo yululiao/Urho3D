@@ -1,5 +1,5 @@
 ﻿#include "CmdMgr.h"
-#include "event/GEvent.h"
+#include "ctrl/event/GEvent.h"
 #include "Urho3D/Container/Str.h"
 
 using namespace Urho3D;

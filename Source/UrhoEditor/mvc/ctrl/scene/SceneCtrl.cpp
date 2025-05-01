@@ -23,17 +23,14 @@
 #include "Urho3D//Graphics/VertexBuffer.h"
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Math/Ray.h"
-#include "AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 #include "Urho3D/IO/FileSystem.h"
 #include "EditorApp.h"
 #include "Urho3D/Urho2D/StaticSprite2D.h"
 #include "Urho3D/Urho2D/Sprite2D.h"
 #include "Urho3D/Graphics/BillboardSet.h"
-#include "gizmo/GizmoUtils.h"
+#include "view/gizmo/GizmoUtils.h"
 #include "Urho3D/Graphics/GeoUtils.h"
-//#include "ctrl/utils.h"
-//#include "ctrl/asset_mgr.h"
-//#include "ctrl/global_event.h"
 
 namespace Urho3DEditor
 {

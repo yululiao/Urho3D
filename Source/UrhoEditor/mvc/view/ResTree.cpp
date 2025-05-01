@@ -1,5 +1,5 @@
 #include "ResTree.h"
-#include "ctrls/AssetMgr.h"
+#include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
 #include "Urho3D/IO/FileSystem.h"
 #include "Urho3D/Container/HashSet.h"

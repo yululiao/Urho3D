@@ -3,10 +3,10 @@
 #include "Urho3D/Core/Main.h"
 #include "Urho3D/Engine/Engine.h"
 #include "Urho3D/Container/Str.h"
-#include "views/MainWindow.h"
-#include "views/SceneView.h"
-#include "gizmo/TransformCtrl.h"
-#include "ctrls/CameraCtrl.h"
+#include "view/MainWindow.h"
+#include "view/SceneView.h"
+#include "view/gizmo/TransformCtrl.h"
+#include "ctrl/scene/CameraCtrl.h"
 
 using namespace Urho3D;
 namespace Urho3DEditor 
