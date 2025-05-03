@@ -1,6 +1,6 @@
 #include "MatInspector.h"
 #include "EditorApp.h"
-#include "ctrl/cmd/CmdDefines.h"
+#include "ctrl/base/CmdDefines.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include "VariantDrawer.h"
 #include "Urho3D/Graphics/Material.h"
@@ -9,7 +9,7 @@
 #include "Urho3D/Graphics/Texture2D.h"
 #include <Urho3D/Resource/ResourceCache.h>
 #include "Urho3D/Graphics/Graphics.h"
-#include "ctrl/cmd/CmdDefines.h"
+#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 #include "ctrl/res/AssetMgr.h"
 

@@ -4,14 +4,14 @@
 namespace Urho3DEditor 
 {
 
-class EditCmd
+class CmdEdit
 {
 public:
-	EditCmd(const Urho3D::String& id) 
+	CmdEdit(const Urho3D::String& id)
 	{
 		_id = id;
 	};
-	virtual ~EditCmd() 
+	virtual ~CmdEdit()
 	{
 	
 	}

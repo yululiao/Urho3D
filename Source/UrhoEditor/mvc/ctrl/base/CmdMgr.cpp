@@ -1,5 +1,5 @@
 ﻿#include "CmdMgr.h"
-#include "ctrl/event/GEvent.h"
+#include "ctrl/base/GEvent.h"
 #include "Urho3D/Container/Str.h"
 
 using namespace Urho3D;
@@ -47,7 +47,7 @@ bool CmdMgr::HasNode()
 	return false;
 }
 
-void CmdMgr::ToDo(EditCmd* node)
+void CmdMgr::ToDo(CmdEdit* node)
 {
 	if (node == NULL)
 		return;
@@ -72,7 +72,7 @@ void CmdMgr::ToDo(EditCmd* node)
 
 void CmdMgr::UnDo()
 {
-	std::vector<EditCmd*> nodes = GetUnDoNodes(currentNodeId);
+	std::vector<CmdEdit*> nodes = GetUnDoNodes(currentNodeId);
 	for (auto node : nodes)
 	{
 		node->UnDo();
@@ -84,7 +84,7 @@ void CmdMgr::UnDo()
 
 void CmdMgr::ReDo()
 {
-	std::vector<EditCmd*> nodes = GetRedoNodes(currentNodeId + 1);
+	std::vector<CmdEdit*> nodes = GetRedoNodes(currentNodeId + 1);
 	for (auto node : nodes)
 	{
 		node->ToDo();
@@ -116,9 +116,9 @@ bool CmdMgr::CanReDo()
 	return result;
 }
 
-std::vector<EditCmd*> CmdMgr::GetUnDoNodes(int index)
+std::vector<CmdEdit*> CmdMgr::GetUnDoNodes(int index)
 {
-	std::vector<EditCmd*> result;
+	std::vector<CmdEdit*> result;
 	if (index <0 || index > editNodeList.size())
 		return result;
 	auto it = editNodeList.begin();
@@ -148,9 +148,9 @@ std::vector<EditCmd*> CmdMgr::GetUnDoNodes(int index)
 	return result;
 }
 
-std::vector<EditCmd*> CmdMgr::GetRedoNodes(int index)
+std::vector<CmdEdit*> CmdMgr::GetRedoNodes(int index)
 {
-	std::vector<EditCmd*> result;
+	std::vector<CmdEdit*> result;
 	if (index <0 || index > editNodeList.size())
 		return result;
 	auto it = editNodeList.begin();
@@ -176,7 +176,7 @@ std::vector<EditCmd*> CmdMgr::GetRedoNodes(int index)
 	return result;
 }
 
-void CmdMgr::AddNode(EditCmd* node)
+void CmdMgr::AddNode(CmdEdit* node)
 {
 	editNodeList.push_back(node);
 	currentNodeId++;

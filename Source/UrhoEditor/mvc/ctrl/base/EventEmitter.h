@@ -1,8 +1,8 @@
 #pragma once
 #include <list>
 #include <map>
-#include "ctrl/delegate/FastDelegate.h"
-#include "ctrl/delegate/Delegate.h"
+#include "ctrl/base/DelegateFast.h"
+#include "ctrl/base/Delegate.h"
 
 namespace Urho3DEditor
 {

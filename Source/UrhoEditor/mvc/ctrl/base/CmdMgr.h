@@ -2,7 +2,7 @@
 #include <list>
 #include <vector>
 #include "CmdMgr.h"
-#include "EditCmd.h"
+#include "CmdEdit.h"
 
 using namespace std;
 
@@ -13,7 +13,7 @@ class CmdMgr
 public:
 	CmdMgr();
 	~CmdMgr();
-	void ToDo(EditCmd* command);
+	void ToDo(CmdEdit* command);
 	void UnDo();
 	void ReDo();
 	bool CanUnDo();
@@ -23,13 +23,13 @@ public:
 	bool HasNode();
 
 protected:
-	std::vector<EditCmd*> GetUnDoNodes(int index);
-	std::vector<EditCmd*> GetRedoNodes(int index);
-	void AddNode(EditCmd* node);
+	std::vector<CmdEdit*> GetUnDoNodes(int index);
+	std::vector<CmdEdit*> GetRedoNodes(int index);
+	void AddNode(CmdEdit* node);
 	void Clear();
 
 private:
-	list<EditCmd*> editNodeList;
+	list<CmdEdit*> editNodeList;
 	int currentNodeId = -1;
 	static CmdMgr* _instance;
 public:

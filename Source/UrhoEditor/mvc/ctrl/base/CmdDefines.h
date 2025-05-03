@@ -15,7 +15,7 @@ namespace Urho3DEditor {
 //CmdModify CmdInsertList CmdInsertVector CmdInsertMap CmdDeleteList CmdDeleteVector CmdDeleteMap
 //数据单元是继承Serializable的对象，Serializable有属性反射的能力
 //Resource不继承Serializable需要特殊处理
-class CmdModify : public EditCmd
+class CmdModify : public CmdEdit
 {
 public:
 	CmdModify(const String& id, Serializable* obj,const String& attrName, Variant value);
@@ -28,7 +28,7 @@ private:
 	SharedPtr<Serializable> _obj;
 };
 //材质不继承自Serializable,需要特殊处理
-class CmdModifyMat:public EditCmd
+class CmdModifyMat:public CmdEdit
 {
 public:
 	CmdModifyMat(const String& id, Material* mat, const String& attrName, Variant value);
@@ -45,7 +45,7 @@ private:
 };
 
 
-class CmdModifyPropPtr:public EditCmd
+class CmdModifyPropPtr:public CmdEdit
 {
 public:
 	enum ResType

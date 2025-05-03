@@ -11,7 +11,7 @@ namespace Urho3DEditor {
 
 
 CmdModify::CmdModify(const String& id, Serializable* obj,const String& attrName, Variant value)
-	:EditCmd(id){
+	:CmdEdit(id){
 	_obj = obj;
 	_attrName = attrName;
 	_value = value;
@@ -33,7 +33,7 @@ void CmdModify::UnDo() {
 }
 
 CmdModifyMat::CmdModifyMat(const String& id, Material* mat, const String& attrName, Variant value)
-	:EditCmd(id)
+	:CmdEdit(id)
 {
 	_mat = mat;
 	_attrName = attrName;
@@ -41,7 +41,7 @@ CmdModifyMat::CmdModifyMat(const String& id, Material* mat, const String& attrNa
 }
 
 CmdModifyMat::CmdModifyMat(const String& id, Material* mat, uint16_t texUnit, Variant value)
-	:EditCmd(id)
+	:CmdEdit(id)
 {
 	_type = 1;
 	_mat = mat;
@@ -76,7 +76,7 @@ void CmdModifyMat::UnDo() {
 }
 
 CmdModifyPropPtr::CmdModifyPropPtr(const String& id, Serializable* obj, Object* objProp)
-	:EditCmd(id)
+	:CmdEdit(id)
 {
 	_obj = obj;
 	_objProp = objProp;

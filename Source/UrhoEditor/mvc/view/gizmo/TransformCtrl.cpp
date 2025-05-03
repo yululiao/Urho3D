@@ -10,7 +10,7 @@
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Graphics/GeoUtils.h"
 #include "GizmoUtils.h"
-#include "ctrl/cmd/CmdDefines.h"
+#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 
 TransformCtrl::TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot)

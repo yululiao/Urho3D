@@ -1,7 +1,7 @@
 #include "VariantDrawer.h"
 #include "TransformInspector.h"
 #include "EditorApp.h"
-#include "ctrl/cmd/CmdDefines.h"
+#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 
 

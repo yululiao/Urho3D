@@ -1,6 +1,6 @@
 #pragma once
-#include "FastDelegate.h"
-#include "ctrl/event/EventData.h"
+#include "DelegateFast.h"
+#include "ctrl/base/EventData.h"
 
 namespace Urho3DEditor
 {

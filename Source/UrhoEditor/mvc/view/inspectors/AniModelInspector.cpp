@@ -1,6 +1,6 @@
 #include "AniModelInspector.h"
 #include "EditorApp.h"
-#include "ctrl/cmd/CmdDefines.h"
+#include "ctrl/base/CmdDefines.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include "VariantDrawer.h"
 
