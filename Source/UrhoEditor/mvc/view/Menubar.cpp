@@ -1,6 +1,7 @@
 #include "Menubar.h"
 #include "imgui.h"
 #include "EditorApp.h"
+#include "stb/stb_image.h"
 
 namespace Urho3DEditor 
 {
@@ -15,16 +16,16 @@ Menubar::~Menubar()
 
 void Menubar::Init() 
 {
-	AddMenu("file/open",&OnOpen);
-	AddMenu("file/save",&OnSave);
-	AddMenu("edit/undo",&OnUndo);
-	AddMenu("edit/redo",&OnRedo);
-	AddMenu("view/ToolBar",&ShowToolBar);
-	AddMenu("view/NodeTree",&ShowNodeTree);
-	AddMenu("view/ResTree",&ShowResTree);
-	AddMenu("view/ResPreview",&ShowResPreview);
-	AddMenu("view/SceneView",&ShowSceneView);
-	AddMenu("view/Inspector",ShowInspector);
+	AddMenu("File/Open",&OnOpen);
+	AddMenu("File/Save",&OnSave);
+	AddMenu("Edit/Undo",&OnUndo);
+	AddMenu("Edit/Redo",&OnRedo);
+	AddMenu("Views/ToolBar",&ShowToolBar);
+	AddMenu("Views/NodeTree",&ShowNodeTree);
+	AddMenu("Views/ResTree",&ShowResTree);
+	AddMenu("Views/ResPreview",&ShowResPreview);
+	AddMenu("Views/SceneView",&ShowSceneView);
+	AddMenu("Views/Inspector",ShowInspector);
 	//AddMenu("test/show|hide imgui demo", ShowDemo);
 }
 

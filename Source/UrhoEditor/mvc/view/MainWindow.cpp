@@ -7,6 +7,7 @@
 #include <GLFW/glfw3native.h>   // for glfwGetWin32Window
 #endif
 #include "EditorApp.h"
+#include "stb/stb_image.h"
 
 
 namespace Urho3DEditor
@@ -65,6 +66,14 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     this->width = width * dpiScale;
     this->height = height * dpiScale;
     window = glfwCreateWindow(this->width, this->height, "Urho3D", NULL, NULL);
+    GLFWimage images[4];
+    //res/icons/urho64.png
+    std::vector<std::string> imgPaths ={"urho64.png","urho48.png","urho32.png","urho16.png"};
+    for(int i=0;i<4;++i)
+    {
+        images[i].pixels = stbi_load(("res/icons/"+imgPaths[i]).c_str(),&images[i].width,&images[i].height,0,4);
+    }
+    glfwSetWindowIcon(window,4,images);
     glfwSetWindowSizeCallback(window, MainWindowSizeCallBack);
     glfwSetWindowSize(window, this->width, this->height);
     glfwSetWindowPos(window, 300, 200);
