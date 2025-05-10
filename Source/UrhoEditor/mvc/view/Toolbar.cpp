@@ -16,7 +16,7 @@ Toolbar::~Toolbar()
 void Toolbar::Update() 
 {
 	auto winSize = ImGui::GetWindowSize();
-	ImGui::BeginChild("ToolBar",ImVec2(winSize.x,itemSize+6));
+	ImGui::BeginChild("ToolBar",ImVec2(winSize.x,itemSize+ itemSize*0.15));
 	this->DrawTrigerTool();
 	this->DrawTransformTool();
 	ImGui::EndChild();

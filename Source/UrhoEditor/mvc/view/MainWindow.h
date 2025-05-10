@@ -61,7 +61,7 @@ private:
     ResTree* _resTree = nullptr;
     Inspector* _inspector = nullptr;
     ResPreview* _resPreview = nullptr;
-    ConsoleView* _cosoleView = nullptr;
+    //ConsoleView* _cosoleView = nullptr;
     FolderFiles* _folderFiles = nullptr;
     bool done = false;
     bool _showDemo = false;
