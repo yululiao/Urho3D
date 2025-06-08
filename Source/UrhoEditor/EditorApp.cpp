@@ -399,7 +399,6 @@ void EditorApp::ShowSceneView(bool show)
     else
         _sceneView->Hide();
 }
-
 //EditorMenu* editor_app::AddMenu(const String path) 
 //{ 
 //	QAction* act = _main_window->GetMenuBar()->add_menu(path.CString());
