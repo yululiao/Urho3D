@@ -11,6 +11,7 @@
 #include <Urho3D/Resource/ResourceCache.h>
 #include "ctrl/res/EditorFileWatch.h"
 #include "Global.h"
+#include "Urho3D/Graphics/Octree.h"
 
 namespace Urho3DEditor {
 AssetMgr* AssetMgr::_instance = nullptr;
