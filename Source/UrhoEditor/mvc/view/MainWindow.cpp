@@ -139,7 +139,7 @@ void MainWindow::UpdateDockerSpace()
 {
     static bool opt_fullscreen_persistant = true;
     bool opt_fullscreen = opt_fullscreen_persistant;
-    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
+    static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None| ImGuiDockNodeFlags_PassthruCentralNode;
 
     ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
     if (opt_fullscreen) {
@@ -153,8 +153,8 @@ void MainWindow::UpdateDockerSpace()
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
     }
 
-    if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
-        window_flags |= ImGuiWindowFlags_NoBackground;
+  /*  if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+        window_flags |= ImGuiWindowFlags_NoBackground;*/
 
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
     ImGui::Begin("###DockSpace", &_showingDocker, window_flags);

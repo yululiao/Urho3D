@@ -10,6 +10,7 @@
 #include "ctrl/scene/SceneCtrl.h"
 #include <Urho3D/Resource/ResourceCache.h>
 #include "ctrl/res/EditorFileWatch.h"
+#include "Global.h"
 
 namespace Urho3DEditor {
 AssetMgr* AssetMgr::_instance = nullptr;
@@ -41,7 +42,7 @@ AssetMgr* AssetMgr::getInstance()
 { 
 	if (!_instance)
     {
-        _instance = new AssetMgr(EditorApp::GetInstance()->GetContext());
+        _instance = new AssetMgr(Global::context);
 
     }
     return _instance;
@@ -146,8 +147,8 @@ int AssetMgr::getImguiTex(const String& path)
     
     if (_texMap.find(path) == _texMap.end())
     {
-        Image* img = new Image(EditorApp::GetInstance()->GetContext());
-        File file(EditorApp::GetInstance()->GetContext(), path);
+        Image* img = new Image(Global::context);
+        File file(Global::context, path);
         img->BeginLoad(file);
         if(!img->GetData())
         {
@@ -163,6 +164,8 @@ int AssetMgr::getImguiTex(const String& path)
         GLint format = GL_RGBA;
         if (img->GetComponents() < 4)
             format = GL_RGB;
+        if(img->GetComponents() ==1)
+            format = GL_R;
         glTexImage2D(GL_TEXTURE_2D, 0, format, img->GetWidth(), img->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
                      img->GetData());
        /* auto* cache = GetSubsystem<ResourceCache>();
@@ -170,7 +173,7 @@ int AssetMgr::getImguiTex(const String& path)
         if(!newTex)
             return texID;
         texID = newTex->GetGPUObjectName();*/
-        ImguiTexInfo* info = new ImguiTexInfo(this->GetContext());
+        ImguiTexInfo* info = new ImguiTexInfo(Global::context);
         info->id = texID;
         info->img = img;
         _texMap[path] = info;//»º´æÎÆÀí
@@ -269,6 +272,14 @@ bool AssetMgr::IsModelFile(const String& r_path) {
         return true;
     }
     return false;
+}
+void AssetMgr::UpdateFileShortCut(const String& path) {
+}
+void AssetMgr::InitShortCutRtt() 
+{
+    shorCutRtt.scene = new Scene(context_);
+    shorCutRtt.scene->SetName("ShotCutRttScene");
+    shorCutRtt.scene->CreateComponent<Octree>();
 }
 }
 

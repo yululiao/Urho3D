@@ -1,4 +1,5 @@
 #include "EditorApp.h"
+#include "Global.h"
 
 using namespace Urho3DEditor;
 #ifdef _MSC_VER
@@ -9,6 +10,7 @@ int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
     SetConsoleOutputCP(CP_UTF8);
     freopen("CONOUT$", "w", stdout);
 	//----------
+	Global::InitGlobal();
 	EditorApp::GetInstance()->Run();
 	return 0;
 }

@@ -3,12 +3,15 @@
 #include "EditorApp.h"
 #include "Urho3D/IO/FileSystem.h"
 #include "Urho3D/Container/HashSet.h"
+#include "Global.h"
 
 namespace Urho3DEditor 
 {
 ResTree::ResTree() 
 {
 	_dirIconId = AssetMgr::getInstance()->getImguiTex("res/img/folder.png");
+	AddContexMenu(new FolderContexMenu("Import", &OnImport));
+	
 }
 ResTree::~ResTree() 
 {
@@ -68,7 +71,8 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 	}
 	if(!needDraw)
 		return;
-	if(AssetMgr::getInstance()->selectedFolders.Contains(path))
+	bool sellected = AssetMgr::getInstance()->selectedFolders.Contains(path);
+	if(sellected)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
@@ -83,15 +87,14 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 	if (_nodeHeight == 0)
 		_nodeHeight = ImGui::GetItemRectSize().y;
 	if (isInWindow) {
+		DrawContextMenu(path);
 		if (ImGui::BeginDragDropSource(0)) {
 			ImGui::SetDragDropPayload("drag_folder", path.CString(), path.Length());
 			OnDrag();
 			ImGui::EndDragDropSource();
 		}
-		if (ImGui::IsItemClicked()) {
-			AssetMgr::getInstance()->selectedFolders.Clear();
-			AssetMgr::getInstance()->selectedFolders.Insert(path);
-			AssetMgr::getInstance()->lastSelectedFolder = path;
+		if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
+			OnItemClick(path);
 		}
 	}
 	ImGui::PopID();
@@ -104,12 +107,6 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 	}
 	nodeCache[path].fold = !open_node;
 	if (open_node) {
-		if (ImGui::BeginPopupContextItem("ResContext", 1)) {
-			if (ImGui::MenuItem("Import")) {
-				OnImport(path);
-			}
-			ImGui::EndPopup();
-		}
 		for (auto& item : nodeCache[path].childDirs) {
 			DrawResNode(path + "/" + item, false);
 		}
@@ -117,5 +114,71 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 
 	}
 }
+
+void ResTree::DrawContextMenu(const String& path) {
+	if (ImGui::BeginPopupContextItem("ResContext", 1)) {
+		OnItemClick(path);
+		for(auto item:_contexMenus){
+			if (ImGui::MenuItem(item->GetName().CString())) {
+				item->OnClicked(path);
+			}
+		}
+		
+		ImGui::EndPopup();
+	}
+}
+
+void ResTree::OnItemClick(const String& path) {
+	AssetMgr::getInstance()->selectedFolders.Clear();
+	AssetMgr::getInstance()->selectedFolders.Insert(path);
+	AssetMgr::getInstance()->lastSelectedFolder = path;
+}
+
+void ResTree::AddContexMenu(FolderContexMenu* menu)
+{
+	_contexMenus.Push(menu);
+}
+
+FolderContexMenu::FolderContexMenu(const String& name)
+	:Object(Global::context)
+{
+	_name = name;
+}
+
+FolderContexMenu::FolderContexMenu(const String& name, ContexMenuHandle callback)
+   :Object(Global::context)
+{
+	_name = name;
+	_callBackFun = callback;
+}
+
+void FolderContexMenu::SetCallBack(ContexMenuHandle callback) {
+	_callBackFun = callback;
+}
+
+void FolderContexMenu::OnClicked(const String& path) {
+	if(_callBackFun)
+	{
+		_callBackFun(path);
+	}
+	//for lua script call back
+	// local contexMenu = FolderContexMenu:new()
+	/*
+	SubscribeToEvent(contexMenu, "Clicked",
+        function (eventType, eventData)
+           -- on clicked call
+        end)
+	*/
+	using namespace Clicked;
+	VariantMap& eventData = GetEventDataMap();
+	eventData[P_FolderContexMenu] = this;
+	SendEvent(ECM_CLICKED, eventData);
+
+}
+
+String& FolderContexMenu::GetName() {
+	return _name;
+}
+
 
 }

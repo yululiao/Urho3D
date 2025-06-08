@@ -28,7 +28,6 @@ class SceneCtrl :public Object
 public:
 	~SceneCtrl();
 	static SceneCtrl* getInstance();
-	static Context* _ctx;
 	//void create_scene();
     void CreateScene();
     void DeleteNode(Urho3D::Node* node);

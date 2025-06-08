@@ -31,17 +31,17 @@
 #include "Urho3D/Graphics/BillboardSet.h"
 #include "view/gizmo/GizmoUtils.h"
 #include "Urho3D/Graphics/GeoUtils.h"
+#include "Global.h"
 
 namespace Urho3DEditor
 {
 
 	SceneCtrl* SceneCtrl::_instance = nullptr;
-	Context* SceneCtrl::_ctx = nullptr;
 	SceneCtrl* SceneCtrl::getInstance()
 	{
 		if (_instance == nullptr)
 		{
-			_instance = new SceneCtrl(_ctx);
+			_instance = new SceneCtrl(Global::context);
 		}
 		return _instance;
 	}

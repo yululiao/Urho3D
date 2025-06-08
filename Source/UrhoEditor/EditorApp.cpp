@@ -24,6 +24,7 @@
 #include <view/ndf/nfd.h>
 #include "ctrl/res/AssetMgr.h"
 #include "Utils.h"
+#include "Global.h"
 
 namespace Urho3DEditor {
 String EditorApp::_getPathResult;
@@ -31,8 +32,6 @@ EditorApp* EditorApp::_instance = nullptr;
 EditorApp::EditorApp(Context* context)
 	:Object(context)
 {
-    _context = context;
-    SceneCtrl::_ctx = _context;
     _lastCmdGuid = String(Utils::GenGuid().c_str());
 }
 
@@ -46,7 +45,7 @@ void EditorApp::CreateEngine(void* win_ptr)
 	_window_ptr = win_ptr;
 	_engineParameters = Engine::ParseParameters(GetArguments());
 	// Create the Engine, but do not initialize it yet. Subsystems except Graphics & Renderer are registered at this point
-	_engine = new Engine(_context);
+	_engine = new Engine(Global::context);
 	// Subscribe to log messages so that can show errors if ErrorExit() is called with empty message
 	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, HandleLogMessage));
 	Setup();
@@ -328,8 +327,7 @@ EditorApp* EditorApp::GetInstance()
 {
     if (_instance == nullptr)
     {
-
-        _instance = new EditorApp(new Context());
+        _instance = new EditorApp(Global::context);
     }
     return _instance;
 }

@@ -6,6 +6,7 @@
 #include "Urho3D/Container/Str.h"
 #include "Urho3D/Resource/Image.h"
 #include "Urho3D/Graphics/Texture2D.h"
+#include "Urho3D/Graphics/Viewport.h"
 
 using namespace Urho3D;
 
@@ -38,6 +39,14 @@ public:
     int id;
 };
 
+struct ShortCutRtt
+{
+    SharedPtr<Scene> scene;
+    SharedPtr<Node> cameraNode;
+    SharedPtr<Texture2D> texture;
+    Vector2 viewSize;
+};
+
 class AssetMgr : public Object
 {
     URHO3D_OBJECT(AssetMgr, Object);
@@ -66,6 +75,8 @@ public:
     String& GetRelativeAssetRoot();
     void SetWorkSpace(const String& path);
     bool IsModelFile(const String& r_path);
+    void UpdateFileShortCut(const String& path);
+    void InitShortCutRtt();
 public:
     HashMap<String, NodeCahce> nodeCache;
     HashSet<String> selectedFolders;
@@ -82,6 +93,7 @@ public:
     static Urho3D::HashSet<String> SurportExtSet;
     static Urho3D::HashSet<String> ImgExtSet;
     static Urho3D::HashSet<String> CanDragExtSet;
+    ShortCutRtt shorCutRtt;
 };
 
 }

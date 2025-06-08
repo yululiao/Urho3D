@@ -1,10 +1,10 @@
 ﻿#include "TransformGizmo.h"
 #include "Urho3D/Graphics/GeoUtils.h"
-#include "EditorApp.h"
 #include "Urho3D/Graphics/Technique.h"
 #include "Urho3D/Math/Matrix3x4.h"
 #include "Urho3D/Math/Quaternion.h"
 #include "GizmoUtils.h"
+#include "Global.h"
 
 using namespace Urho3DEditor;
 
@@ -22,19 +22,18 @@ TransformGizmo::~TransformGizmo()
 
 void TransformGizmo::init()
 {
-	Context* ctx = EditorApp::GetInstance()->GetContext();
-	this->handles = new Node(ctx);
-	this->pickers = new Node(ctx);
-	this->planes = new Node(ctx);
+	this->handles = new Node(Global::context);
+	this->pickers = new Node(Global::context);
+	this->planes = new Node(Global::context);
 
 	this->AddChild(handles);
 	this->AddChild(pickers);
 	this->AddChild(planes);
 
-	planesMap["XY"] = GeoUtils::create_plane(ctx,5, 5);
-	planesMap["YZ"] = GeoUtils::create_plane(ctx,5, 5);
-	planesMap["XZ"] = GeoUtils::create_plane(ctx,5, 5);
-	planesMap["XYZE"] = GeoUtils::create_plane(ctx,5, 5);
+	planesMap["XY"] = GeoUtils::create_plane(Global::context,5, 5);
+	planesMap["YZ"] = GeoUtils::create_plane(Global::context,5, 5);
+	planesMap["XZ"] = GeoUtils::create_plane(Global::context,5, 5);
+	planesMap["XYZE"] = GeoUtils::create_plane(Global::context,5, 5);
 	this->activePlane = planesMap["XYZE"];
 	planesMap["YZ"]->Yaw(90);
 	planesMap["XZ"]->Pitch(-90);
@@ -53,7 +52,7 @@ void TransformGizmo::init()
 
 void TransformGizmo::setupGizmos(std::map<std::string, std::vector<GizmogeoInfo*>> gizmoMap, Node * parent)
 {
-	Context* ctx = EditorApp::GetInstance()->GetContext();
+	Context* ctx = Global::context;
 	for (auto it = gizmoMap.begin(); it != gizmoMap.end(); it++)
 	{
 		for (int i = 0; i < it->second.size(); ++i)

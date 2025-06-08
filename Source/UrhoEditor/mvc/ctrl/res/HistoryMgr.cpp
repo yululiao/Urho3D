@@ -1,16 +1,17 @@
 #include <fstream>
 #include <sstream>
 #include "HistoryMgr.h"
-#include "EditorApp.h"
+//#include "EditorApp.h"
 #include "Urho3D/Resource/JSONValue.h"
 #include "Urho3D/Resource/JSONFile.h"
 #include "Urho3D/IO/Serializer.h"
+#include "Global.h"
 
 namespace Urho3DEditor
 {
 HistoryMgr::HistoryMgr()
 {
-	_history_data = new ProjHistory(EditorApp::GetInstance()->GetContext());
+	_history_data = new ProjHistory(Global::context);
 	open();
 }
 
@@ -46,7 +47,7 @@ void HistoryMgr::save()
 {
 	JSONValue json;
 	_history_data->SaveJSON(json);
-	JSONFile j_file(EditorApp::GetInstance()->GetContext());
+	JSONFile j_file(Global::context);
 	j_file.GetRoot() = json;
 
 	String j_str = j_file.ToString();
@@ -61,7 +62,7 @@ void HistoryMgr::save()
 void HistoryMgr::open()
 {
 
-	JSONFile j_file(EditorApp::GetInstance()->GetContext());
+	JSONFile j_file(Global::context);
 	//将文件读入到ostringstream对象buf中
 	std::ifstream ifile(_history_file.CString());
 	std::ostringstream buf;

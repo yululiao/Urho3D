@@ -19,7 +19,6 @@ public:
 	EditorApp(Context* context);
 	~EditorApp();
 	void Run();
-	Context* GetContext() { return _context; }
     static EditorApp* GetInstance();
 	void CreateEngine(void* win_ptr);
 	void RunEngineFrame();
@@ -79,8 +78,6 @@ public:
     }
 protected:
 	void HandleLogMessage(StringHash eventType, VariantMap& eventData);
-	Context* _context = nullptr;
-
 	void Setup();
 	void Start();
     static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
