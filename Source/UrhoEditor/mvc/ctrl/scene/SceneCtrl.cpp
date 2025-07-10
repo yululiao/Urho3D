@@ -32,6 +32,8 @@
 #include "view/gizmo/GizmoUtils.h"
 #include "Urho3D/Graphics/GeoUtils.h"
 #include "Global.h"
+#include "ctrl/base/CmdDefines.h"
+#include "Utils.h"
 
 namespace Urho3DEditor
 {
@@ -70,7 +72,8 @@ namespace Urho3DEditor
         String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
         //加载fbx对应的mdl
         String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
-        Node* modelNode = rttSceneRoot_->CreateChild(name);
+        Node* modelNode = new Node(Global::context);//rttSceneRoot_->CreateChild(name);
+        modelNode->SetName(name);
         modelNode->SetScale(Vector3(0.01,0.01,0.01));
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
         Model* model = cache->GetResource<Model>(mdl_path);
@@ -78,6 +81,7 @@ namespace Urho3DEditor
         auto matRes = cache->GetResource<Material>("Materials/Default.xml");
         SharedPtr<Material> defMat(matRes->Clone());
         modelObject->SetMaterial(defMat);
+        DoAddNode(Utils::GenGuid().c_str(),modelNode, rttSceneRoot_, rttSceneRoot_->GetChildren().Size(),nullptr,0);
     }
     void SceneCtrl::AddEmptyNode() 
     {

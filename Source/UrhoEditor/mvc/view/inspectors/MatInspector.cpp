@@ -12,6 +12,7 @@
 #include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 #include "ctrl/res/AssetMgr.h"
+#include "Urho3D/Container/Vector.h"
 
 using namespace Urho3D;
 
@@ -91,7 +92,7 @@ void MatInspector::Update()
 			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
 			auto cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
 			SharedPtr<Material> mat(cache->GetResource<Material>(matPath)->Clone());
-			DoObjModifyPropPtr(Utils::GenGuid().c_str(), aniModel, mat.Get());
+			DoModify(Utils::GenGuid().c_str(), aniModel,"Material", ResourceRefList(Material::GetTypeStatic(), { matPath }));
 			ImGui::TreePop();
 			return;
 		}

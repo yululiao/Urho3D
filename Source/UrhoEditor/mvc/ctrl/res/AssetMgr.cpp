@@ -158,10 +158,6 @@ int AssetMgr::getImguiTex(const String& path)
         }
         glGenTextures(1, &texID);
         glBindTexture(GL_TEXTURE_2D, texID);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         GLint format = GL_RGBA;
         if (img->GetComponents() < 4)
             format = GL_RGB;
@@ -169,6 +165,11 @@ int AssetMgr::getImguiTex(const String& path)
             format = GL_R;
         glTexImage2D(GL_TEXTURE_2D, 0, format, img->GetWidth(), img->GetHeight(), 0, format, GL_UNSIGNED_BYTE,
                      img->GetData());
+        glGenerateMipmap(GL_TEXTURE_2D);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
        /* auto* cache = GetSubsystem<ResourceCache>();
         SharedPtr<Urho3D::Texture2D> newTex(cache->GetResource<Urho3D::Texture2D>(path));
         if(!newTex)
