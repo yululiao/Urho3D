@@ -32,6 +32,93 @@ void CmdModify::UnDo() {
 	ToDo();
 }
 
+CmdAddNode::CmdAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx)
+	:CmdEdit(id)
+{
+	_node = addNode;
+	_parent = parent;
+	_idx = idx;
+	_oldParent = oldParent;
+	_oldIdx = oldIdx;
+}
+CmdAddNode::~CmdAddNode()
+{
+}
+
+void CmdAddNode::ToDo()
+{
+	if(_oldParent)
+	{
+		_oldParent->RemoveChild(_node);
+	}
+	if(_parent)
+	{
+		_parent->AddChild(_node, _idx);
+	}
+	int tmpIdx = _idx;
+	_idx = _oldIdx;
+	_oldIdx = tmpIdx;
+	SharedPtr<Node> tmpNode = _parent;
+	_parent = _oldParent;
+	_oldParent = tmpNode;
+}
+
+void CmdAddNode::UnDo()
+{
+	ToDo();
+}
+
+CmdModifyVector::CmdModifyVector(const String& id, Serializable* obj,Vector<SharedPtr<Serializable>>* vector, int idx, Vector<SharedPtr<Serializable>>* oldVector,int oldIdx, bool isAdd)
+	:CmdEdit(id)
+{
+	_vector = vector;
+	_oldVector = oldVector;
+	_idx = idx;
+	_oldIdx = oldIdx;
+	_isAdd = isAdd;
+	_obj = obj;
+}
+CmdModifyVector::~CmdModifyVector()
+{
+}
+
+void CmdModifyVector::ToDo()
+{
+	if(_isAdd)
+	{
+		Node* node = dynamic_cast<Node*>(_obj.Get());
+		_vector->Insert(_idx, _obj);
+		if(_oldVector)
+		{
+			_oldVector->Remove(_obj);
+		}
+	}
+	else
+	{
+		_vector->Remove(_obj);
+		if (_oldVector) 
+		{
+			_oldVector->Insert(_oldIdx, _obj);
+		}
+	}
+	if(_oldVector)
+	{
+		Vector<SharedPtr<Serializable>>* tmpVec = _oldVector;
+		_oldVector = _vector;
+		_vector = tmpVec;
+		int tmpIdx = _oldIdx;
+		_oldIdx = _idx;
+		_idx = tmpIdx;
+
+	}
+	_isAdd = !_isAdd;
+}
+
+void CmdModifyVector::UnDo()
+{
+	ToDo();
+}
+
 CmdModifyMat::CmdModifyMat(const String& id, Material* mat, const String& attrName, Variant value)
 	:CmdEdit(id)
 {
@@ -75,34 +162,21 @@ void CmdModifyMat::UnDo() {
 	ToDo();
 }
 
-CmdModifyPropPtr::CmdModifyPropPtr(const String& id, Serializable* obj, Object* objProp)
-	:CmdEdit(id)
-{
-	_obj = obj;
-	_objProp = objProp;
-}
-
-CmdModifyPropPtr::~CmdModifyPropPtr() {
-
-}
-
-void CmdModifyPropPtr::ToDo() {
-	auto aniModel = dynamic_cast<StaticModel*>(_obj.Get());
-	if (aniModel) {
-		SharedPtr<Material> oldmat(aniModel->GetMaterial());
-		SharedPtr<Material> newMat((Material*)_objProp.Get());
-		aniModel->SetMaterial(newMat);
-		_objProp = oldmat;
-	}
-}
-
-void CmdModifyPropPtr::UnDo() {
-	ToDo();
-}
-
 void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value) {
 	CmdModify* cmd = new CmdModify(id, obj, attrName, value);
 	CmdMgr::Instance()->ToDo(cmd);
+}
+
+void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx)
+{
+	CmdAddNode* cmd = new CmdAddNode(id,addNode,parent,idx,oldParent,oldIdx);
+	CmdMgr::Instance()->ToDo(cmd);
+}
+
+void DoModifyVector(const String& id, Serializable* obj, Vector<SharedPtr<Serializable>>* vector, int idx, Vector<SharedPtr<Serializable>>* oldVector, int oldIdx, bool isAdd) {
+	CmdModifyVector* cmd = new CmdModifyVector(id, obj, vector,idx, oldVector,oldIdx,isAdd);
+	CmdMgr::Instance()->ToDo(cmd);
+
 }
 
 void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value) {
@@ -112,11 +186,6 @@ void DoMatModify(const String& id, Material* mat, const String& attrName, Varian
 
 void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value) {
 	CmdModifyMat* cmd = new CmdModifyMat(id, mat, texUnit, value);
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
-void DoObjModifyPropPtr(const String& id, Serializable* obj, Object* prop) {
-	CmdModifyPropPtr* cmd = new CmdModifyPropPtr(id, obj, prop);
 	CmdMgr::Instance()->ToDo(cmd);
 }
 

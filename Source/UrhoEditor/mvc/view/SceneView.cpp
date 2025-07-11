@@ -127,7 +127,6 @@ void SceneView::OnIO() {
 
 void SceneView::Update() {
     if (showing) {
-
         //ImGui::SetNextWindowSize(ImVec2(416,335));
         ImGui::Begin(title.c_str(), &showing);
         ///ImGui::Text("Mouse wheel: %.1f", io.MouseWheel);

@@ -83,7 +83,8 @@ void FolderFiles::DrawFiles() {
 		{
 			fileIcon = assetMgr->getImguiTex("res/img/file.png");
 		}
-		ImGui::Image(fileIcon, ImVec2(30, 30));
+		float fileIconSize = EditorApp::GetInstance()->GetFontSize();
+		ImGui::Image(fileIcon, ImVec2(fileIconSize, fileIconSize));
 		ImGui::SameLine();
 		ImGui::Text(item.CString());
 		if (open_node) {
