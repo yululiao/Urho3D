@@ -1,6 +1,7 @@
 #include "NodeTree.h"
 #include "EditorApp.h"
 #include "Utils.h"
+#include "Global.h"
 
 namespace Urho3DEditor 
 {
@@ -49,7 +50,7 @@ void NodeTree::DrawNode(Node* node,bool isRoot)
 {
 	String nodeName = node->GetName();
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	auto& children_show = node->GetChildren();
+	auto& children = node->GetChildren();
 	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
 	if(isRoot)
 	{
@@ -59,14 +60,14 @@ void NodeTree::DrawNode(Node* node,bool isRoot)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
 	}
-	//PODVector<Node*> children_show;
-	/*for(auto citem: children)
+	PODVector<Node*> children_show;
+	for(auto citem: children)
 	{
-		if(!citem->HasTag("NotShowInNodeTree"))
+		if(!citem->HasTag(Global::notShowTag))
 		{
 			children_show.Push(citem);
 		}
-	}*/
+	}
 	if (children_show.Size() == 0) {
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}

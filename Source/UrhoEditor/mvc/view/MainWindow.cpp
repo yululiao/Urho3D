@@ -61,7 +61,7 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
     EditorApp::GetInstance()->SetDpi(dpi);
     _toolBar->IntItemSize();
     float dpiScale = dpi / 96.0f;
-    float fontSize = dpiScale * 15.0f;
+    float fontSize = dpiScale * 16.0f;
     EditorApp::GetInstance()->SetFontSize(fontSize);
     this->width = width * dpiScale;
     this->height = height * dpiScale;
