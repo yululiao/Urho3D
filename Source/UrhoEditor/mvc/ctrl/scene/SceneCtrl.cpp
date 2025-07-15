@@ -250,6 +250,7 @@ namespace Urho3DEditor
             bb->enabled_ = true;
 
             SharedPtr<Node> dirLine(GeoUtils::create_line(context_, { Vector3(0.,0,0),Vector3(0,0,0.8) }, 0xffffff00));
+            dirLine->AddTag(Global::notShowTag);
             GizmoUtils::setLineMat(dirLine, 0xffffffff);
             lightNode->AddChild(dirLine);
             
