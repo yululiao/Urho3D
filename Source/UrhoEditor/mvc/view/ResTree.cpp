@@ -4,14 +4,13 @@
 #include "Urho3D/IO/FileSystem.h"
 #include "Urho3D/Container/HashSet.h"
 #include "Global.h"
+#include "FileContextMenus.h"
 
 namespace Urho3DEditor 
 {
 ResTree::ResTree() 
 {
 	_dirIconId = AssetMgr::getInstance()->getImguiTex("res/img/folder.png");
-	AddContexMenu(new FolderContexMenu("Import", &OnImport));
-	
 }
 ResTree::~ResTree() 
 {
@@ -37,11 +36,6 @@ void ResTree::Update()
 }
 void ResTree::OnDrag() 
 {
-
-}
-void ResTree::OnImport(const String& path)
-{
-	AssetMgr::getInstance()->ImportFbx(path);
 
 }
 
@@ -116,14 +110,9 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 }
 
 void ResTree::DrawContextMenu(const String& path) {
-	if (ImGui::BeginPopupContextItem("ResContext", 1)) {
+	if (ImGui::BeginPopupContextItem("FolderContext", 1)) {
 		OnItemClick(path);
-		for(auto item:_contexMenus){
-			if (ImGui::MenuItem(item->GetName().CString())) {
-				item->OnClicked(path);
-			}
-		}
-		
+		FileContextMenus::DrawFolderContext(path);
 		ImGui::EndPopup();
 	}
 }
@@ -134,51 +123,6 @@ void ResTree::OnItemClick(const String& path) {
 	AssetMgr::getInstance()->lastSelectedFolder = path;
 }
 
-void ResTree::AddContexMenu(FolderContexMenu* menu)
-{
-	_contexMenus.Push(menu);
-}
-
-FolderContexMenu::FolderContexMenu(const String& name)
-	:Object(Global::context)
-{
-	_name = name;
-}
-
-FolderContexMenu::FolderContexMenu(const String& name, ContexMenuHandle callback)
-   :Object(Global::context)
-{
-	_name = name;
-	_callBackFun = callback;
-}
-
-void FolderContexMenu::SetCallBack(ContexMenuHandle callback) {
-	_callBackFun = callback;
-}
-
-void FolderContexMenu::OnClicked(const String& path) {
-	if(_callBackFun)
-	{
-		_callBackFun(path);
-	}
-	//for lua script call back
-	// local contexMenu = FolderContexMenu:new()
-	/*
-	SubscribeToEvent(contexMenu, "Clicked",
-        function (eventType, eventData)
-           -- on clicked call
-        end)
-	*/
-	using namespace Clicked;
-	VariantMap& eventData = GetEventDataMap();
-	eventData[P_FolderContexMenu] = this;
-	SendEvent(ECM_CLICKED, eventData);
-
-}
-
-String& FolderContexMenu::GetName() {
-	return _name;
-}
 
 
 }

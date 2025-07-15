@@ -18,5 +18,6 @@ private:
 	void DrawFiles();
 	void OnDrag();
 	void OnItemDoubleClicked(const String& path);
+	void DrawContextMenu(const String& path);
 };
 }

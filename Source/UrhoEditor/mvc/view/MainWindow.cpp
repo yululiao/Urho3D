@@ -8,6 +8,7 @@
 #endif
 #include "EditorApp.h"
 #include "stb/stb_image.h"
+#include "FileContextMenus.h"
 
 
 namespace Urho3DEditor
@@ -129,6 +130,8 @@ void MainWindow::StartGame()
    AddWindow(std::unique_ptr<ResPreview>(_resPreview));
    _folderFiles = new FolderFiles();
    AddWindow(std::unique_ptr<FolderFiles>(_folderFiles));
+
+   FileContextMenus::Init();
 }
 
 void MainWindow::MakeCurrent() {
