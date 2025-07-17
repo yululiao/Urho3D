@@ -16,7 +16,7 @@ private:
 	void OnItemClicked(const String& path);
 	void DrawNodeNoInWindows(int itemH);
 	void DrawFiles();
-	void OnDrag();
+	void OnDrag(const String& path);
 	void OnItemDoubleClicked(const String& path);
 	void DrawContextMenu(const String& path);
 };

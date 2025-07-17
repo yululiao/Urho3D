@@ -143,16 +143,16 @@ void SceneView::Update() {
         ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         if (ImGui::BeginDragDropTarget()) {
             if (ImGui::IsMouseReleased(0)) {
-                auto data = ImGui::AcceptDragDropPayload("drag_res");
+                auto data = ImGui::AcceptDragDropPayload("drag_file");
                 if (data) {
                     String path;
                     path.Resize(data->DataSize);
                     memcpy((void*)path.CString(), data->Data, data->DataSize);
                     if(AssetMgr::getInstance()->IsModelFile(path))
                     {
-                        SceneCtrl::getInstance()->AddModel(path);
+                        SceneCtrl::getInstance()->AddModel(path,nullptr,0);
                     }
-                    std::cout << "onDrop:drag_res" << std::endl;
+                    std::cout << "onDrop:drag_file" << std::endl;
                 }
 
             }

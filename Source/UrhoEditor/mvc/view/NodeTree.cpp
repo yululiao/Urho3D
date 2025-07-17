@@ -2,6 +2,9 @@
 #include "EditorApp.h"
 #include "Utils.h"
 #include "Global.h"
+#include "ctrl/res/AssetMgr.h"
+#include "ctrl/scene/SceneCtrl.h"
+#include "NodeContextMenus.h"
 
 namespace Urho3DEditor 
 {
@@ -21,7 +24,13 @@ void NodeTree::Update()
 	if (newSize.x != winSize.x || newSize.y != winSize.y) {
 		winSize = newSize;
 	}
-	DrawNode(EditorApp::GetInstance()->GetSceneRoot(),true);
+	ImVec2 oldPos = ImGui::GetCursorScreenPos();
+	ImGui::PushID("NodeTreeDropRect");//创建一个不可见可接受拖拽的区域
+	ImGui::Dummy(winSize);
+	OnDrop();
+	ImGui::PopID();
+	ImGui::SetCursorScreenPos(oldPos);//跳回Dummy开始位置绘制场景节点树
+	DrawNode(EditorApp::GetInstance()->GetSceneRoot(),true,0);
 	/*if(ImGui::BeginPopupContextWindow("context"),1)
 	{
 		ImGui::MenuItem("create","",false,true);
@@ -38,6 +47,37 @@ void NodeTree::OnDoubleClicked()
 	
 }
 
+bool NodeTree::isMouseInCurItem(int itemH)
+{
+	bool in = false;
+	ImVec2 curPos = ImGui::GetCursorScreenPos();
+	if(ImGui::GetIO().MousePos.y >= curPos.y && ImGui::GetIO().MousePos.y <= curPos.y + itemH)
+	{
+		in = true;
+	}
+	return in;
+}
+
+bool NodeTree::isMouseInCurItemTop(int itemH) {
+	bool in = false;
+	ImVec2 curPos = ImGui::GetCursorScreenPos();
+	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
+	if (ImGui::GetIO().MousePos.y >= curPos.y - gap && ImGui::GetIO().MousePos.y <= curPos.y) {
+		in = true;
+	}
+	return in;
+}
+
+bool NodeTree::isMouseInCurItemBottom(int itemH) {
+	bool in = false;
+	ImVec2 curPos = ImGui::GetCursorScreenPos();
+	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
+	if (ImGui::GetIO().MousePos.y >= curPos.y + itemH && ImGui::GetIO().MousePos.y <= curPos.y +itemH + gap) {
+		in = true;
+	}
+	return in;
+}
+
 void NodeTree::DrawNodeNoInWindows(int itemH)
 {
 	//Draw nothing
@@ -46,19 +86,58 @@ void NodeTree::DrawNodeNoInWindows(int itemH)
 	ImGui::SetCursorScreenPos(curPos);
 }
 
-void NodeTree::DrawNode(Node* node,bool isRoot)
+void NodeTree::GetDragMouseInfo(bool& isDragingInItem, bool& isDragingInItemTop, bool& isDragingInItemBottom)
+{
+	isDragingInItem = isMouseInCurItem(_itemH);
+	isDragingInItemTop = false;
+	isDragingInItemBottom = false;
+	if (!isDragingInItem) {
+		isDragingInItemTop =  isMouseInCurItemTop(_itemH);
+	}
+	if (!isDragingInItem && !isDragingInItemTop) {
+		isDragingInItemBottom = isMouseInCurItemBottom(_itemH);
+	}
+}
+
+void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 {
 	String nodeName = node->GetName();
-	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
+	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick 
+		| ImGuiTreeNodeFlags_SpanAvailWidth;
 	auto& children = node->GetChildren();
 	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
 	if(isRoot)
 	{
 		flags |= ImGuiTreeNodeFlags_DefaultOpen;
 	}
-	if(selecednode && node->GetID()== selecednode->GetID())
+	bool isDragingInItem = false;
+	bool isDragingInItemTop = false;
+	bool isDragingInItemBottom = false;
+	if(_isDraging)
+	{
+		GetDragMouseInfo(isDragingInItem, isDragingInItemTop, isDragingInItemBottom);
+	}
+	if((selecednode && node->GetID()== selecednode->GetID()) || isDragingInItem)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
+	}
+	else if(isDragingInItemTop)
+	{
+		ImGui::Separator();
+	}
+	if(isDragingInItem)
+	{
+		_dropNodeParent = node;
+		_dropNodeIndex = node->GetNumChildren();
+	}
+	else if(isDragingInItemTop && !isRoot)
+	{
+		_dropNodeParent = node->GetParent();
+		_dropNodeIndex = nodeIndex -1;
+	}
+	else if (isDragingInItemBottom && !isRoot) {
+		_dropNodeParent = node->GetParent();
+		_dropNodeIndex = nodeIndex;
 	}
 	PODVector<Node*> children_show;
 	for(auto citem: children)
@@ -80,21 +159,56 @@ void NodeTree::DrawNode(Node* node,bool isRoot)
 	ImGui::PopID();
 	if(isInWindow)
 	{
+		DrawContextMenu(node);
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered()) {
 			OnDoubleClicked();
 		}
 		else if (ImGui::IsItemClicked()) {
 			OnClicked(node);
 		}
+		if (isDragingInItemBottom) {
+			ImGui::Separator();
+		}
 	}
 	if (node_open) {
 		if (children_show.Size() > 0) {
 			_foldState[node->GetID()] = true;
 		}
-		for (auto item : children_show) {
-			DrawNode(item, false);
+		for(int ci=0;ci<children_show.Size();++ci){
+			DrawNode(children_show[ci], false,ci);
 		}
 		ImGui::TreePop();
 	}
 }
+
+void NodeTree::OnDrop()
+{
+	_isDraging = false;
+	if (ImGui::BeginDragDropTarget()) {
+		_isDraging = true;
+		if (ImGui::IsMouseReleased(0)) {
+			auto data = ImGui::AcceptDragDropPayload("drag_file", ImGuiDragDropFlags_AcceptBeforeDelivery);
+			if (data) {
+				String path;
+				path.Resize(data->DataSize);
+				memcpy((void*)path.CString(), data->Data, data->DataSize);
+				if (AssetMgr::getInstance()->IsModelFile(path)) {
+					SceneCtrl::getInstance()->AddModel(path,_dropNodeParent,_dropNodeIndex);
+				}
+				std::cout << "onDrop:drag_file" << std::endl;
+			}
+
+		}
+		ImGui::EndDragDropTarget();
+	}
+}
+
+void NodeTree::DrawContextMenu(Node* node)
+{
+	if (ImGui::BeginPopupContextItem("NodeContextMenus", 1)) {
+		NodeContextMenus::DrawContextMenu(node);
+		ImGui::EndPopup();
+	}
+}
+
 }

@@ -41,7 +41,7 @@ void FileContexMenu::OnClicked(const String& path)
 	using namespace Clicked;
 	VariantMap& eventData = GetEventDataMap();
 	eventData[P_FileContexMenu] = this;
-	SendEvent(ECM_CLICKED, eventData);
+	SendEvent(EFCM_CLICKED, eventData);
 }
 
 String& FileContexMenu::GetName() {

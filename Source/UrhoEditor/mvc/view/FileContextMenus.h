@@ -42,8 +42,8 @@ protected:
 	static Vector<FileContexMenu*> fileContexMenus;
 };
 
-//ECM is editor contextMenu
-URHO3D_EVENT(ECM_CLICKED, Clicked) {
+//ECM is editor file contextMenu
+URHO3D_EVENT(EFCM_CLICKED, Clicked) {
 	URHO3D_PARAM(P_FileContexMenu, FileContexMenu);              // UIElement pointer
 };
 

@@ -4,7 +4,6 @@
 #include "Urho3D/Engine/Engine.h"
 #include "Urho3D/Container/Str.h"
 #include "view/MainWindow.h"
-#include "view/SceneView.h"
 #include "view/gizmo/TransformCtrl.h"
 #include "ctrl/scene/CameraCtrl.h"
 
@@ -30,7 +29,6 @@ public:
     String GetCurTool(){return _curent_tool;}
     Node* GetRootNode();
     Scene* GetScene();
-    void ShowSceneView(bool show);
     void StartGame();
     String DialogSelectPath();
     String DialogOpenFile(Urho3D::Vector<String> filer);
@@ -90,7 +88,6 @@ private:
 	VariantMap _engineParameters;
 	String _startupErrors;
 	void* _window_ptr = nullptr;
-    SceneView* _sceneView = nullptr;
     bool _gameStarted = false;
     Node* _selectedNode = nullptr;
     time_t _lastTime = -1;

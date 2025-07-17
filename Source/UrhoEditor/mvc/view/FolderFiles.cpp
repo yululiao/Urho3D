@@ -62,11 +62,7 @@ void FolderFiles::DrawFiles() {
 		ImGui::PushID(item.CString());
 		bool open_node = ImGui::TreeNodeEx("", flags);
 		DrawContextMenu(path);
-		if (ImGui::BeginDragDropSource(0)) {
-			ImGui::SetDragDropPayload("drag_res", path.CString(), path.Length());
-			OnDrag();
-			ImGui::EndDragDropSource();
-		}
+		OnDrag(path);
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(0)) {
 			OnItemDoubleClicked(assetMgr->pathToFull(path));
 		}
@@ -99,8 +95,11 @@ void FolderFiles::DrawFiles() {
 
 }
 
-void FolderFiles::OnDrag() {
-
+void FolderFiles::OnDrag(const String& path) {
+	if (ImGui::BeginDragDropSource(0)) {
+		ImGui::SetDragDropPayload("drag_file", path.CString(), path.Length());
+		ImGui::EndDragDropSource();
+	}
 }
 
 void FolderFiles::OnItemDoubleClicked(const String& path) {
