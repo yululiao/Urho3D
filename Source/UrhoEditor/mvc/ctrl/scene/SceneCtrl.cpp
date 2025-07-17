@@ -65,14 +65,14 @@ namespace Urho3DEditor
         node->Remove();
     }
 
-    void SceneCtrl::AddModel(const String& path)
+    void SceneCtrl::AddModel(const String& path,Node* parent,int index)
     {
         GetSubsystem<Graphics>()->MakeCurrent();
         auto* cache = GetSubsystem<ResourceCache>();
         String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
         //加载fbx对应的mdl
         String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
-        Node* modelNode = new Node(Global::context);//rttSceneRoot_->CreateChild(name);
+        Node* modelNode = new Node(Global::context);
         modelNode->SetName(name);
         modelNode->SetScale(Vector3(0.01,0.01,0.01));
         auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
@@ -81,12 +81,27 @@ namespace Urho3DEditor
         auto matRes = cache->GetResource<Material>("Materials/Default.xml");
         SharedPtr<Material> defMat(matRes->Clone());
         modelObject->SetMaterial(defMat);
-        DoAddNode(Utils::GenGuid().c_str(),modelNode, rttSceneRoot_, rttSceneRoot_->GetChildren().Size(),nullptr,0);
+        if(parent)
+        {
+            DoAddNode(Utils::GenGuid().c_str(), modelNode, parent, index, nullptr, 0);
+        }
+        else
+        {
+            DoAddNode(Utils::GenGuid().c_str(), modelNode, rttSceneRoot_, rttSceneRoot_->GetNumChildren(), nullptr, 0);
+        }
+        
     }
-    void SceneCtrl::AddEmptyNode() 
+    void SceneCtrl::AddEmptyNode(Node* parent)
     {
         GetSubsystem<Graphics>()->MakeCurrent();
-        Node* modelNode = rttSceneRoot_->CreateChild("EmptyNode");
+        Node* emptyNode = new Node(Global::context);
+        emptyNode->SetName("EmptyNode");
+        if (parent) {
+            DoAddNode(Utils::GenGuid().c_str(), emptyNode, parent, parent->GetNumChildren(), nullptr, 0);
+        }
+        else {
+            DoAddNode(Utils::GenGuid().c_str(), emptyNode, rttSceneRoot_, rttSceneRoot_->GetNumChildren(), nullptr, 0);
+        }
     }
 
     void SceneCtrl::GenRttTex()

@@ -2,6 +2,7 @@
 #include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
 #include "Global.h"
+#include "FileContextMenus.h"
 
 namespace Urho3DEditor{
 
@@ -22,7 +23,11 @@ void FolderFiles::Update() {
 
 }
 
-void FolderFiles::OnItemClicked(const String& path) {
+void FolderFiles::OnItemClicked(const String& path)
+{
+	auto assetMgr = AssetMgr::getInstance();
+	assetMgr->selectedFiles.Clear();
+	assetMgr->selectedFiles.Insert(path);
 }
 void FolderFiles::DrawNodeNoInWindows(int itemH) {
 
@@ -50,24 +55,20 @@ void FolderFiles::DrawFiles() {
 			continue;
 		}
 		int flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_SpanAvailWidth;
-		if(assetMgr->selectedFiles.Contains(path))
+		bool selected = assetMgr->selectedFiles.Contains(path);
+		if(selected)
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
 		}
 		ImGui::PushID(item.CString());
 		bool open_node = ImGui::TreeNodeEx("", flags);
-		if (ImGui::BeginDragDropSource(0)) {
-
-			ImGui::SetDragDropPayload("drag_res", path.CString(), path.Length());
-			OnDrag();
-			ImGui::EndDragDropSource();
-		}
+		DrawContextMenu(path);
+		OnDrag(path);
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(0)) {
 			OnItemDoubleClicked(assetMgr->pathToFull(path));
 		}
-		else if (ImGui::IsItemClicked()) {
-			assetMgr->selectedFiles.Clear();
-			assetMgr->selectedFiles.Insert(path);
+		else if (ImGui::IsItemClicked(ImGuiMouseButton_Left) ) {
+			OnItemClicked(path);
 			assetMgr->lastSlectedFile = path;
 			if(AssetMgr::CanInspectExtSet.Contains(nodeCache[path].ext))
 			{
@@ -101,13 +102,25 @@ void FolderFiles::DrawFiles() {
 
 }
 
-void FolderFiles::OnDrag() {
-
+void FolderFiles::OnDrag(const String& path) {
+	if (ImGui::BeginDragDropSource(0)) {
+		ImGui::SetDragDropPayload("drag_file", path.CString(), path.Length());
+		ImGui::EndDragDropSource();
+	}
 }
 
 void FolderFiles::OnItemDoubleClicked(const String& path) {
 	AssetMgr::getInstance()->OpenScene(path);
 	EditorApp::GetInstance()->SetCurTool("move");
+}
+
+void FolderFiles::DrawContextMenu(const String& path)
+{
+	if (ImGui::BeginPopupContextItem("FileContext", 1)) {
+		OnItemClicked(path);
+		FileContextMenus::DrawFileContext(path);
+		ImGui::EndPopup();
+	}
 }
 
 }

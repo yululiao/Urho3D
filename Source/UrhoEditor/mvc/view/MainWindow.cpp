@@ -8,6 +8,8 @@
 #endif
 #include "EditorApp.h"
 #include "stb/stb_image.h"
+#include "FileContextMenus.h"
+#include "NodeContextMenus.h"
 
 
 namespace Urho3DEditor
@@ -117,6 +119,8 @@ GLFWwindow* MainWindow::GetRawWindow() {
 
 void MainWindow::StartGame() 
 {
+    _sceneView = new SceneView("renderWindow");
+   AddWindow(std::unique_ptr<SceneView>(_sceneView));
     _nodeTree = new NodeTree();
    AddWindow(std::unique_ptr<NodeTree>(_nodeTree));
    _resTree = new ResTree();
@@ -129,6 +133,9 @@ void MainWindow::StartGame()
    AddWindow(std::unique_ptr<ResPreview>(_resPreview));
    _folderFiles = new FolderFiles();
    AddWindow(std::unique_ptr<FolderFiles>(_folderFiles));
+
+   FileContextMenus::Init();
+   NodeContextMenus::Init();
 }
 
 void MainWindow::MakeCurrent() {

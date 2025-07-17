@@ -271,8 +271,6 @@ void EditorApp::StartGame()
     auto* cache = GetSubsystem<ResourceCache>();
     cache->AddResourceDir(AssetMgr::getInstance()->GetWorkSpace());
     _gameStarted = true;
-    _sceneView = new SceneView("renderWindow");
-    mainWindow->AddWindow(std::unique_ptr<SceneView>(_sceneView));
     mainWindow->StartGame();
     mainWindow->MaxSize();
     _isStartView = false;
@@ -390,15 +388,6 @@ Node* EditorApp::GetRootNode()
 Scene* EditorApp::GetScene() 
 { 
 	return SceneCtrl::getInstance()->rttScene_; 
-}
-
-
-void EditorApp::ShowSceneView(bool show) 
-{ 
-    if (show)
-        _sceneView->Show();
-    else
-        _sceneView->Hide();
 }
 //EditorMenu* editor_app::AddMenu(const String path) 
 //{ 

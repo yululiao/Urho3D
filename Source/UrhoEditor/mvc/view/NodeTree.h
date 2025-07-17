@@ -17,10 +17,20 @@ public:
 private:
 	void OnClicked(Node* node);
 	void OnDoubleClicked();
+	bool isMouseInCurItem(int itemH);
+	bool isMouseInCurItemTop(int itemH);
+	bool isMouseInCurItemBottom(int itemH);
 	void DrawNodeNoInWindows(int itemH);
-	void DrawNode(Node* node,bool isRoot);
+	void GetDragMouseInfo(bool& isInItem, bool& isInItemTop, bool& isInItemBottom);
+	void DrawNode(Node* node,bool isRoot,int nodeIdex);
+	void OnDrop();
+	void DrawContextMenu();
 	HashMap<int, bool> _foldState;
 	float _itemH = 12;
+	bool _isDraging = false;
+	Node* _dropNodeParent = nullptr;
+	int _dropNodeIndex = 0;
+	Node* _contextClickNode = nullptr;
 
 };
 }
