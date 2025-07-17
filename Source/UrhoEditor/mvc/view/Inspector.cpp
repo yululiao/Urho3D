@@ -2,6 +2,8 @@
 #include "EditorApp.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include "view/inspectors/VariantDrawer.h"
+#include "Global.h"
+#include "ctrl/res/AssetMgr.h"
 
 namespace Urho3DEditor 
 {
@@ -9,6 +11,7 @@ Inspector::Inspector()
 {
 	_transformIns = new TransformInspector();
 	_aniModelIns = new AniModelInspector();
+	_assetIns = new AssetInspector();
 }
 Inspector::~Inspector() 
 {
@@ -19,7 +22,7 @@ void Inspector::Update()
 		return;
 	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
 	ImGui::Begin("Inspector",&showing);
-	if(selectedNode)
+	if(Global::curSelectType == "Node" && selectedNode)
 	{
 		_nodeEnable = selectedNode->IsEnabled();
 		VariantDrawer::DrawBool("  Enable", _nodeEnable);
@@ -31,6 +34,13 @@ void Inspector::Update()
 		if(_nodeEnable != selectedNode->IsEnabled())
 		{
 			selectedNode->SetEnabled(_nodeEnable);
+		}
+	}
+	else if(Global::curSelectType == "File")
+	{
+		if(AssetMgr::getInstance()->selectedFiles.Size()>0)
+		{
+			_assetIns->Update();
 		}
 	}
 	ImGui::End();

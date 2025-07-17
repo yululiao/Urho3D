@@ -3,6 +3,7 @@
 #include "EditorWidget.h"
 #include "inspectors/TransformInspector.h"
 #include "inspectors/AniModelInspector.h"
+#include "inspectors/AssetInspector.h"
 
 namespace Urho3DEditor 
 {
@@ -15,6 +16,7 @@ public:
 private:
 	TransformInspector* _transformIns = nullptr;
 	AniModelInspector* _aniModelIns = nullptr;
+	AssetInspector* _assetIns = nullptr;
 	bool _nodeEnable = true;
 
 };

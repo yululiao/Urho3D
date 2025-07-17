@@ -230,6 +230,7 @@ void EditorApp::SelectNode(Node* node)
     {
         gizmoCtrl_->attach(node);
     }
+    Global::curSelectType = "Node";
 }
 
 Node* EditorApp::GetSelectNode() 

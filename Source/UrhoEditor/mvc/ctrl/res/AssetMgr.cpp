@@ -28,6 +28,10 @@ Urho3D::HashSet<String> AssetMgr::CanDragExtSet = {
     ".uprefab",".uscene",".fbx"
 };
 
+Urho3D::HashSet<String> AssetMgr::CanInspectExtSet = {
+     ".png",".tga",".jpg",".fbx"
+};
+
 AssetMgr::AssetMgr(Context* ctx)
     :Object(ctx)
 {

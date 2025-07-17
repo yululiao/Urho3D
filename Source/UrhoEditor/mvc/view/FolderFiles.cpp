@@ -1,6 +1,7 @@
 #include "FolderFiles.h"
 #include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
+#include "Global.h"
 
 namespace Urho3DEditor{
 
@@ -67,6 +68,12 @@ void FolderFiles::DrawFiles() {
 		else if (ImGui::IsItemClicked()) {
 			assetMgr->selectedFiles.Clear();
 			assetMgr->selectedFiles.Insert(path);
+			assetMgr->lastSlectedFile = path;
+			if(AssetMgr::CanInspectExtSet.Contains(nodeCache[path].ext))
+			{
+				Global::curSelectType = "File";
+			}
+			
 		}
 		ImGui::PopID();
 		ImGui::SameLine();

@@ -45,20 +45,58 @@ protected:
 
 };
 
-class CmdModifyVector:public CmdEdit
+
+template <typename T> class CmdModifyVector:public CmdEdit
 {
 public:
-	CmdModifyVector(const String& id, Serializable* obj,Vector<SharedPtr<Serializable>>* vector, int idx, Vector<SharedPtr<Serializable>>* oldVector,int oldIdx,bool isAdd);
-	~CmdModifyVector();
-	void ToDo() override;
-	void UnDo() override;
+	CmdModifyVector(const String& id, T obj,Vector<T>* vector, int idx, Vector<T>* oldVector,int oldIdx,bool isAdd)
+		:CmdEdit(id)
+	{
+		_oldVector = oldVector;
+		_idx = idx;
+		_oldIdx = oldIdx;
+		_isAdd = isAdd;
+		_obj = obj;
+	}
+	~CmdModifyVector()
+	{
+	}
+	void ToDo() override
+	{
+		if (_isAdd) {
+			_vector->Insert(_idx, _obj);
+			if (_oldVector) {
+				_oldVector->Remove(_obj);
+			}
+		}
+		else {
+			_vector->Remove(_obj);
+			if (_oldVector) {
+				_oldVector->Insert(_oldIdx, _obj);
+			}
+		}
+		if (_oldVector) {
+			Vector<T>* tmpVec = _oldVector;
+			_oldVector = _vector;
+			_vector = tmpVec;
+			int tmpIdx = _oldIdx;
+			_oldIdx = _idx;
+			_idx = tmpIdx;
+
+		}
+		_isAdd = !_isAdd;
+	}
+	void UnDo() override
+	{
+		ToDo();
+	}
 protected:
 	bool _isAdd;
 	int _idx;
 	int _oldIdx;
-	Vector<SharedPtr<Serializable>>* _vector;
-	Vector<SharedPtr<Serializable>>* _oldVector;
-	SharedPtr<Serializable> _obj;
+	Vector<T>* _vector;
+	Vector<T>* _oldVector;
+	T _obj;
 };
 //材质不继承自Serializable,没有attributes_列表,没有通用的SetAttribute接口,需要特殊处理
 class CmdModifyMat:public CmdEdit
@@ -78,9 +116,15 @@ protected:
 };
 void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value);
 void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx);
-void DoModifyVector(const String& id, Serializable* obj, Vector<SharedPtr<Serializable>>* vector, int idx, Vector<SharedPtr<Serializable>>* oldVector, int oldIdx, bool isAdd);
 void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value);
 void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value);
+
+template <typename T>
+void DoModifyVector(const String& id, T obj, Vector<T>* vector, int idx, Vector<T>* oldVector, int oldIdx, bool isAdd)
+{
+	CmdModifyVector<T>* cmd = new CmdModifyVector(id, obj, vector, idx, oldVector, oldIdx, isAdd);
+	CmdMgr::Instance()->ToDo(cmd);
+}
 
 }
 

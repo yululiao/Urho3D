@@ -82,6 +82,7 @@ public:
     HashSet<String> selectedFolders;
     String lastSelectedFolder;
     HashSet<String> selectedFiles;
+    String lastSlectedFile;
 private:
     static AssetMgr* _instance;
     //String _history_file = "res/editor_historys.json";
@@ -93,6 +94,7 @@ public:
     static Urho3D::HashSet<String> SurportExtSet;
     static Urho3D::HashSet<String> ImgExtSet;
     static Urho3D::HashSet<String> CanDragExtSet;
+    static Urho3D::HashSet<String> CanInspectExtSet;
     ShortCutRtt shorCutRtt;
 };
 

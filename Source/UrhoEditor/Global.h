@@ -9,6 +9,6 @@ struct Global
 	static Context* context;
 	static void InitGlobal();
 	static String notShowTag;
-
+	static String curSelectType;
 };
 }
