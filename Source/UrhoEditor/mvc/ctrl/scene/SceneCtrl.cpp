@@ -62,7 +62,7 @@ namespace Urho3DEditor
 
     void SceneCtrl::DeleteNode(Urho3D::Node* node)
     {
-        node->Remove();
+        DoDeleteNode(Utils::GenGuid().c_str(),node);
     }
 
     void SceneCtrl::AddModel(const String& path,Node* parent,int index)

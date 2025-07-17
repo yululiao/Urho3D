@@ -52,7 +52,8 @@ bool NodeTree::isMouseInCurItem(int itemH)
 {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
-	if(ImGui::GetIO().MousePos.y >= curPos.y && ImGui::GetIO().MousePos.y <= curPos.y + itemH)
+	ImVec2 curMousePos = ImGui::GetIO().MousePos;
+	if(curMousePos.y >= curPos.y && curMousePos.y <= curPos.y + itemH)
 	{
 		in = true;
 	}
@@ -166,9 +167,12 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 		else if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
 			OnClicked(node);
 		}
-		else if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+		if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
 		{
-			_contextClickNode = node;
+			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
+				if(!isRoot)
+					_contextClickNode = node;
+			}
 		}
 		if (isDragingInItemBottom) {
 			ImGui::Separator();

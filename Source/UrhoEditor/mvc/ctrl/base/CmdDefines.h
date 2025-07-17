@@ -116,6 +116,7 @@ protected:
 };
 void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value);
 void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx);
+void DoDeleteNode(const String& id, Node* deleteNode);
 void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value);
 void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value);
 

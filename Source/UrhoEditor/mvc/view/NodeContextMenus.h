@@ -30,6 +30,7 @@ public:
 	static void AddContexMenu(NodeContexMenu* menu);
 	static bool DrawContextMenu(Node* node);
 	static void OnAddEmptyNode(Node* node);
+	static void OnDeleteNode(Node* node);
 protected:
 	static bool _init;
 	static Vector<NodeContexMenu*> contexMenus;

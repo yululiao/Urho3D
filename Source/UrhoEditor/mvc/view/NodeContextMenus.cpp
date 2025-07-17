@@ -57,6 +57,7 @@ void NodeContextMenus::Init()
 		return;
 	//ÎÄ¼þ¼ÐÓÒ¼ü²Ëµ¥
 	AddContexMenu(new NodeContexMenu("AddEmpty", &OnAddEmptyNode));
+	AddContexMenu(new NodeContexMenu("Delete", &OnDeleteNode));
 	_init = true;
 }
 
@@ -65,15 +66,22 @@ void NodeContextMenus::AddContexMenu(NodeContexMenu* menu)
 	contexMenus.Push(menu);
 }
 
-
 bool NodeContextMenus::DrawContextMenu(Node* node)
 {
 	bool clicked = false;
 	for (auto item : contexMenus) {
-		if (ImGui::MenuItem(item->GetName().CString())) {
+		bool show = true;
+		if(item->GetName() == "Delete"){
+			if(!node)
+			{
+				show = false;
+			}
+		}
+		if (show && ImGui::MenuItem(item->GetName().CString())) {
 			item->OnClicked(node);
 			clicked = true;
 		}
+		
 	}
 	return clicked;
 }
@@ -81,6 +89,15 @@ bool NodeContextMenus::DrawContextMenu(Node* node)
 void NodeContextMenus::OnAddEmptyNode(Node* node)
 {
 	SceneCtrl::getInstance()->AddEmptyNode(node);
+}
+
+void NodeContextMenus::OnDeleteNode(Node* node) 
+{
+	if(node)
+	{
+		SceneCtrl::getInstance()->DeleteNode(node);
+	}
+	
 }
 
 

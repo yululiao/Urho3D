@@ -122,6 +122,11 @@ void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* old
 	CmdMgr::Instance()->ToDo(cmd);
 }
 
+void DoDeleteNode(const String& id, Node* deleteNode) {
+	CmdAddNode* cmd = new CmdAddNode(id, deleteNode, nullptr,0, deleteNode->GetParent(), deleteNode->GetParent()->GetNumChildren());
+	CmdMgr::Instance()->ToDo(cmd);
+}
+
 void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value) {
 	CmdModifyMat* cmd = new CmdModifyMat(id,mat,attrName,value);
 	CmdMgr::Instance()->ToDo(cmd);
