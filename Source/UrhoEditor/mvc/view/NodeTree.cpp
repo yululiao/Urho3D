@@ -25,9 +25,10 @@ void NodeTree::Update()
 		winSize = newSize;
 	}
 	ImVec2 oldPos = ImGui::GetCursorScreenPos();
-	ImGui::PushID("NodeTreeDropRect");//创建一个不可见可接受拖拽的区域
+	ImGui::PushID("NodeTreeDropRect");//创建一个和窗口等大的不可见区域，用于接受拖拽和右键菜单
 	ImGui::Dummy(winSize);
 	OnDrop();
+	DrawContextMenu();
 	ImGui::PopID();
 	ImGui::SetCursorScreenPos(oldPos);//跳回Dummy开始位置绘制场景节点树
 	DrawNode(EditorApp::GetInstance()->GetSceneRoot(),true,0);
@@ -46,7 +47,7 @@ void NodeTree::OnDoubleClicked()
 {
 	
 }
-
+//必须再Item绘制之前调用
 bool NodeTree::isMouseInCurItem(int itemH)
 {
 	bool in = false;
@@ -159,12 +160,15 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 	ImGui::PopID();
 	if(isInWindow)
 	{
-		DrawContextMenu(node);
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered()) {
 			OnDoubleClicked();
 		}
-		else if (ImGui::IsItemClicked()) {
+		else if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
 			OnClicked(node);
+		}
+		else if(ImGui::IsItemClicked(ImGuiMouseButton_Right))
+		{
+			_contextClickNode = node;
 		}
 		if (isDragingInItemBottom) {
 			ImGui::Separator();
@@ -203,10 +207,14 @@ void NodeTree::OnDrop()
 	}
 }
 
-void NodeTree::DrawContextMenu(Node* node)
+void NodeTree::DrawContextMenu()
 {
 	if (ImGui::BeginPopupContextItem("NodeContextMenus", 1)) {
-		NodeContextMenus::DrawContextMenu(node);
+		bool clicked = NodeContextMenus::DrawContextMenu(_contextClickNode);
+		if(clicked)
+		{
+			_contextClickNode = nullptr;
+		}
 		ImGui::EndPopup();
 	}
 }

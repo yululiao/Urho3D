@@ -66,19 +66,21 @@ void NodeContextMenus::AddContexMenu(NodeContexMenu* menu)
 }
 
 
-void NodeContextMenus::DrawContextMenu(Node* node)
+bool NodeContextMenus::DrawContextMenu(Node* node)
 {
+	bool clicked = false;
 	for (auto item : contexMenus) {
 		if (ImGui::MenuItem(item->GetName().CString())) {
 			item->OnClicked(node);
+			clicked = true;
 		}
 	}
-
+	return clicked;
 }
 
 void NodeContextMenus::OnAddEmptyNode(Node* node)
 {
-	SceneCtrl::getInstance()->AddEmptyNode();
+	SceneCtrl::getInstance()->AddEmptyNode(node);
 }
 
 

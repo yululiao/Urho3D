@@ -91,10 +91,17 @@ namespace Urho3DEditor
         }
         
     }
-    void SceneCtrl::AddEmptyNode() 
+    void SceneCtrl::AddEmptyNode(Node* parent)
     {
         GetSubsystem<Graphics>()->MakeCurrent();
-        Node* modelNode = rttSceneRoot_->CreateChild("EmptyNode");
+        Node* emptyNode = new Node(Global::context);
+        emptyNode->SetName("EmptyNode");
+        if (parent) {
+            DoAddNode(Utils::GenGuid().c_str(), emptyNode, parent, parent->GetNumChildren(), nullptr, 0);
+        }
+        else {
+            DoAddNode(Utils::GenGuid().c_str(), emptyNode, rttSceneRoot_, rttSceneRoot_->GetNumChildren(), nullptr, 0);
+        }
     }
 
     void SceneCtrl::GenRttTex()

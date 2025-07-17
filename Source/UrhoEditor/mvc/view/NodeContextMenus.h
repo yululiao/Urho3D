@@ -28,7 +28,7 @@ class NodeContextMenus
 public:
 	static void Init();
 	static void AddContexMenu(NodeContexMenu* menu);
-	static void DrawContextMenu(Node* node);
+	static bool DrawContextMenu(Node* node);
 	static void OnAddEmptyNode(Node* node);
 protected:
 	static bool _init;

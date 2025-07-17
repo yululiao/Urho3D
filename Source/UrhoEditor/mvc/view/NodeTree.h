@@ -24,12 +24,13 @@ private:
 	void GetDragMouseInfo(bool& isInItem, bool& isInItemTop, bool& isInItemBottom);
 	void DrawNode(Node* node,bool isRoot,int nodeIdex);
 	void OnDrop();
-	void DrawContextMenu(Node* node);
+	void DrawContextMenu();
 	HashMap<int, bool> _foldState;
 	float _itemH = 12;
 	bool _isDraging = false;
 	Node* _dropNodeParent = nullptr;
 	int _dropNodeIndex = 0;
+	Node* _contextClickNode = nullptr;
 
 };
 }
