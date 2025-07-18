@@ -9,14 +9,14 @@
 using namespace Urho3D;
 namespace Urho3DEditor
 {
-typedef void (*NodeContexMenuHandle)(Node* node);
+typedef void (*NodeContexMenuHandle)(Vector<Node*> selectNodes);
 class NodeContexMenu : public Object {
 	URHO3D_OBJECT(NodeContexMenu, Object);
 public:
 	NodeContexMenu(const String& name);
 	NodeContexMenu(const String& name, NodeContexMenuHandle callback);
 	void SetCallBack(NodeContexMenuHandle callback);
-	void OnClicked(Node* node);
+	void OnClicked(Vector<Node*> selectNodes);
 	String& GetName();
 protected:
 	String _name;
@@ -28,9 +28,9 @@ class NodeContextMenus
 public:
 	static void Init();
 	static void AddContexMenu(NodeContexMenu* menu);
-	static bool DrawContextMenu(Node* node);
-	static void OnAddEmptyNode(Node* node);
-	static void OnDeleteNode(Node* node);
+	static bool DrawContextMenu(Vector<Node*> selectNodes);
+	static void OnAddEmptyNode(Vector<Node*> selectNodes);
+	static void OnDeleteNode(Vector<Node*> selectNodes);
 protected:
 	static bool _init;
 	static Vector<NodeContexMenu*> contexMenus;

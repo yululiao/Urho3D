@@ -28,6 +28,10 @@ void NodeTree::Update()
 	ImGui::PushID("NodeTreeDropRect");//创建一个和窗口等大的不可见区域，用于接受拖拽和右键菜单
 	ImGui::Dummy(winSize);
 	OnDrop();
+	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+		_contextClickNodes.Clear();
+		std::cout << "node tree Mouse_Right clicked clear _contextClickNode!!!! " << std::endl;
+	}
 	DrawContextMenu();
 	ImGui::PopID();
 	ImGui::SetCursorScreenPos(oldPos);//跳回Dummy开始位置绘制场景节点树
@@ -48,7 +52,7 @@ void NodeTree::OnDoubleClicked()
 	
 }
 //必须再Item绘制之前调用
-bool NodeTree::isMouseInCurItem(int itemH)
+bool NodeTree::IsMouseInCurItem(int itemH)
 {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
@@ -60,7 +64,7 @@ bool NodeTree::isMouseInCurItem(int itemH)
 	return in;
 }
 
-bool NodeTree::isMouseInCurItemTop(int itemH) {
+bool NodeTree::IsMouseInCurItemTop(int itemH) {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
 	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
@@ -70,7 +74,7 @@ bool NodeTree::isMouseInCurItemTop(int itemH) {
 	return in;
 }
 
-bool NodeTree::isMouseInCurItemBottom(int itemH) {
+bool NodeTree::IsMouseInCurItemBottom(int itemH) {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
 	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
@@ -88,16 +92,12 @@ void NodeTree::DrawNodeNoInWindows(int itemH)
 	ImGui::SetCursorScreenPos(curPos);
 }
 
-void NodeTree::GetDragMouseInfo(bool& isDragingInItem, bool& isDragingInItemTop, bool& isDragingInItemBottom)
+void NodeTree::IsDragMouseInTB( bool& isDragingInItemTop, bool& isDragingInItemBottom)
 {
-	isDragingInItem = isMouseInCurItem(_itemH);
-	isDragingInItemTop = false;
+	isDragingInItemTop = IsMouseInCurItemTop(_itemH);
 	isDragingInItemBottom = false;
-	if (!isDragingInItem) {
-		isDragingInItemTop =  isMouseInCurItemTop(_itemH);
-	}
-	if (!isDragingInItem && !isDragingInItemTop) {
-		isDragingInItemBottom = isMouseInCurItemBottom(_itemH);
+	if (!isDragingInItemTop) {
+		isDragingInItemBottom = IsMouseInCurItemBottom(_itemH);
 	}
 }
 
@@ -115,9 +115,13 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 	bool isDragingInItem = false;
 	bool isDragingInItemTop = false;
 	bool isDragingInItemBottom = false;
+	bool isMouseInCurItem = IsMouseInCurItem(_itemH);
 	if(_isDraging)
 	{
-		GetDragMouseInfo(isDragingInItem, isDragingInItemTop, isDragingInItemBottom);
+		if(isMouseInCurItem)
+			isDragingInItem = true;
+		else
+			IsDragMouseInTB(isDragingInItemTop, isDragingInItemBottom);
 	}
 	if((selecednode && node->GetID()== selecednode->GetID()) || isDragingInItem)
 	{
@@ -139,7 +143,7 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 	}
 	else if (isDragingInItemBottom && !isRoot) {
 		_dropNodeParent = node->GetParent();
-		_dropNodeIndex = nodeIndex;
+		_dropNodeIndex = nodeIndex + 1;
 	}
 	PODVector<Node*> children_show;
 	for(auto citem: children)
@@ -167,11 +171,11 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 		else if (ImGui::IsItemClicked(ImGuiMouseButton_Left)) {
 			OnClicked(node);
 		}
-		if(ImGui::IsMouseClicked(ImGuiMouseButton_Right))
-		{
-			if (ImGui::IsItemClicked(ImGuiMouseButton_Right)) {
-				if(!isRoot)
-					_contextClickNode = node;
+		if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
+			if(isMouseInCurItem)
+			{
+				_contextClickNodes.Push(node);
+				std::cout << "node tree Mouse_Right clicked,set _contextClickNode to node" << node->GetName().CString() << std::endl;
 			}
 		}
 		if (isDragingInItemBottom) {
@@ -205,7 +209,8 @@ void NodeTree::OnDrop()
 				}
 				std::cout << "onDrop:drag_file" << std::endl;
 			}
-
+			_isDraging = false;
+			_dropNodeParent = nullptr;
 		}
 		ImGui::EndDragDropTarget();
 	}
@@ -214,10 +219,10 @@ void NodeTree::OnDrop()
 void NodeTree::DrawContextMenu()
 {
 	if (ImGui::BeginPopupContextItem("NodeContextMenus", 1)) {
-		bool clicked = NodeContextMenus::DrawContextMenu(_contextClickNode);
+		bool clicked = NodeContextMenus::DrawContextMenu(_contextClickNodes);
 		if(clicked)
 		{
-			_contextClickNode = nullptr;
+			_contextClickNodes.Clear();
 		}
 		ImGui::EndPopup();
 	}

@@ -26,10 +26,10 @@ void NodeContexMenu::SetCallBack(NodeContexMenuHandle callback)
 	_callBackFun = callback;
 }
 
-void NodeContexMenu::OnClicked(Node* node)
+void NodeContexMenu::OnClicked(Vector<Node*> selectNodes)
 {
 	if (_callBackFun) {
-		_callBackFun(node);
+		_callBackFun(selectNodes);
 	}
 	//for lua script call back
 	// local contexMenu = FolderContexMenu:new()
@@ -66,19 +66,19 @@ void NodeContextMenus::AddContexMenu(NodeContexMenu* menu)
 	contexMenus.Push(menu);
 }
 
-bool NodeContextMenus::DrawContextMenu(Node* node)
+bool NodeContextMenus::DrawContextMenu(Vector<Node*> selectNodes)
 {
 	bool clicked = false;
 	for (auto item : contexMenus) {
 		bool show = true;
 		if(item->GetName() == "Delete"){
-			if(!node)
+			if(selectNodes.Empty())
 			{
 				show = false;
 			}
 		}
 		if (show && ImGui::MenuItem(item->GetName().CString())) {
-			item->OnClicked(node);
+			item->OnClicked(selectNodes);
 			clicked = true;
 		}
 		
@@ -86,17 +86,17 @@ bool NodeContextMenus::DrawContextMenu(Node* node)
 	return clicked;
 }
 
-void NodeContextMenus::OnAddEmptyNode(Node* node)
+void NodeContextMenus::OnAddEmptyNode(Vector<Node*> selectNodes)
 {
+	Node* node = nullptr;
+	if(selectNodes.Size()>0)
+		node = selectNodes[selectNodes.Size()-1];
 	SceneCtrl::getInstance()->AddEmptyNode(node);
 }
 
-void NodeContextMenus::OnDeleteNode(Node* node) 
+void NodeContextMenus::OnDeleteNode(Vector<Node*> selectNodes)
 {
-	if(node)
-	{
-		SceneCtrl::getInstance()->DeleteNode(node);
-	}
+	SceneCtrl::getInstance()->DeleteNodes(selectNodes);
 	
 }
 
