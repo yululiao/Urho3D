@@ -3,11 +3,11 @@
 
 
 namespace Urho3DEditor{
-class ResTree :public EditorWidget 
+class FolderTree :public EditorWidget 
 {
 public:
-	ResTree();
-	virtual ~ResTree();
+	FolderTree();
+	virtual ~FolderTree();
 	void Update() override;
 protected:
 	void OnDrag();

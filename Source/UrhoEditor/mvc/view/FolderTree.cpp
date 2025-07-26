@@ -1,4 +1,4 @@
-#include "ResTree.h"
+#include "FolderTree.h"
 #include "ctrl/res/AssetMgr.h"
 #include "EditorApp.h"
 #include "Urho3D/IO/FileSystem.h"
@@ -8,14 +8,14 @@
 
 namespace Urho3DEditor 
 {
-ResTree::ResTree() 
+FolderTree::FolderTree() 
 {
 	_dirIconId = AssetMgr::getInstance()->getImguiTex("res/img/folder.png");
 }
-ResTree::~ResTree() 
+FolderTree::~FolderTree() 
 {
 }
-void ResTree::Update() 
+void FolderTree::Update() 
 {
 	if(!showing)
 		return;
@@ -34,12 +34,12 @@ void ResTree::Update()
 	DrawResNode(relativeRootPath,true);
 	ImGui::End();
 }
-void ResTree::OnDrag() 
+void FolderTree::OnDrag() 
 {
 
 }
 
-void ResTree::DrawNodeNoInWindows(int itemH,const String& name)
+void FolderTree::DrawNodeNoInWindows(int itemH,const String& name)
 {
 	//Draw nothing,just jump
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
@@ -47,7 +47,7 @@ void ResTree::DrawNodeNoInWindows(int itemH,const String& name)
 	ImGui::SetCursorScreenPos(curPos);
 }
 
-void ResTree::DrawResNode(const String& path, bool forceDraw)
+void FolderTree::DrawResNode(const String& path, bool forceDraw)
 {
 	auto& nodeCache = AssetMgr::getInstance()->nodeCache;
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
@@ -109,7 +109,7 @@ void ResTree::DrawResNode(const String& path, bool forceDraw)
 	}
 }
 
-void ResTree::DrawContextMenu(const String& path) {
+void FolderTree::DrawContextMenu(const String& path) {
 	if (ImGui::BeginPopupContextItem("FolderContext", 1)) {
 		OnItemClick(path);
 		FileContextMenus::DrawFolderContext(path);
@@ -117,7 +117,7 @@ void ResTree::DrawContextMenu(const String& path) {
 	}
 }
 
-void ResTree::OnItemClick(const String& path) {
+void FolderTree::OnItemClick(const String& path) {
 	AssetMgr::getInstance()->selectedFolders.Clear();
 	AssetMgr::getInstance()->selectedFolders.Insert(path);
 	AssetMgr::getInstance()->lastSelectedFolder = path;

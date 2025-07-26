@@ -5,7 +5,7 @@
 #include "Menubar.h"
 #include "Toolbar.h"
 #include "NodeTree.h"
-#include "ResTree.h"
+#include "FolderTree.h"
 #include "Inspector.h"
 #include "ConsoleView.h"
 #include "ResPreview.h"
@@ -59,7 +59,7 @@ private:
     std::shared_ptr<Menubar> _menuBar;
     std::shared_ptr<Toolbar> _toolBar;
     NodeTree* _nodeTree = nullptr;
-    ResTree* _resTree = nullptr;
+    FolderTree* _folderTree = nullptr;
     Inspector* _inspector = nullptr;
     ResPreview* _resPreview = nullptr;
     //ConsoleView* _cosoleView = nullptr;

@@ -123,8 +123,8 @@ void MainWindow::StartGame()
    AddWindow(std::unique_ptr<SceneView>(_sceneView));
     _nodeTree = new NodeTree();
    AddWindow(std::unique_ptr<NodeTree>(_nodeTree));
-   _resTree = new ResTree();
-   AddWindow(std::unique_ptr<ResTree>(_resTree));
+   _folderTree = new FolderTree();
+   AddWindow(std::unique_ptr<FolderTree>(_folderTree));
    _inspector = new Inspector();
    AddWindow(std::unique_ptr<Inspector>(_inspector));
    //_cosoleView = new ConsoleView();
