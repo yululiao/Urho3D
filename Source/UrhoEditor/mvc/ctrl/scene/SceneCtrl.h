@@ -30,7 +30,7 @@ public:
 	static SceneCtrl* getInstance();
 	//void create_scene();
     void CreateScene();
-    void DeleteNode(Node* node);
+    void DeleteNodes(Vector<Node*> nodes);
     void UpdateGrids();
 	void Update();
 	Node* Select(float x, float y);
