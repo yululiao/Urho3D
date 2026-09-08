@@ -23,30 +23,17 @@
 #include "Urho3D//Graphics/VertexBuffer.h"
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Math/Ray.h"
-#include "ctrl/res/AssetMgr.h"
 #include "Urho3D/IO/FileSystem.h"
-#include "EditorApp.h"
 #include "Urho3D/Urho2D/StaticSprite2D.h"
 #include "Urho3D/Urho2D/Sprite2D.h"
 #include "Urho3D/Graphics/BillboardSet.h"
 #include "view/gizmo/GizmoUtils.h"
 #include "Urho3D/Graphics/GeoUtils.h"
-#include "Global.h"
 #include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 
 namespace Urho3DEditor
 {
-
-	SceneCtrl* SceneCtrl::_instance = nullptr;
-	SceneCtrl* SceneCtrl::getInstance()
-	{
-		if (_instance == nullptr)
-		{
-			_instance = new SceneCtrl(Global::context);
-		}
-		return _instance;
-	}
 
 	SceneCtrl::SceneCtrl(Context* ctx)
 		:Object(ctx)
@@ -59,55 +46,6 @@ namespace Urho3DEditor
 	{
 
 	}
-
-    void SceneCtrl::DeleteNodes(Vector<Node*> nodes)
-    {
-        String id(Utils::GenGuid().c_str());
-        for(auto nodeItem:nodes)
-        {
-            DoDeleteNode(id, nodeItem);
-        }
-       
-    }
-
-    void SceneCtrl::AddModel(const String& path,Node* parent,int index)
-    {
-        GetSubsystem<Graphics>()->MakeCurrent();
-        auto* cache = GetSubsystem<ResourceCache>();
-        String name = AssetMgr::getInstance()->getBaseName(path); // Utils::get_base_name(path);
-        //加载fbx对应的mdl
-        String mdl_path = AssetMgr::getInstance()->getFilePath(path) + "/" + name + ".mdl";
-        Node* modelNode = new Node(Global::context);
-        modelNode->SetName(name);
-        modelNode->SetScale(Vector3(0.01,0.01,0.01));
-        auto* modelObject = modelNode->CreateComponent<AnimatedModel>();
-        Model* model = cache->GetResource<Model>(mdl_path);
-        modelObject->SetModel(model);
-        auto matRes = cache->GetResource<Material>("Materials/Default.xml");
-        SharedPtr<Material> defMat(matRes->Clone());
-        modelObject->SetMaterial(defMat);
-        if(parent)
-        {
-            DoAddNode(Utils::GenGuid().c_str(), modelNode, parent, index, nullptr, 0);
-        }
-        else
-        {
-            DoAddNode(Utils::GenGuid().c_str(), modelNode, rttSceneRoot_, rttSceneRoot_->GetNumChildren(), nullptr, 0);
-        }
-        
-    }
-    void SceneCtrl::AddEmptyNode(Node* parent)
-    {
-        GetSubsystem<Graphics>()->MakeCurrent();
-        Node* emptyNode = new Node(Global::context);
-        emptyNode->SetName("EmptyNode");
-        if (parent) {
-            DoAddNode(Utils::GenGuid().c_str(), emptyNode, parent, parent->GetNumChildren(), nullptr, 0);
-        }
-        else {
-            DoAddNode(Utils::GenGuid().c_str(), emptyNode, rttSceneRoot_, rttSceneRoot_->GetNumChildren(), nullptr, 0);
-        }
-    }
 
     void SceneCtrl::GenRttTex()
     {
@@ -227,7 +165,6 @@ namespace Urho3DEditor
 
     void SceneCtrl::Clear()
     {
-        EditorApp::GetInstance()->Clear();
         _grid_root = nullptr;
         rttSceneRoot_ = nullptr;
     }
@@ -270,7 +207,7 @@ namespace Urho3DEditor
             bb->enabled_ = true;
 
             SharedPtr<Node> dirLine(GeoUtils::create_line(context_, { Vector3(0.,0,0),Vector3(0,0,0.8) }, 0xffffff00));
-            dirLine->AddTag(Global::notShowTag);
+            dirLine->AddTag(notShowTag_);
             GizmoUtils::setLineMat(dirLine, 0xffffffff);
             lightNode->AddChild(dirLine);
             
@@ -305,8 +242,7 @@ namespace Urho3DEditor
         rttScene_ = new Scene(context_);
         rttScene_->LoadJSON(file);
         InitScene(true);
-        EditorApp::GetInstance()->SetCurTool("move");
-        EditorApp::GetInstance()->SelectNode(nullptr);
+        // selection cleared by caller
     }
 
     void SceneCtrl::OpenNewScene()
@@ -317,8 +253,7 @@ namespace Urho3DEditor
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
-        EditorApp::GetInstance()->SetCurTool("move");
-        EditorApp::GetInstance()->SelectNode(nullptr);
+        // selection cleared by caller
     }
 
     void SceneCtrl::CreateScene()
@@ -327,7 +262,7 @@ namespace Urho3DEditor
         rttScene_->SetName("RttScene");
         rttScene_->CreateComponent<Octree>();
         InitScene(false);
-        EditorApp::GetInstance()->SelectNode(nullptr);
+        // selection cleared by caller
     }
 
 	void SceneCtrl::Update()
@@ -346,7 +281,6 @@ namespace Urho3DEditor
         Ray world_ray = rttCameraNode_->GetComponent<Camera>()->GetScreenRay(x, y);
 		float dis = 100000;
         hit = IntersectObj(world_ray, rttSceneRoot_, dis);
-        EditorApp::GetInstance()->SelectNode(hit);
 		return hit;
 	}
 }

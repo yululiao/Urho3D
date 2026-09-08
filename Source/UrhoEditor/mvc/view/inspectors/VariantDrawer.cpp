@@ -1,12 +1,25 @@
 #include "imgui.h"
 #include "VariantDrawer.h"
-#include "EditorApp.h"
 #include "Utils.h"
-#include "ctrl/res/AssetMgr.h"
 
+
+using namespace Urho3D;
 
 namespace Urho3DEditor 
 {
+static VariantDrawer::DialogOpenFileHandler g_dialogOpenFileHandler;
+static VariantDrawer::PathToRelativeHandler g_pathToRelativeHandler;
+
+void VariantDrawer::SetDialogOpenFileHandler(DialogOpenFileHandler handler)
+{
+	g_dialogOpenFileHandler = handler;
+}
+
+void VariantDrawer::SetPathToRelativeHandler(PathToRelativeHandler handler)
+{
+	g_pathToRelativeHandler = handler;
+}
+
 void VariantDrawer::DrawVariant(const Urho3D::String& name, Urho3D::Variant& value)
 {
 	ImVec2 winSize = ImGui::GetWindowSize();
@@ -194,9 +207,9 @@ void VariantDrawer::DrawPath(const Urho3D::String& name, Urho3D::String& path, U
 	ImGui::PopID();
 	ImGui::SameLine();
 	if (ImGui::Button("...")) {
-		String resultPath = EditorApp::GetInstance()->DialogOpenFile(filter);
+		String resultPath = g_dialogOpenFileHandler ? g_dialogOpenFileHandler(filter) : String();
 		if (resultPath != "") {
-			resultPath = AssetMgr::getInstance()->pathToRelative(resultPath);
+			resultPath = g_pathToRelativeHandler ? g_pathToRelativeHandler(resultPath) : resultPath;
 			path = resultPath;
 		}
 	}

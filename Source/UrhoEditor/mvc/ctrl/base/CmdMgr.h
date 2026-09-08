@@ -31,8 +31,5 @@ protected:
 private:
 	list<CmdEdit*> editNodeList;
 	int currentNodeId = -1;
-	static CmdMgr* _instance;
-public:
-	static CmdMgr* Instance();
 };
 }

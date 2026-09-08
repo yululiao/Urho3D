@@ -1,14 +1,15 @@
+#include "imgui.h"
 #include "VariantDrawer.h"
 #include "TransformInspector.h"
-#include "EditorApp.h"
-#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 
 
 namespace Urho3DEditor 
 {
 
-TransformInspector::TransformInspector() 
+TransformInspector::TransformInspector(SelectionModel& selectionModel, PropertyEditController& propEditCtrl)
+	: selectionModel_(selectionModel)
+	, propertyEditController_(propEditCtrl)
 {
 }
 TransformInspector::~TransformInspector()
@@ -19,7 +20,7 @@ void TransformInspector::Update()
 	/*ImVec2 winSize = ImGui::GetWindowSize();
 	float width = winSize.x;*/
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
-	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
+	Node* selectedNode = selectionModel_.GetSelectedNode();
 	if(!selectedNode)
 		return;
 	_pos = selectedNode->GetPosition();
@@ -36,27 +37,22 @@ void TransformInspector::Update()
 		ImGui::TreePop();
 	}
 	
-	String cmdGuid = EditorApp::GetInstance()->GetLastCmdGuid();
+	String cmdGuid = _lastCmdGuid;
+	if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
+		cmdGuid = String(Utils::GenGuid().c_str());
+		_lastCmdGuid = cmdGuid;
+	}
 	if(_pos != selectedNode->GetPosition())
 	{
-		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
-			cmdGuid = String(Utils::GenGuid().c_str());
-		}
-		DoModify(cmdGuid, selectedNode, "Position", _pos);
+		propertyEditController_.SetNodeProperty(selectedNode, "Position", _pos, cmdGuid);
 	}
 	if (_rot != selectedNode->GetRotation().EulerAngles()) 
 	{
-		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
-			cmdGuid = String(Utils::GenGuid().c_str());
-		}
-		DoModify(cmdGuid, selectedNode, "Rotation",Quaternion(_rot));
+		propertyEditController_.SetNodeProperty(selectedNode, "Rotation", Quaternion(_rot), cmdGuid);
 	}
 	if (_scale != selectedNode->GetScale()) 
 	{
-		if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
-			cmdGuid = String(Utils::GenGuid().c_str());
-		}
-		DoModify(cmdGuid, selectedNode, "Scale", _scale);
+		propertyEditController_.SetNodeProperty(selectedNode, "Scale", _scale, cmdGuid);
 	}
 }
 }

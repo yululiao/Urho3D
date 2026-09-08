@@ -1,14 +1,15 @@
 #include "NodeTree.h"
-#include "EditorApp.h"
 #include "Utils.h"
-#include "Global.h"
-#include "ctrl/res/AssetMgr.h"
-#include "ctrl/scene/SceneCtrl.h"
 #include "NodeContextMenus.h"
 
 namespace Urho3DEditor 
 {
-NodeTree::NodeTree() 
+NodeTree::NodeTree(SelectionController& selectionCtrl, SelectionModel& selectionModel, SceneCtrl& sceneCtrl, SceneManipulationController& sceneManipCtrl, float dpiScale)
+	: selectionController_(selectionCtrl)
+	, selectionModel_(selectionModel)
+	, sceneCtrl_(sceneCtrl)
+	, sceneManipController_(sceneManipCtrl)
+	, dpiScale_(dpiScale)
 {
 }
 NodeTree::~NodeTree() 
@@ -25,7 +26,7 @@ void NodeTree::Update()
 		winSize = newSize;
 	}
 	ImVec2 oldPos = ImGui::GetCursorScreenPos();
-	ImGui::PushID("NodeTreeDropRect");//´´½¨Ò»¸öºÍ´°¿ÚµÈ´óµÄ²»¿É¼ûÇøÓò£¬ÓÃÓÚ½ÓÊÜÍÏ×§ºÍÓÒ¼ü²Ëµ¥
+	ImGui::PushID("NodeTreeDropRect");//ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½Í´ï¿½ï¿½ÚµÈ´ï¿½Ä²ï¿½ï¿½É¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½×§ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½Ëµï¿½
 	ImGui::Dummy(winSize);
 	OnDrop();
 	if (ImGui::IsMouseClicked(ImGuiMouseButton_Right)) {
@@ -34,8 +35,8 @@ void NodeTree::Update()
 	}
 	DrawContextMenu();
 	ImGui::PopID();
-	ImGui::SetCursorScreenPos(oldPos);//Ìø»ØDummy¿ªÊ¼Î»ÖÃ»æÖÆ³¡¾°½ÚµãÊ÷
-	DrawNode(EditorApp::GetInstance()->GetSceneRoot(),true,0);
+	ImGui::SetCursorScreenPos(oldPos);//ï¿½ï¿½ï¿½ï¿½Dummyï¿½ï¿½Ê¼Î»ï¿½Ã»ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½Úµï¿½ï¿½ï¿½
+	DrawNode(sceneCtrl_.GetRoot(),true,0);
 	/*if(ImGui::BeginPopupContextWindow("context"),1)
 	{
 		ImGui::MenuItem("create","",false,true);
@@ -45,13 +46,13 @@ void NodeTree::Update()
 }
 void NodeTree::OnClicked(Node* node)
 {
-	EditorApp::GetInstance()->SelectNode(node);
+	selectionController_.OnNodeClicked(node);
 }
 void NodeTree::OnDoubleClicked() 
 {
 	
 }
-//±ØÐëÔÙItem»æÖÆÖ®Ç°µ÷ÓÃ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Itemï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½
 bool NodeTree::IsMouseInCurItem(int itemH)
 {
 	bool in = false;
@@ -67,7 +68,7 @@ bool NodeTree::IsMouseInCurItem(int itemH)
 bool NodeTree::IsMouseInCurItemTop(int itemH) {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
-	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
+	int gap = 2 * dpiScale_;
 	if (ImGui::GetIO().MousePos.y >= curPos.y - gap && ImGui::GetIO().MousePos.y <= curPos.y) {
 		in = true;
 	}
@@ -77,7 +78,7 @@ bool NodeTree::IsMouseInCurItemTop(int itemH) {
 bool NodeTree::IsMouseInCurItemBottom(int itemH) {
 	bool in = false;
 	ImVec2 curPos = ImGui::GetCursorScreenPos();
-	int gap = 2 * EditorApp::GetInstance()->GetDpiScale();
+	int gap = 2 * dpiScale_;
 	if (ImGui::GetIO().MousePos.y >= curPos.y + itemH && ImGui::GetIO().MousePos.y <= curPos.y +itemH + gap) {
 		in = true;
 	}
@@ -107,7 +108,7 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick 
 		| ImGuiTreeNodeFlags_SpanAvailWidth;
 	auto& children = node->GetChildren();
-	auto selecednode = EditorApp::GetInstance()->GetSelectNode();
+	auto selecednode = selectionModel_.GetSelectedNode();
 	if(isRoot)
 	{
 		flags |= ImGuiTreeNodeFlags_DefaultOpen;
@@ -148,7 +149,7 @@ void NodeTree::DrawNode(Node* node,bool isRoot,int nodeIndex)
 	PODVector<Node*> children_show;
 	for(auto citem: children)
 	{
-		if(!citem->HasTag(Global::notShowTag))
+		if(!citem->HasTag(sceneCtrl_.GetNotShowTag()))
 		{
 			children_show.Push(citem);
 		}
@@ -204,9 +205,7 @@ void NodeTree::OnDrop()
 				String path;
 				path.Resize(data->DataSize);
 				memcpy((void*)path.CString(), data->Data, data->DataSize);
-				if (AssetMgr::getInstance()->IsModelFile(path)) {
-					SceneCtrl::getInstance()->AddModel(path,_dropNodeParent,_dropNodeIndex);
-				}
+				sceneManipController_.ImportModel(path, _dropNodeParent, _dropNodeIndex);
 				std::cout << "onDrop:drag_file" << std::endl;
 			}
 			_isDraging = false;

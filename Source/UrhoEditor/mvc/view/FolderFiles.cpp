@@ -1,13 +1,15 @@
 #include "FolderFiles.h"
-#include "ctrl/res/AssetMgr.h"
-#include "EditorApp.h"
-#include "Global.h"
+#include "ctrl/res/AssetBrowserController.h"
 #include "FileContextMenus.h"
 
 namespace Urho3DEditor{
 
-FolderFiles::FolderFiles() {
-
+FolderFiles::FolderFiles(ProjectController& projectCtrl, ToolController& toolCtrl, AssetBrowserController& assetBrowserCtrl, float fontSize)
+	: projectController_(projectCtrl)
+	, toolController_(toolCtrl)
+	, assetBrowserCtrl_(assetBrowserCtrl)
+	, fontSize_(fontSize)
+{
 }
 FolderFiles::~FolderFiles() {
 }
@@ -25,37 +27,34 @@ void FolderFiles::Update() {
 
 void FolderFiles::OnItemClicked(const String& path)
 {
-	auto assetMgr = AssetMgr::getInstance();
-	assetMgr->selectedFiles.Clear();
-	assetMgr->selectedFiles.Insert(path);
+	assetBrowserCtrl_.SelectFile(path);
 }
 void FolderFiles::DrawNodeNoInWindows(int itemH) {
 
 }
 void FolderFiles::DrawFiles() {
 	ImGuiIO& io = ImGui::GetIO();
-	auto assetMgr = AssetMgr::getInstance();
-	auto& nodeCache = assetMgr->nodeCache;
-	if(assetMgr->lastSelectedFolder.Empty())
+	const String& lastSelectedFolder = assetBrowserCtrl_.GetLastSelectedFolder();
+	if(lastSelectedFolder.Empty())
 		return;
-	auto& files = nodeCache[assetMgr->lastSelectedFolder].childFiles;
+	const StringVector& files = assetBrowserCtrl_.GetChildFiles(lastSelectedFolder);
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick 
 		| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_Leaf;
 	//flags |= ImGuiTreeNodeFlags_Selected;
 	if(ImGui::IsMouseClicked(0) &&IsInWindow(io.MousePos))
 	{
-		assetMgr->selectedFiles.Clear();
+		assetBrowserCtrl_.ClearFileSelection();
 	}
 	for(auto& item:files)
 	{
 		//ImGui::Text(item.CString());
-		String path = assetMgr->lastSelectedFolder + "/" + item;
-		if(!AssetMgr::SurportExtSet.Contains(nodeCache[path].ext))
+		String path = lastSelectedFolder + "/" + item;
+		if(!AssetBrowserController::IsSupportedExt(assetBrowserCtrl_.GetNodeExt(path)))
 		{
 			continue;
 		}
 		int flags = ImGuiTreeNodeFlags_Leaf | ImGuiTreeNodeFlags_SpanAvailWidth;
-		bool selected = assetMgr->selectedFiles.Contains(path);
+		bool selected = assetBrowserCtrl_.IsFileSelected(path);
 		if(selected)
 		{
 			flags |= ImGuiTreeNodeFlags_Selected;
@@ -65,34 +64,32 @@ void FolderFiles::DrawFiles() {
 		DrawContextMenu(path);
 		OnDrag(path);
 		if (ImGui::IsMouseDoubleClicked(0) && ImGui::IsItemHovered(0)) {
-			OnItemDoubleClicked(assetMgr->pathToFull(path));
+			OnItemDoubleClicked(assetBrowserCtrl_.PathToFull(path));
 		}
 		else if (ImGui::IsItemClicked(ImGuiMouseButton_Left) ) {
 			OnItemClicked(path);
-			assetMgr->lastSlectedFile = path;
-			if(AssetMgr::CanInspectExtSet.Contains(nodeCache[path].ext))
+			if(AssetBrowserController::IsInspectableExt(assetBrowserCtrl_.GetNodeExt(path)))
 			{
-				Global::curSelectType = "File";
+				// selection type is updated through SelectionController::OnFileSelected
 			}
 			
 		}
 		ImGui::PopID();
 		ImGui::SameLine();
 		int fileIcon = 0;
-		if(AssetMgr::ImgExtSet.Contains(assetMgr->nodeCache[path].ext))
+		if(AssetBrowserController::IsImageExt(assetBrowserCtrl_.GetNodeExt(path)))
 		{
-			fileIcon = assetMgr->getImguiTex(assetMgr->pathToFull(path));
+			fileIcon = assetBrowserCtrl_.GetImguiTex(assetBrowserCtrl_.PathToFull(path));
 			if(fileIcon == 0)
 			{
-				fileIcon = assetMgr->getImguiTex("res/img/file.png");
+				fileIcon = assetBrowserCtrl_.GetImguiTex("res/img/file.png");
 			}
 		}
 		else
 		{
-			fileIcon = assetMgr->getImguiTex("res/img/file.png");
+			fileIcon = assetBrowserCtrl_.GetImguiTex("res/img/file.png");
 		}
-		float fileIconSize = EditorApp::GetInstance()->GetFontSize();
-		ImGui::Image(fileIcon, ImVec2(fileIconSize, fileIconSize));
+		ImGui::Image(fileIcon, ImVec2(fontSize_, fontSize_));
 		ImGui::SameLine();
 		ImGui::Text(item.CString());
 		if (open_node) {
@@ -110,8 +107,8 @@ void FolderFiles::OnDrag(const String& path) {
 }
 
 void FolderFiles::OnItemDoubleClicked(const String& path) {
-	AssetMgr::getInstance()->OpenScene(path);
-	EditorApp::GetInstance()->SetCurTool("move");
+	projectController_.OpenScene(path);
+	toolController_.SetTool("move");
 }
 
 void FolderFiles::DrawContextMenu(const String& path)

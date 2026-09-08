@@ -5,20 +5,24 @@ using namespace Urho3DEditor;
 #ifdef _MSC_VER
 int WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmdshow)
 {
-	//´ò¿ª¿ØÖÆÌ¨
+	//ï¿½ò¿ª¿ï¿½ï¿½ï¿½Ì¨
     AllocConsole();
     SetConsoleOutputCP(CP_UTF8);
     freopen("CONOUT$", "w", stdout);
 	//----------
-	Global::InitGlobal();
-	EditorApp::GetInstance()->Run();
+	//Global::InitGlobal();
+    Context* context = new Context();
+    EditorApp* app = new EditorApp(context);
+	app->Run();
+    delete context;
 	return 0;
 }
 
 #else
 int main(int argc, char* argv[])
 {
-	EditorApp::getInstance()->run();
+	EditorApp* app = new EditorApp(Global::context);
+	app->run();
 	return 0;
 }
 #endif

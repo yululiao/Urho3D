@@ -1,11 +1,12 @@
+#include "imgui.h"
 #include "AssetInspector.h"
 #include "VariantDrawer.h"
-#include "EditorApp.h"
-#include "ctrl/res/AssetMgr.h"
+#include "ctrl/res/ProjectController.h"
 
 namespace Urho3DEditor {
 
-AssetInspector::AssetInspector()
+AssetInspector::AssetInspector(ProjectController& projectCtrl)
+	: projectController_(projectCtrl)
 {
 }
 
@@ -15,14 +16,12 @@ AssetInspector::~AssetInspector()
 void AssetInspector::Update()
 {
 	int flags = ImGuiTreeNodeFlags_DefaultOpen;
-	auto assetMgr = AssetMgr::getInstance();
-	auto& nodeCache = assetMgr->nodeCache;
-	if(nodeCache[assetMgr->lastSlectedFile].ext == ".fbx")
+	if(projectController_.GetLastSelectedFileExt() == ".fbx")
 	{
 		if (ImGui::TreeNodeEx("FbxInspector", flags)) {
 
 			if (ImGui::Button("Import")) {
-				AssetMgr::getInstance()->ImportFbx(assetMgr->lastSlectedFile);
+				projectController_.ImportFbx(projectController_.GetLastSelectedFile());
 			}
 			ImGui::TreePop();
 		}

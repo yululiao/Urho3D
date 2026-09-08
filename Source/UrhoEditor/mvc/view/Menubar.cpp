@@ -1,12 +1,14 @@
 #include "Menubar.h"
 #include "imgui.h"
-#include "EditorApp.h"
 #include "stb/stb_image.h"
 
 namespace Urho3DEditor 
 {
 
-Menubar::Menubar():_menuTree(new MenuNode())
+Menubar::Menubar(ProjectController& projectCtrl, ToggleDemoHandler toggleDemo)
+	: _menuTree(new MenuNode())
+	, projectController_(projectCtrl)
+	, toggleDemo_(toggleDemo)
 {
 	Init();
 }
@@ -16,17 +18,17 @@ Menubar::~Menubar()
 
 void Menubar::Init() 
 {
-	AddMenu("File/Open",&OnOpen);
-	AddMenu("File/Save",&OnSave);
-	AddMenu("Edit/Undo",&OnUndo);
-	AddMenu("Edit/Redo",&OnRedo);
-	AddMenu("Views/ToolBar",&ShowToolBar);
-	AddMenu("Views/NodeTree",&ShowNodeTree);
-	AddMenu("Views/ResTree",&ShowResTree);
-	AddMenu("Views/ResPreview",&ShowResPreview);
-	AddMenu("Views/SceneView",&ShowSceneView);
-	AddMenu("Views/Inspector",ShowInspector);
-	//AddMenu("test/show|hide imgui demo", ShowDemo);
+	AddMenu("File/Open", [this]() { OnOpen(); });
+	AddMenu("File/Save", [this]() { OnSave(); });
+	AddMenu("Edit/Undo", [this]() { OnUndo(); });
+	AddMenu("Edit/Redo", [this]() { OnRedo(); });
+	AddMenu("Views/ToolBar", []() { ShowToolBar(); });
+	AddMenu("Views/NodeTree", []() { ShowNodeTree(); });
+	AddMenu("Views/ResTree", []() { ShowResTree(); });
+	AddMenu("Views/ResPreview", []() { ShowResPreview(); });
+	AddMenu("Views/SceneView", []() { ShowSceneView(); });
+	AddMenu("Views/Inspector", [this]() { ShowInspector(); });
+	AddMenu("test/show|hide imgui demo", [this]() { ShowDemo(); });
 }
 
 void Menubar::AddMenu(const String& path, MenuHandle handle)
@@ -49,7 +51,7 @@ void Menubar::AddMenu(const String& path, MenuHandle handle)
 			curentNode = curentNode->children[item];
 		}
 	}
-	//pathItems中的最后一项是叶子节点
+	// last item in pathItems is the leaf node
 	auto leafName = pathItems[pathItems.Size() - 1];
 	curentNode->children[leafName] = std::shared_ptr<MenuNode>(new MenuNode());
 	curentNode->children[leafName]->name = leafName;
@@ -97,12 +99,17 @@ void Menubar::OnOpen()
 }
 
 void Menubar::OnSave() {
+	String assetRoot = projectController_.GetAssetRoot();
+	projectController_.SaveScene(assetRoot + "/test.uscene");
+	projectController_.OnSave();
 }
 
 void Menubar::OnUndo() {
+	projectController_.Undo();
 }
 
 void Menubar::OnRedo() {
+	projectController_.Redo();
 }
 
 void Menubar::ShowToolBar() {
@@ -124,8 +131,8 @@ void Menubar::ShowInspector() {
 }
 
 void Menubar::ShowDemo() {
-	bool isShow = EditorApp::GetInstance()->mainWindow->IsShowDemo();
-	EditorApp::GetInstance()->mainWindow->ShowDemo(!isShow);
+	if (toggleDemo_)
+		toggleDemo_();
 }
 
 }

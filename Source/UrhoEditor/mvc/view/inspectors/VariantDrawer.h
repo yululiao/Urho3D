@@ -1,10 +1,12 @@
 #pragma once
+#include <functional>
 //#include "Urho3D/Math/Vector2.h"
 //#include "Urho3D/Math/Vector3.h"
 //#include "Urho3D/Math/Vector4.h"
 //#include "Urho3D/Math/Color.h"
 //#include "Urho3D/Container/Str.h"
 #include "Urho3D/Core/Variant.h"
+#include "Urho3D/Container/Str.h"
 #include "Urho3D/Container/Vector.h"
 
 
@@ -13,6 +15,11 @@ namespace Urho3DEditor
 class VariantDrawer
 {
 public:
+	using DialogOpenFileHandler = std::function<Urho3D::String(const Urho3D::Vector<Urho3D::String>&)>;
+	using PathToRelativeHandler = std::function<Urho3D::String(const Urho3D::String&)>;
+	static void SetDialogOpenFileHandler(DialogOpenFileHandler handler);
+	static void SetPathToRelativeHandler(PathToRelativeHandler handler);
+
 	static void DrawVariant(const Urho3D::String& name,Urho3D::Variant& data);
 	static void DrawBool(const Urho3D::String& name,bool& data);
 	static void DrawFloat(const Urho3D::String& name, float& data,float min,float max);

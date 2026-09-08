@@ -5,6 +5,7 @@
 #include "Urho3D/Container/Str.h"
 #include "Urho3D/Container/Vector.h"
 #include "Urho3D/Scene/Node.h"
+#include "ctrl/scene/SceneManipulationController.h"
 
 using namespace Urho3D;
 namespace Urho3DEditor
@@ -13,8 +14,8 @@ typedef void (*NodeContexMenuHandle)(Vector<Node*> selectNodes);
 class NodeContexMenu : public Object {
 	URHO3D_OBJECT(NodeContexMenu, Object);
 public:
-	NodeContexMenu(const String& name);
-	NodeContexMenu(const String& name, NodeContexMenuHandle callback);
+	NodeContexMenu(Context* context, const String& name);
+	NodeContexMenu(Context* context, const String& name, NodeContexMenuHandle callback);
 	void SetCallBack(NodeContexMenuHandle callback);
 	void OnClicked(Vector<Node*> selectNodes);
 	String& GetName();
@@ -26,14 +27,16 @@ protected:
 class NodeContextMenus
 {
 public:
-	static void Init();
+	static void Init(Context* context, SceneManipulationController* sceneManipCtrl);
 	static void AddContexMenu(NodeContexMenu* menu);
 	static bool DrawContextMenu(Vector<Node*> selectNodes);
 	static void OnAddEmptyNode(Vector<Node*> selectNodes);
 	static void OnDeleteNode(Vector<Node*> selectNodes);
 protected:
 	static bool _init;
+	static Context* context_;
 	static Vector<NodeContexMenu*> contexMenus;
+	static SceneManipulationController* sceneManipController_;
 };
 
 //ECM is editor node contextMenu

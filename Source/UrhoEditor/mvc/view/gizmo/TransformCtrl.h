@@ -15,11 +15,27 @@ eTranslate,
 eScale,
 eRotate
 };
+
+// Implemented by GizmoController
+class IGizmoDragHandler
+{
+public:
+    virtual ~IGizmoDragHandler() = default;
+    virtual void OnGizmoDragStart(const std::string& cmdName, const std::string& axis, const Vector3& offset,
+                                  const Vector3& startPos, const Vector3& startScale,
+                                  const Matrix4& oriRotationMatrix, const Matrix4& oriworldRotationMatrix,
+                                  const Matrix4& oriworldRotationMatrixInverse, const Vector3& oriworldPos,
+                                  const Vector3& oriworldScale, const Matrix4& oriparentRotationMatrix,
+                                  const Vector3& oriparentScale) = 0;
+    virtual void OnGizmoDragMove(float x, float y, eTransformCtrlMode mode, const std::string& axis) = 0;
+    virtual void OnGizmoDragEnd() = 0;
+};
+
 class TransformCtrl:public Object
 {
 URHO3D_OBJECT(TransformCtrl, Object);
 public:
-TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot);
+TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot, IGizmoDragHandler* handler);
 virtual ~TransformCtrl();
 void onPointerDown(float x, float y);
 void onPointerHover(float x, float y);
@@ -28,6 +44,7 @@ void onPointerUp(float x, float y, bool isTempCamera = false);
 virtual void update();
 void attach(Node* obj);
 void detach();
+Node* getAttachedNode() const { return object; }
 void setMode(eTransformCtrlMode mode);
 void pause(bool isp);
 void setOperationEnable(bool enable);
@@ -38,11 +55,25 @@ void setScene(Scene* sc) { _scene = sc; }
 Node* intersectObj(Ray& ray, Node* pnode,float& dis);
 void intersectObj(Ray& ray, Node* pnode, std::map<float,Node*>& out);
 bool isDraging() { return _dragging; }
+
+// Expose captured gizmo state for GizmoController
+Node* getActivePlane() const { return gizmo ? gizmo->activePlane.Get() : nullptr; }
+Node* getCameraNode() const { return _camNode; }
+Scene* getScene() const { return _scene; }
+const std::string& getAxis() const { return axis; }
+const Vector3& getOffset() const { return offset; }
+const Vector3& getStartPos() const { return startPos; }
+const Vector3& getStartScale() const { return startScale; }
+const Matrix4& getOriRotationMatrix() const { return oriRotationMatrix; }
+const Matrix4& getOriWorldRotationMatrix() const { return oriworldRotationMatrix; }
+const Matrix4& getOriWorldRotationMatrixInverse() const { return oriworldRotationMatrixInverse; }
+const Vector3& getOriWorldPos() const { return oriworldPos; }
+const Vector3& getOriWorldScale() const { return oriworldScale; }
+const Matrix4& getOriParentRotationMatrix() const { return oriparentRotationMatrix; }
+const Vector3& getOriParentScale() const { return oriparentScale; }
+
 protected:
 void createGizmo();
-void translate(float x, float y);
-void scale(float x, float y);
-void rotate(float x, float y);
 //void onSetSelectObjInScene(EventData* data);
 eTransformCtrlMode mode;
 SharedPtr<TransformGizmo> gizmo = nullptr;
@@ -73,6 +104,6 @@ Vector3 oriparentScale;
 Node* _gizmoRoot = nullptr;
 Node* _camNode = nullptr;
 Scene* _scene = nullptr;
-std::string _cmdName;
+IGizmoDragHandler* dragHandler_ = nullptr;
 
 };

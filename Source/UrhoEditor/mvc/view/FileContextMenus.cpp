@@ -1,20 +1,18 @@
 #include "FileContextMenus.h"
-#include "Global.h"
-#include "ctrl/res/AssetMgr.h"
+#include "ctrl/res/ProjectController.h"
 #include "imgui.h"
-#include "NdfMgr.h"
 
 namespace Urho3DEditor
 {
 
-FileContexMenu::FileContexMenu(const String& name)
-	:Object(Global::context),_callBackFun(nullptr)
+FileContexMenu::FileContexMenu(Context* context, const String& name)
+	:Object(context),_callBackFun(nullptr)
 {
 	_name = name;
 }
 
-FileContexMenu::FileContexMenu(const String& name, ContexMenuHandle callback)
-	:Object(Global::context)
+FileContexMenu::FileContexMenu(Context* context, const String& name, ContexMenuHandle callback)
+	:Object(context)
 {
 	_name = name;
 	_callBackFun = callback;
@@ -51,16 +49,20 @@ String& FileContexMenu::GetName() {
 Vector<FileContexMenu*> FileContextMenus::folderContexMenus;
 Vector<FileContexMenu*> FileContextMenus::fileContexMenus;
 bool FileContextMenus::_init = false;
-void FileContextMenus::Init()
+Context* FileContextMenus::context_ = nullptr;
+ProjectController* FileContextMenus::projectController_ = nullptr;
+void FileContextMenus::Init(Context* context, ProjectController* projectCtrl)
 {
 	if(_init)
 		return;
-	//ÎÄ¼þ¼ÐÓÒ¼ü²Ëµ¥
-	AddFolderContexMenu(new FileContexMenu("GoTo", &OnGoToFolder));
-	AddFolderContexMenu(new FileContexMenu("Import", &OnFolderImport));
-	//ÎÄ¼þÓÒ¼ü²Ëµ¥
-	AddFileContexMenu(new FileContexMenu("GoTo", &OnGoToFile));
-	AddFileContexMenu(new FileContexMenu("Delete", &OnDeleteFile));
+	context_ = context;
+	projectController_ = projectCtrl;
+	//ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½Ëµï¿½
+	AddFolderContexMenu(new FileContexMenu(context_, "GoTo", &OnGoToFolder));
+	AddFolderContexMenu(new FileContexMenu(context_, "Import", &OnFolderImport));
+	//ï¿½Ä¼ï¿½ï¿½Ò¼ï¿½ï¿½Ëµï¿½
+	AddFileContexMenu(new FileContexMenu(context_, "GoTo", &OnGoToFile));
+	AddFileContexMenu(new FileContexMenu(context_, "Delete", &OnDeleteFile));
 	_init = true;
 }
 void FileContextMenus::RegistFolderContextMenu() {
@@ -87,7 +89,8 @@ void FileContextMenus::DrawFolderContext(const String& path)
 }
 
 void FileContextMenus::OnFolderImport(const String& path) {
-	AssetMgr::getInstance()->ImportFbx(path);
+	if (projectController_)
+		projectController_->ImportFbx(path);
 }
 
 void FileContextMenus::DrawFileContext(const String& path)
@@ -104,11 +107,13 @@ void FileContextMenus::OnDeleteFile(const String& path) {
 }
 
 void FileContextMenus::OnGoToFile(const String& path) {
-	NdfMgr::GetInstance()->GoToPath(path);
+	if (projectController_)
+		projectController_->ExplorePath(path);
 }
 
 void FileContextMenus::OnGoToFolder(const String& path) {
-	NdfMgr::GetInstance()->GoToPath(path);
+	if (projectController_)
+		projectController_->ExplorePath(path);
 }
 
 }

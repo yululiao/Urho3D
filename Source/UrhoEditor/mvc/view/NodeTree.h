@@ -3,6 +3,10 @@
 #include "Urho3D/Container/Str.h"
 #include "Urho3D/Core/Context.h"
 #include "Urho3D/Scene/Scene.h"
+#include "ctrl/scene/SelectionController.h"
+#include "model/SelectionModel.h"
+#include "ctrl/scene/SceneCtrl.h"
+#include "ctrl/scene/SceneManipulationController.h"
 
 using namespace Urho3D;
 
@@ -11,7 +15,7 @@ namespace Urho3DEditor
 class NodeTree:public EditorWidget
 {
 public:
-	NodeTree();
+	NodeTree(SelectionController& selectionCtrl, SelectionModel& selectionModel, SceneCtrl& sceneCtrl, SceneManipulationController& sceneManipCtrl, float dpiScale);
 	virtual ~NodeTree();
 	void Update() override;
 private:
@@ -32,5 +36,10 @@ private:
 	int _dropNodeIndex = 0;
 	Vector<Node*> _contextClickNodes;;
 
+	SelectionController& selectionController_;
+	SelectionModel& selectionModel_;
+	SceneCtrl& sceneCtrl_;
+	SceneManipulationController& sceneManipController_;
+	float dpiScale_;
 };
 }

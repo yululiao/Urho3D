@@ -26,16 +26,13 @@ class SceneCtrl :public Object
 {
 	URHO3D_OBJECT(SceneCtrl, Object);
 public:
+	SceneCtrl(Context* ctx);
 	~SceneCtrl();
-	static SceneCtrl* getInstance();
 	//void create_scene();
     void CreateScene();
-    void DeleteNodes(Vector<Node*> nodes);
     void UpdateGrids();
 	void Update();
 	Node* Select(float x, float y);
-    void AddModel(const String& path,Node* parent,int index);
-    void AddEmptyNode(Node* parent);
     Node* GetRoot() { return rttSceneRoot_; }
     Node* GetEditorRoot() { return editorRoot_; }
     void GenRttTex();
@@ -44,6 +41,7 @@ public:
     Node* IntersectObj(Ray& ray, Node* pnode, float& dis);
     void IntersectObj(Ray& ray, Node* pnode, std::map<float, Node*>& out);
     Scene* GetScene() { return rttScene_; }
+    const String& GetNotShowTag() const { return notShowTag_; }
     void Clear();
     void InitScene(bool hasRoot);
     void OpenScene(const String& path);
@@ -52,8 +50,6 @@ protected:
     char* rttData = nullptr;
 
 private:
-	SceneCtrl(Context* ctx);
-	static SceneCtrl* _instance;
     //SharedPtr<Node> _modelNode = nullptr;
     //SharedPtr<Scene> scene_;
     //SharedPtr<Node> _scene_root = nullptr;
@@ -77,6 +73,7 @@ public:
     Camera* rttCam_ = nullptr;
     Vector2 constRttSize;
     SharedPtr<Node> editorRoot_ = nullptr;
+    String notShowTag_ = "NotShowInNodeTree";
 };
 
 }

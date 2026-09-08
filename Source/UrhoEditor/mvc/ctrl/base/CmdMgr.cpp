@@ -5,7 +5,6 @@
 using namespace Urho3D;
 namespace Urho3DEditor 
 {
-CmdMgr* CmdMgr::_instance = nullptr;
 CmdMgr::CmdMgr()
 {
 	
@@ -24,15 +23,6 @@ void CmdMgr::Clear()
 		delete (*it);
 	}
 	editNodeList.clear();
-}
-
-CmdMgr* CmdMgr::Instance()
-{
-	if(!_instance)
-	{
-		_instance = new CmdMgr();
-	}
-	return _instance;
 }
 
 void CmdMgr::OnSave()

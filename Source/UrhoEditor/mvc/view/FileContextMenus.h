@@ -12,8 +12,8 @@ typedef void (*ContexMenuHandle)(const String& path);
 class FileContexMenu : public Object {
 	URHO3D_OBJECT(FileContexMenu, Object);
 public:
-	FileContexMenu(const String& name);
-	FileContexMenu(const String& name, ContexMenuHandle callback);
+	FileContexMenu(Context* context, const String& name);
+	FileContexMenu(Context* context, const String& name, ContexMenuHandle callback);
 	void SetCallBack(ContexMenuHandle callback);
 	void OnClicked(const String& path);
 	String& GetName();
@@ -22,10 +22,12 @@ protected:
 	ContexMenuHandle _callBackFun;
 
 };
+class ProjectController;
+
 class FileContextMenus
 {
 public:
-	static void Init();
+	static void Init(Context* context, ProjectController* projectCtrl);
 	static void RegistFolderContextMenu();
 	static void RegistFileContextMenu();
 	static void AddFolderContexMenu(FileContexMenu* menu);
@@ -38,6 +40,8 @@ public:
 	static void OnGoToFolder(const String& path);
 protected:
 	static bool _init;
+	static Context* context_;
+	static ProjectController* projectController_;
 	static Vector<FileContexMenu*> folderContexMenus;
 	static Vector<FileContexMenu*> fileContexMenus;
 };

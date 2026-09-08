@@ -3,7 +3,6 @@
 #include "Urho3D/IO/IOEvents.h"
 #include "Urho3D/IO/Log.h"
 
-#include "Urho3D/DebugNew.h"
 #include <Urho3D/Engine/EngineDefs.h>
 #include <Urho3D/IO/FileSystem.h>
 #include <Urho3D/Graphics/Graphics.h>
@@ -13,6 +12,8 @@
 //#include "glfw/glfw3native.h"
 //#include "EditorLuaBinding.h"//todo
 #include "ImGuiFileBrowser.h"
+#include "view/inspectors/VariantDrawer.h"
+#include "view/MainWindow.h"
 #ifdef _WIN32
 #include <windows.h>
 #include <string>
@@ -23,12 +24,14 @@
 #endif // _WIN32
 #include <view/ndf/nfd.h>
 #include "ctrl/res/AssetMgr.h"
+#include "ctrl/res/ProjectController.h"
 #include "Utils.h"
 #include "Global.h"
 
+#include "Urho3D/DebugNew.h"
+
 namespace Urho3DEditor {
 String EditorApp::_getPathResult;
-EditorApp* EditorApp::_instance = nullptr;
 EditorApp::EditorApp(Context* context)
 	:Object(context)
 {
@@ -45,12 +48,11 @@ void EditorApp::CreateEngine(void* win_ptr)
 	_window_ptr = win_ptr;
 	_engineParameters = Engine::ParseParameters(GetArguments());
 	// Create the Engine, but do not initialize it yet. Subsystems except Graphics & Renderer are registered at this point
-	_engine = new Engine(Global::context);
+	_engine = new Engine(context_);
 	// Subscribe to log messages so that can show errors if ErrorExit() is called with empty message
 	SubscribeToEvent(E_LOGMESSAGE, URHO3D_HANDLER(EditorApp, HandleLogMessage));
 	Setup();
-    //开启自动重载资源，比如材质、shader修改时场景中的prefab自动重载
-    //编辑器也监听了整个工程目录，如果性能出现问题可在编辑器层监听到变化时处理
+    // Auto-reload resources when modified (e.g. shader edits trigger prefab refresh)
     auto* cache = GetSubsystem<ResourceCache>();
     cache->SetAutoReloadResources(true);
 	if (!_engine->Initialize(_engineParameters))
@@ -78,13 +80,8 @@ void EditorApp::Setup()
 	// The second and third entries are possible relative paths from the installed program/bin directory to the asset directory -- these entries are for binary when it is in the Urho3D SDK installation location
 	if (!_engineParameters.Contains(EP_RESOURCE_PREFIX_PATHS))
     {
-        //_engineParameters[EP_RESOURCE_PREFIX_PATHS] = ";../share/Resources;../share/Urho3D/Resources";
-        String assetsPath = "Data;CoreData;";// + AssetMgr::getInstance()->GetWorkSpace();
+        String assetsPath = "Data;CoreData;";
         _engineParameters[EP_RESOURCE_PATHS] = assetsPath;
-        //串到assetsPath后等同于AddResourceDir
-        //auto* cache = GetSubsystem<ResourceCache>();
-        //cache->AddResourceDir(AssetMgr::getInstance()->GetWorkSpace());
-
     }
 
 }
@@ -95,8 +92,8 @@ void EditorApp::Start()
     //EditorLuaBinding::LuaBinding(luaScript->GetState());//todo
     context_->RegisterSubsystem(luaScript);
     luaScript->ExecuteFile("EditorLua/main.lua");
-	SceneCtrl::getInstance()->CreateScene();
-    SetCurTool("move");
+    sceneCtrl_ = new SceneCtrl(context_);
+	sceneCtrl_->CreateScene();
 }
 
 int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData) 
@@ -113,11 +110,11 @@ int EditorApp::BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lp
 
 void EditorApp::RunEngineFrame()
 {
-	SceneCtrl::getInstance()->Update();
+	sceneCtrl_->Update();
 	_engine->RunFrame();
-    SceneCtrl::getInstance()->GenRttTex();
-    if (gizmoCtrl_)
-        gizmoCtrl_->update();
+    sceneCtrl_->GenRttTex();
+    if (gizmoController_)
+        gizmoController_->update();
 }
 
 void EditorApp::ResizeWwindow(int w, int h)
@@ -218,26 +215,6 @@ int EditorApp::System(const char* cmd, char* pRetMsg, int msg_len)
     }
 }
 
-Node* EditorApp::GetSceneRoot()
-{
-   return SceneCtrl::getInstance()->GetRoot();
-}
-
-void EditorApp::SelectNode(Node* node)
-{
-    _selectedNode = node;
-    if(gizmoCtrl_ && _curent_tool != "camera")
-    {
-        gizmoCtrl_->attach(node);
-    }
-    Global::curSelectType = "Node";
-}
-
-Node* EditorApp::GetSelectNode() 
-{
-    return _selectedNode;
-}
-
 void EditorApp::MakeCurent() 
 {
     GetSubsystem<Graphics>()->MakeCurrent();
@@ -265,13 +242,11 @@ void EditorApp::HandleLogMessage(StringHash eventType, VariantMap& eventData)
 
 void EditorApp::StartGame() 
 { 
-    //用相对路径
-    auto assetMgr = AssetMgr::getInstance();
-    assetMgr->RefreshResCache(assetMgr->GetAssetRoot(),true);
+    // Refresh asset cache and register workspace resource directory
+    assetMgr_->RefreshResCache(assetMgr_->GetAssetRoot(),true);
     auto* cache = GetSubsystem<ResourceCache>();
-    cache->AddResourceDir(AssetMgr::getInstance()->GetWorkSpace());
+    cache->AddResourceDir(assetMgr_->GetWorkSpace());
     _gameStarted = true;
-    mainWindow->StartGame();
     mainWindow->MaxSize();
     _isStartView = false;
 };
@@ -311,10 +286,44 @@ void EditorApp::Run()
 	_start_ui->show();*/
 	//UMainWindow ui(800, 600);
     NFD_Init();
-    mainWindow = new MainWindow(800,520);
     //HWND winid = glfwGetWin32Window(ui.getRawWindow()); 
     //mainWindow->AddWindow(std::unique_ptr<DockerContainer>(new DockerContainer()));
     CreateEngine(nullptr);
+    VariantDrawer::SetDialogOpenFileHandler([this](const Vector<String>& filter) { return DialogOpenFile(filter); });
+
+    // Create MVC objects after engine/scene are ready
+    selectionModel_ = new SelectionModel();
+    cmdMgr_ = new CmdMgr();
+    historyMgr_ = new HistoryMgr(context_);
+    assetMgr_ = new AssetMgr(context_);
+    Node* gizmoRoot = sceneCtrl_->GetEditorRoot()->CreateChild("gizmoRoot");
+    gizmoController_ = new GizmoController(context_, gizmoRoot, sceneCtrl_->GetScene(), sceneCtrl_->rttCameraNode_, *cmdMgr_);
+    selectionController_ = new SelectionController(*selectionModel_, *gizmoController_, *sceneCtrl_);
+    toolModel_ = new ToolModel();
+    toolController_ = new ToolController(*toolModel_, *gizmoController_);
+    cameraController_ = new CameraCtrl(sceneCtrl_->rttCameraNode_);
+    propertyEditController_ = new PropertyEditController(*cmdMgr_, *assetMgr_);
+    sceneManipController_ = new SceneManipulationController(*sceneCtrl_, *cmdMgr_, *assetMgr_);
+    projectController_ = new ProjectController(*sceneCtrl_, *assetMgr_, *cmdMgr_, *sceneManipController_,
+                                               *selectionController_, *toolController_);
+    assetBrowserController_ = new AssetBrowserController(*assetMgr_, *selectionController_);
+
+    MainWindowServices services;
+    services.startGame = [this]() { StartGame(); };
+    services.selectPath = [this]() { return DialogSelectPath(); };
+    services.getFps = [this]() { return GetFps(); };
+    services.updateCmdGuid = [this]() { UpdateCmdGuid(); };
+    services.isStartView = [this]() { return _isStartView; };
+    services.setDpi = [this](int dpi) { SetDpi(dpi); };
+    services.setFontSize = [this](int fontSize) { SetFontSize(fontSize); };
+    services.getFontSize = [this]() { return GetFontSize(); };
+
+    mainWindow = new MainWindow(800, 520, *selectionController_, *selectionModel_, *toolController_, *gizmoController_,
+                                *cameraController_, *propertyEditController_, *sceneManipController_,
+                                *projectController_, *sceneCtrl_, *assetBrowserController_, *historyMgr_, services, GetDpiScale());
+
+  
+
     while (!mainWindow->ShouldClose())
     {
         EditorOneFrame();
@@ -322,72 +331,95 @@ void EditorApp::Run()
     //return 0;
 }
 
-EditorApp* EditorApp::GetInstance()
-{
-    if (_instance == nullptr)
-    {
-        _instance = new EditorApp(Global::context);
-    }
-    return _instance;
-}
-
 void EditorApp::Clear()
 { 
-    if (gizmoCtrl_)
+    if (gizmoController_)
     {
-        delete gizmoCtrl_;
-        gizmoCtrl_ = nullptr;
+        delete gizmoController_;
+        gizmoController_ = nullptr;
     }
-    if (cam_ctrl_)
+    if (cameraController_)
     {
-        delete cam_ctrl_;
-        cam_ctrl_ = nullptr;
+        delete cameraController_;
+        cameraController_ = nullptr;
     }
-   
+    if (toolController_)
+    {
+        delete toolController_;
+        toolController_ = nullptr;
+    }
+    if (toolModel_)
+    {
+        delete toolModel_;
+        toolModel_ = nullptr;
+    }
+    if (selectionController_)
+    {
+        delete selectionController_;
+        selectionController_ = nullptr;
+    }
+    if (selectionModel_)
+    {
+        delete selectionModel_;
+        selectionModel_ = nullptr;
+    }
+    if (propertyEditController_)
+    {
+        delete propertyEditController_;
+        propertyEditController_ = nullptr;
+    }
+    if (sceneManipController_)
+    {
+        delete sceneManipController_;
+        sceneManipController_ = nullptr;
+    }
+    if (projectController_)
+    {
+        delete projectController_;
+        projectController_ = nullptr;
+    }
+    if (assetBrowserController_)
+    {
+        delete assetBrowserController_;
+        assetBrowserController_ = nullptr;
+    }
+    if (cmdMgr_)
+    {
+        delete cmdMgr_;
+        cmdMgr_ = nullptr;
+    }
+    if (historyMgr_)
+    {
+        delete historyMgr_;
+        historyMgr_ = nullptr;
+    }
+    if (assetMgr_)
+    {
+        delete assetMgr_;
+        assetMgr_ = nullptr;
+    }
+    if (sceneCtrl_)
+    {
+        delete sceneCtrl_;
+        sceneCtrl_ = nullptr;
+    }
 }
 
 void EditorApp::SetCurTool(const String& name) 
 {
     GetSubsystem<Graphics>()->MakeCurrent();
-    if (cam_ctrl_ == nullptr)
-    {
-        cam_ctrl_ = new CameraCtrl(SceneCtrl::getInstance()->rttCameraNode_);
-    }
-    if (gizmoCtrl_ == NULL && SceneCtrl::getInstance()->rttScene_)
-    {
-        Node* gizmoRoot = SceneCtrl::getInstance()->GetEditorRoot()->CreateChild("gizmoRoot"); 
-        gizmoCtrl_ = new TransformCtrl(context_, eTransformCtrlMode::eTranslate, gizmoRoot);
-        gizmoCtrl_->setScene(SceneCtrl::getInstance()->rttScene_);
-        gizmoCtrl_->setCameraNode(SceneCtrl::getInstance()->rttCameraNode_);
-    }
-    _curent_tool = name;
-    if (name == "move")
-    {
-        gizmoCtrl_->setMode(eTransformCtrlMode::eTranslate);
-    }
-    else if (name == "rotate")
-    {
-        gizmoCtrl_->setMode(eTransformCtrlMode::eRotate);
-    }
-    else if (name == "scale")
-    {
-        gizmoCtrl_->setMode(eTransformCtrlMode::eScale);
-    }
-    else if (name == "camera")
-    {
-        if (gizmoCtrl_)
-            gizmoCtrl_->detach();
-    }
+    if (toolController_)
+        toolController_->SetTool(name);
 }
 
 Node* EditorApp::GetRootNode() 
 {
-	return SceneCtrl::getInstance()->rttSceneRoot_; 
+	return sceneCtrl_ ? sceneCtrl_->rttSceneRoot_ : nullptr; 
 }
 
 Scene* EditorApp::GetScene() 
 { 
-	return SceneCtrl::getInstance()->rttScene_; 
+	return sceneCtrl_ ? sceneCtrl_->rttScene_ : nullptr; 
 }
 //EditorMenu* editor_app::AddMenu(const String path) 
 //{ 

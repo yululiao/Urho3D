@@ -1,21 +1,17 @@
 #include "NodeContextMenus.h"
-#include "Global.h"
-#include "ctrl/res/AssetMgr.h"
 #include "imgui.h"
-#include "NdfMgr.h"
-#include "ctrl/scene/SceneCtrl.h"
 
 namespace Urho3DEditor
 {
 
-NodeContexMenu::NodeContexMenu(const String& name)
-	:Object(Global::context),_callBackFun(nullptr)
+NodeContexMenu::NodeContexMenu(Context* context, const String& name)
+	:Object(context),_callBackFun(nullptr)
 {
 	_name = name;
 }
 
-NodeContexMenu::NodeContexMenu(const String& name, NodeContexMenuHandle callback)
-	:Object(Global::context)
+NodeContexMenu::NodeContexMenu(Context* context, const String& name, NodeContexMenuHandle callback)
+	:Object(context)
 {
 	_name = name;
 	_callBackFun = callback;
@@ -51,13 +47,17 @@ String& NodeContexMenu::GetName() {
 
 Vector<NodeContexMenu*> NodeContextMenus::contexMenus;
 bool NodeContextMenus::_init = false;
-void NodeContextMenus::Init()
+Context* NodeContextMenus::context_ = nullptr;
+SceneManipulationController* NodeContextMenus::sceneManipController_ = nullptr;
+void NodeContextMenus::Init(Context* context, SceneManipulationController* sceneManipCtrl)
 {
 	if(_init)
 		return;
-	//ÎÄ¼þ¼ÐÓÒ¼ü²Ëµ¥
-	AddContexMenu(new NodeContexMenu("AddEmpty", &OnAddEmptyNode));
-	AddContexMenu(new NodeContexMenu("Delete", &OnDeleteNode));
+	context_ = context;
+	sceneManipController_ = sceneManipCtrl;
+	//ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ï¿½Ëµï¿½
+	AddContexMenu(new NodeContexMenu(context_, "AddEmpty", &OnAddEmptyNode));
+	AddContexMenu(new NodeContexMenu(context_, "Delete", &OnDeleteNode));
 	_init = true;
 }
 
@@ -91,13 +91,14 @@ void NodeContextMenus::OnAddEmptyNode(Vector<Node*> selectNodes)
 	Node* node = nullptr;
 	if(selectNodes.Size()>0)
 		node = selectNodes[selectNodes.Size()-1];
-	SceneCtrl::getInstance()->AddEmptyNode(node);
+	if (sceneManipController_)
+		sceneManipController_->AddEmptyNode(node);
 }
 
 void NodeContextMenus::OnDeleteNode(Vector<Node*> selectNodes)
 {
-	SceneCtrl::getInstance()->DeleteNodes(selectNodes);
-	
+	if (sceneManipController_)
+		sceneManipController_->DeleteNodes(selectNodes);
 }
 
 

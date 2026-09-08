@@ -10,11 +10,11 @@
 #include "Urho3D/Graphics/IndexBuffer.h"
 #include "Urho3D/Graphics/GeoUtils.h"
 #include "GizmoUtils.h"
-#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
 
-TransformCtrl::TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot)
+TransformCtrl::TransformCtrl(Context* ctx,eTransformCtrlMode m,Node* gizmoRoot, IGizmoDragHandler* handler)
 	:Object(ctx)
+	, dragHandler_(handler)
 {
 	_gizmoRoot = gizmoRoot;
 	mode = m;
@@ -157,7 +157,13 @@ void TransformCtrl::onPointerDown(float x, float y)
 			//parentWordMatrixInverse.get_scale(oriparentScale);
 			oriparentScale = object->GetParent()->GetWorldScale();
 			_dragging = true;
-			_cmdName = Urho3DEditor::Utils::GenGuid();
+			std::string cmdName = Urho3DEditor::Utils::GenGuid();
+			if (dragHandler_)
+			{
+				dragHandler_->OnGizmoDragStart(cmdName, axis, offset, startPos, startScale,
+					oriRotationMatrix, oriworldRotationMatrix, oriworldRotationMatrixInverse,
+					oriworldPos, oriworldScale, oriparentRotationMatrix, oriparentScale);
+			}
 		}
 
 	}
@@ -191,20 +197,8 @@ void TransformCtrl::onPointerMove(float x, float y)
 		return;
 	if (!oprationEnable)
 		return;
-	switch (mode)
-	{
-	case eTranslate:
-		translate(x, y);
-		break;
-	case eScale:
-		scale(x,y);
-		break;
-	case eRotate:
-		rotate(x, y);
-		break;
-	default:
-		break;
-	}
+	if (dragHandler_)
+		dragHandler_->OnGizmoDragMove(x, y, mode, axis);
 }
 
 void TransformCtrl::onPointerUp(float x, float y, bool isTempCamera)
@@ -214,6 +208,8 @@ void TransformCtrl::onPointerUp(float x, float y, bool isTempCamera)
 	if (_dragging)
 	{
 		_dragging = false;
+		if (dragHandler_)
+			dragHandler_->OnGizmoDragEnd();
 		return;
 	}
 }
@@ -306,136 +302,4 @@ void TransformCtrl::stop()
 	state = eTransformCtrlState::ePause;
 }
 
-void TransformCtrl::translate(float x, float y)
-{
-	Ray world_ray = _camNode->GetComponent<Camera>()->GetScreenRay(x, y);
-	//camera->screen_to_world(vec2d(x, y), world_ray);
-	float dis = 100000;
-	std::string name = gizmo->activePlane->GetName().CString();
-	//auto hitActPlane = gizmo->activePlane->hit_test_all(world_ray, dis, true);//要保证一定击中
-	Node* hitActPlane = intersectObj(world_ray, gizmo->activePlane, dis);
-	if (hitActPlane && hitActPlane == gizmo->activePlane.Get())
-	{
-		//vec3d hitPoint = world_ray.evaluate(dis);
-		Vector3 hitPoint = world_ray.origin_ + world_ray.direction_ * dis;
-		point = hitPoint;
-		point = point - offset;
-		point = point * oriparentScale;
-		Vector3 localPoint;
-		//oriworldRotationMatrixInverse.vec_mul(point, localPoint);
-		localPoint = oriworldRotationMatrixInverse * point;
-				
-		//point.copy_from(localPoint);
-		//QString qstr_axis = Utils::str2qstr(axis);
-        Urho3D::String qstr_axis(axis.c_str());
-		if (!qstr_axis.Contains("X")) localPoint.x_ = 0;
-		if (!qstr_axis.Contains("Y")) localPoint.y_ = 0;
-        if (!qstr_axis.Contains("Z")) localPoint.z_ = 0;
-		//oriworldRotationMatrix.vec_mul(localPoint, point);
-		point = oriworldRotationMatrix * localPoint;
-				
-		//object->set_world_pos(startPos + point);
-		//object->SetWorldPosition(startPos + point);
-		Vector3 pos =(startPos + point)- object->GetParent()->GetWorldPosition();
-		Urho3DEditor::DoModify(String(_cmdName.c_str()),object,"Position",pos);
-	}
-}
-void TransformCtrl::scale(float x, float y)
-{
-	Ray world_ray = _camNode->GetComponent<Camera>()->GetScreenRay(x, y);
-	float dis = 100000;
-	std::string name = gizmo->activePlane->GetName().CString();
-	//auto hitActPlane = gizmo->activePlane->hit_test_all(world_ray, dis, true);//要保证一定击中
-	Node* hitActPlane = intersectObj(world_ray,gizmo->activePlane,dis);
-	if (hitActPlane && hitActPlane == gizmo->activePlane.Get())
-	{
-		Vector3 hitPoint = world_ray.origin_ + world_ray.direction_ * dis;
-		point = hitPoint;
-		point = point - offset;
-		point = point * oriparentScale;
-		//std::cout << "point:" << point.x << ", " << point.y << ", " << point.z << std::endl;
-		//std::cout << "offset:" << offset.x << ", " << offset.y << ", " << offset.z << std::endl;
-		Vector3 newScale = startScale;
-		if (axis == "XYZ")
-		{
-			newScale = startScale * (1 + point.y_);
-		}
-		else
-		{
-			if (axis == "X")
-				newScale.x_ = startScale.x_ * (1 + point.x_);
-			if (axis == "Y")
-				newScale.y_ = startScale.y_ * (1 + point.y_);
-			if (axis == "Z")
-				newScale.z_ = startScale.z_ * (1 + point.z_);
 
-		}
-		//object->SetScale(newScale);
-		Urho3DEditor::DoModify(String(_cmdName.c_str()), object, "Scale", newScale);
-	}
-
-}
-
-void TransformCtrl::rotate(float x, float y)
-{
-	Ray world_ray = _camNode->GetComponent<Camera>()->GetScreenRay(x, y);
-	float dis = 100000;
-	std::string name = gizmo->activePlane->GetName().CString();
-	//auto hitActPlane = gizmo->activePlane->hit_test_all(world_ray, dis, true);//要保证一定击中
-	Node* hitActPlane = intersectObj(world_ray, gizmo->activePlane,dis);
-	if (hitActPlane && hitActPlane == gizmo->activePlane.Get())
-	{
-		Vector3 hitPoint = world_ray.origin_ + world_ray.direction_ * dis;
-		point = hitPoint;
-		Vector3 worldPosition = object->GetWorldPosition();
-
-		point = point - worldPosition;
-		point = point * oriparentScale;
-		Vector3 tempVector = offset - worldPosition;
-		tempVector = tempVector * oriparentScale;
-		
-		Matrix4 matrixInverse;
-		//object->get_rot().inverse_to(matrixInverse);
-		matrixInverse = object->GetRotation().RotationMatrix().Inverse();
-		Vector3 localPoint;
-		Vector3 localOffet;
-		//matrixInverse.vec_mul(point, localPoint);
-		//matrixInverse.vec_mul(tempVector, localOffet);
-		localPoint = matrixInverse * point;
-		localOffet = matrixInverse * tempVector;
-		Vector3 unitX(1, 0, 0);
-		Vector3 unitY(0, 1, 0);
-		Vector3 unitZ(0, 0, 1);
-
-		Vector3 rotation(atan2(localPoint.z_, localPoint.y_), atan2(localPoint.x_, localPoint.z_), atan2(localPoint.y_, localPoint.x_));
-		Vector3 offsetRotation(atan2(localOffet.z_, localOffet.y_), atan2(localOffet.x_, localOffet.z_), atan2(localOffet.y_, localOffet.x_));
-
-		Quaternion quaternionXYZ;
-		//mat44_to_quat(oriRotationMatrix, quaternionXYZ);
-		quaternionXYZ = oriRotationMatrix.Rotation();
-		Quaternion quaternionX;
-		Quaternion quaternionY;
-		Quaternion quaternionZ;
-
-		float pi = 3.1415926;
-		quaternionX.FromAngleAxis( (rotation.x_-offsetRotation.x_)*180/pi ,unitX);
-		quaternionY.FromAngleAxis( (rotation.y_-offsetRotation.y_)*180/pi, unitY);
-		quaternionZ.FromAngleAxis( (rotation.z_-offsetRotation.z_)*180/pi, unitZ);
-
-		if(axis == "X")
-			quaternionXYZ = quaternionXYZ * quaternionX;
-		if (axis == "Y")
-			quaternionXYZ = quaternionXYZ * quaternionY;
-		if (axis == "Z")
-			quaternionXYZ = quaternionXYZ * quaternionZ;
-
-				
-		//std::cout << "mouseXY:" << "x" << x << ",y" << y;
-		//std::cout << "quaternionY:" << "x" << quaternionY.x << ",y" << quaternionY.y << ",z" << quaternionY.z << ",w" << quaternionY.w << std::endl;
-		//object->SetRotation(quaternionXYZ);
-		//Urho3DEditor::TransformCmd::Rot(_cmdName,object, quaternionXYZ.EulerAngles());
-		Urho3DEditor::DoModify(String(_cmdName.c_str()), object, "Rotation", quaternionXYZ);
-
-
-	}
-}

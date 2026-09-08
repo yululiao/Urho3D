@@ -1,16 +1,14 @@
 #include "FolderTree.h"
-#include "ctrl/res/AssetMgr.h"
-#include "EditorApp.h"
-#include "Urho3D/IO/FileSystem.h"
-#include "Urho3D/Container/HashSet.h"
-#include "Global.h"
+#include "Utils.h"
+#include "ctrl/res/AssetBrowserController.h"
 #include "FileContextMenus.h"
 
 namespace Urho3DEditor 
 {
-FolderTree::FolderTree() 
+FolderTree::FolderTree(AssetBrowserController& assetBrowserCtrl)
+	: assetBrowserCtrl_(assetBrowserCtrl)
 {
-	_dirIconId = AssetMgr::getInstance()->getImguiTex("res/img/folder.png");
+	_dirIconId = assetBrowserCtrl_.GetImguiTex("res/img/folder.png");
 }
 FolderTree::~FolderTree() 
 {
@@ -19,7 +17,7 @@ void FolderTree::Update()
 {
 	if(!showing)
 		return;
-	String& relativeRootPath = AssetMgr::getInstance()->GetRelativeAssetRoot();
+	String& relativeRootPath = const_cast<String&>(assetBrowserCtrl_.GetRelativeAssetRoot());
 	ImGui::Begin("Folders",&showing);
 	ImVec2 newSize = ImGui::GetWindowSize();
 	_winPos = ImGui::GetWindowPos();
@@ -28,8 +26,7 @@ void FolderTree::Update()
 	}
 	ImGuiIO& io = ImGui::GetIO();
 	if (ImGui::IsMouseClicked(0) && IsInWindow(io.MousePos)) {
-		AssetMgr::getInstance()->selectedFolders.Clear();
-		AssetMgr::getInstance()->lastSelectedFolder = "";
+		assetBrowserCtrl_.ClearFolderSelection();
 	}
 	DrawResNode(relativeRootPath,true);
 	ImGui::End();
@@ -49,23 +46,19 @@ void FolderTree::DrawNodeNoInWindows(int itemH,const String& name)
 
 void FolderTree::DrawResNode(const String& path, bool forceDraw)
 {
-	auto& nodeCache = AssetMgr::getInstance()->nodeCache;
+	if (!assetBrowserCtrl_.NodeExists(path))
+		return;
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick | ImGuiTreeNodeFlags_SpanAvailWidth;
-	//int flags = ImGuiTreeNodeFlags_OpenOnArrow;
 	//Just draw folder,files draw in FolderFiles Window.
-	bool needDraw = !nodeCache[path].isFile;
-	/*if(!SurportExtSet.Contains(nodeCache[path].ext))
-	{
-		needDraw = false;
-	}
-	*/
-	if(nodeCache[path].childDirs.Size() == 0)
+	bool needDraw = assetBrowserCtrl_.IsFolder(path);
+	const StringVector& childDirs = assetBrowserCtrl_.GetChildDirs(path);
+	if(childDirs.Size() == 0)
 	{
 		flags |= ImGuiTreeNodeFlags_Leaf;
 	}
 	if(!needDraw)
 		return;
-	bool sellected = AssetMgr::getInstance()->selectedFolders.Contains(path);
+	bool sellected = assetBrowserCtrl_.IsFolderSelected(path);
 	if(sellected)
 	{
 		flags |= ImGuiTreeNodeFlags_Selected;
@@ -76,7 +69,7 @@ void FolderTree::DrawResNode(const String& path, bool forceDraw)
 	}
 	bool isInWindow =IsInWindow(ImGui::GetCursorScreenPos());
 	//----------------------TreeNode-----------------------
-	ImGui::PushID(nodeCache[path].name.CString());
+	ImGui::PushID(assetBrowserCtrl_.GetNodeName(path).CString());
 	bool open_node = ImGui::TreeNodeEx("", flags);
 	if (_nodeHeight == 0)
 		_nodeHeight = ImGui::GetItemRectSize().y;
@@ -97,11 +90,11 @@ void FolderTree::DrawResNode(const String& path, bool forceDraw)
 		ImGui::SameLine();
 		ImGui::Image(_dirIconId, ImVec2(_nodeHeight, _nodeHeight));
 		ImGui::SameLine();
-		ImGui::Text(nodeCache[path].name.CString());
+		ImGui::Text(assetBrowserCtrl_.GetNodeName(path).CString());
 	}
-	nodeCache[path].fold = !open_node;
+	assetBrowserCtrl_.SetNodeFolded(path, !open_node);
 	if (open_node) {
-		for (auto& item : nodeCache[path].childDirs) {
+		for (auto& item : childDirs) {
 			DrawResNode(path + "/" + item, false);
 		}
 		ImGui::TreePop();
@@ -118,9 +111,7 @@ void FolderTree::DrawContextMenu(const String& path) {
 }
 
 void FolderTree::OnItemClick(const String& path) {
-	AssetMgr::getInstance()->selectedFolders.Clear();
-	AssetMgr::getInstance()->selectedFolders.Insert(path);
-	AssetMgr::getInstance()->lastSelectedFolder = path;
+	assetBrowserCtrl_.SelectFolder(path);
 }
 
 

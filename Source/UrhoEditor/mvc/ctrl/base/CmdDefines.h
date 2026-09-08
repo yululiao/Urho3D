@@ -7,15 +7,15 @@ using namespace Urho3D;
 
 namespace Urho3DEditor {
 
-//Êı¾İµÄ±à¼­²ÉÓÃÉè¼ÆÄ£Ê½ÖĞµÄÃüÁîÄ£Ê½£¬ËùÓĞµÄÊôĞÔĞŞ¸Ä¶¼Í¨¹ıcmdÀ´Ö´ĞĞ£¬ÊµÏÖ undo redo
-//»ùÓÚÊı¾İµÄÃüÁî£¬Êı¾İµÄ±ä»¯¿ÉÒÔ³éÏó³ÉÒ»ÏÂ¼¸ÖÖ£º
-//ÆäÖĞÔö¼ÓÊı¾İ·ÖÎªlist vector mapÖĞÔö¼Ó²åÈëÊı¾İ
-//É¾³ıÊı¾İ¿ÉÒÔ·ÖÎªlist vector mapÉ¾³ıÊı¾İ
-//»ùÓÚ´ËÉè¼Æ³öÒÔÏÂ¼¸ÖÖÃüÁî
+//ï¿½ï¿½ï¿½İµÄ±à¼­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½ï¿½ï¿½ï¿½ï¿½ï¿½Ğµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ş¸Ä¶ï¿½Í¨ï¿½ï¿½cmdï¿½ï¿½Ö´ï¿½Ğ£ï¿½Êµï¿½ï¿½ undo redo
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İµï¿½ï¿½ï¿½ï¿½î£¬ï¿½ï¿½ï¿½İµÄ±ä»¯ï¿½ï¿½ï¿½Ô³ï¿½ï¿½ï¿½ï¿½Ò»ï¿½Â¼ï¿½ï¿½Ö£ï¿½
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ·ï¿½Îªlist vector mapï¿½ï¿½ï¿½ï¿½ï¿½Ó²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//É¾ï¿½ï¿½ï¿½ï¿½ï¿½İ¿ï¿½ï¿½Ô·ï¿½Îªlist vector mapÉ¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//ï¿½ï¿½ï¿½Ú´ï¿½ï¿½ï¿½Æ³ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 //CmdModify CmdModifyList CmdModifyVector CmdModifyMap
-//¼Ì³ĞSerializableµÄ¶ÔÏó£¬SerializableÓĞÊôĞÔ·´ÉäµÄÄÜÁ¦
-//Resource²»¼Ì³ĞSerializableĞèÒªÌØÊâ´¦Àí
-//Ìí¼ÓÉ¾³ı½ÚµãÒ²ÒªÌØÊâ´¦Àí
+//ï¿½Ì³ï¿½Serializableï¿½Ä¶ï¿½ï¿½ï¿½Serializableï¿½ï¿½ï¿½ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+//Resourceï¿½ï¿½ï¿½Ì³ï¿½Serializableï¿½ï¿½Òªï¿½ï¿½ï¿½â´¦ï¿½ï¿½
+//ï¿½ï¿½ï¿½ï¿½É¾ï¿½ï¿½ï¿½Úµï¿½Ò²Òªï¿½ï¿½ï¿½â´¦ï¿½ï¿½
 class CmdModify : public CmdEdit
 {
 public:
@@ -98,7 +98,7 @@ protected:
 	Vector<T>* _oldVector;
 	T _obj;
 };
-//²ÄÖÊ²»¼Ì³Ğ×ÔSerializable,Ã»ÓĞattributes_ÁĞ±í,Ã»ÓĞÍ¨ÓÃµÄSetAttribute½Ó¿Ú,ĞèÒªÌØÊâ´¦Àí
+//ï¿½ï¿½ï¿½Ê²ï¿½ï¿½Ì³ï¿½ï¿½ï¿½Serializable,Ã»ï¿½ï¿½attributes_ï¿½Ğ±ï¿½,Ã»ï¿½ï¿½Í¨ï¿½Ãµï¿½SetAttributeï¿½Ó¿ï¿½,ï¿½ï¿½Òªï¿½ï¿½ï¿½â´¦ï¿½ï¿½
 class CmdModifyMat:public CmdEdit
 {
 public:
@@ -114,18 +114,6 @@ protected:
 	SharedPtr<Material> _mat;
 	uint8_t _type = 0;//0 attr ,1 tex
 };
-void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value);
-void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx);
-void DoDeleteNode(const String& id, Node* deleteNode);
-void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value);
-void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value);
-
-template <typename T>
-void DoModifyVector(const String& id, T obj, Vector<T>* vector, int idx, Vector<T>* oldVector, int oldIdx, bool isAdd)
-{
-	CmdModifyVector<T>* cmd = new CmdModifyVector(id, obj, vector, idx, oldVector, oldIdx, isAdd);
-	CmdMgr::Instance()->ToDo(cmd);
-}
 
 }
 

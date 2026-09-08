@@ -1,17 +1,18 @@
 #include "Inspector.h"
-#include "EditorApp.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include "view/inspectors/VariantDrawer.h"
-#include "Global.h"
-#include "ctrl/res/AssetMgr.h"
 
 namespace Urho3DEditor 
 {
-Inspector::Inspector() 
+Inspector::Inspector(SelectionModel& selectionModel, PropertyEditController& propEditCtrl, ProjectController& projectCtrl)
+	: selectionModel_(selectionModel)
+	, propertyEditController_(propEditCtrl)
+	, projectController_(projectCtrl)
 {
-	_transformIns = new TransformInspector();
-	_aniModelIns = new AniModelInspector();
-	_assetIns = new AssetInspector();
+	_transformIns = new TransformInspector(selectionModel, propEditCtrl);
+	_aniModelIns = new AniModelInspector(selectionModel, propEditCtrl, projectCtrl);
+	_assetIns = new AssetInspector(projectCtrl);
+	VariantDrawer::SetPathToRelativeHandler([&projectCtrl](const String& path) { return projectCtrl.PathToRelative(path); });
 }
 Inspector::~Inspector() 
 {
@@ -20,9 +21,9 @@ void Inspector::Update()
 {
 	if(!showing)
 		return;
-	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
+	Node* selectedNode = selectionModel_.GetSelectedNode();
 	ImGui::Begin("Inspector",&showing);
-	if(Global::curSelectType == "Node" && selectedNode)
+	if(selectionModel_.GetSelectType() == "Node" && selectedNode)
 	{
 		_nodeEnable = selectedNode->IsEnabled();
 		VariantDrawer::DrawBool("  Enable", _nodeEnable);
@@ -33,12 +34,12 @@ void Inspector::Update()
 		}
 		if(_nodeEnable != selectedNode->IsEnabled())
 		{
-			selectedNode->SetEnabled(_nodeEnable);
+			propertyEditController_.SetNodeEnabled(selectedNode, _nodeEnable);
 		}
 	}
-	else if(Global::curSelectType == "File")
+	else if(selectionModel_.GetSelectType() == "File")
 	{
-		if(AssetMgr::getInstance()->selectedFiles.Size()>0)
+		if(projectController_.HasSelectedFiles())
 		{
 			_assetIns->Update();
 		}

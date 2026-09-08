@@ -1,15 +1,17 @@
 #pragma once
 #include <memory>
+#include <functional>
 #include "Urho3D/Core/Context.h"
 #include "Urho3D/Core/Main.h"
 #include "Urho3D/Engine/Engine.h"
+#include "ctrl/res/ProjectController.h"
 
 using namespace Urho3D;
 
 namespace Urho3DEditor 
 {
 
-typedef void (*MenuHandle)();
+typedef std::function<void()> MenuHandle;
 
 struct MenuNode
 {
@@ -21,17 +23,19 @@ struct MenuNode
 class Menubar 
 {
 public:
-	Menubar();
+	using ToggleDemoHandler = std::function<void()>;
+
+	Menubar(ProjectController& projectCtrl, ToggleDemoHandler toggleDemo);
 	~Menubar();
 	void Update();
 	void AddMenu(const String& path, MenuHandle handle);
 private:
 	void Init();
 	void RenderMenu(MenuNode* menuNode);
-	static void OnOpen();
-	static void OnSave();
-	static void OnUndo();
-	static void OnRedo();
+	void OnOpen();
+	void OnSave();
+	void OnUndo();
+	void OnRedo();
 
 	static void ShowToolBar();
 	static void ShowNodeTree();
@@ -39,10 +43,11 @@ private:
 	static void ShowResPreview();
 	static void ShowSceneView();
 	static void ShowInspector();
-	static void ShowDemo();
+	void ShowDemo();
 private:
 	std::shared_ptr<MenuNode> _menuTree;
-
+	ProjectController& projectController_;
+	ToggleDemoHandler toggleDemo_;
 };
 
 }

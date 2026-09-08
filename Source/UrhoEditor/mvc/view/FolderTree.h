@@ -3,10 +3,12 @@
 
 
 namespace Urho3DEditor{
+class AssetBrowserController;
+
 class FolderTree :public EditorWidget 
 {
 public:
-	FolderTree();
+	FolderTree(AssetBrowserController& assetBrowserCtrl);
 	virtual ~FolderTree();
 	void Update() override;
 protected:
@@ -17,6 +19,7 @@ protected:
 	void OnItemClick(const String& path);
 	
 protected:
+	AssetBrowserController& assetBrowserCtrl_;
 	int _dirIconId;
 	int _nodeHeight = 0;
 

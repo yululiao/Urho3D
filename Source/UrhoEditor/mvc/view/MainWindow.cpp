@@ -1,4 +1,5 @@
 #include "MainWindow.h"
+#include "ctrl/res/AssetBrowserController.h"
 #include "imgui_impl_opengl3.h"
 #include "GLFW/glfw3.h"
 #ifdef _WIN32
@@ -6,7 +7,6 @@
 #define GLFW_EXPOSE_NATIVE_WIN32
 #include <GLFW/glfw3native.h>   // for glfwGetWin32Window
 #endif
-#include "EditorApp.h"
 #include "stb/stb_image.h"
 #include "FileContextMenus.h"
 #include "NodeContextMenus.h"
@@ -16,21 +16,34 @@ namespace Urho3DEditor
 {
 void MainWindowSizeCallBack(GLFWwindow* window, int width, int height)
 {
-    if(width == 0)
-    {
-        EditorApp::GetInstance()->miniSize = true;
-    }
-    else
-    {
-        if(EditorApp::GetInstance()->miniSize)
-        {
-           EditorApp::GetInstance()->mainWindow->MakeCurrent();
-        }
-        EditorApp::GetInstance()->miniSize = false;
-    }
+    auto* mainWindow = static_cast<MainWindow*>(glfwGetWindowUserPointer(window));
+    if (mainWindow)
+        mainWindow->OnWindowSize(width, height);
 }
-MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
-    ,_startView(new StartView),_menuBar(new Menubar()),_toolBar(new Toolbar())
+
+MainWindow::MainWindow(int width, int height, SelectionController& selectionCtrl, SelectionModel& selectionModel, ToolController& toolCtrl, GizmoController& gizmoCtrl, CameraCtrl& cameraCtrl, PropertyEditController& propEditCtrl, SceneManipulationController& sceneManipCtrl, ProjectController& projectCtrl, SceneCtrl& sceneCtrl, AssetBrowserController& assetBrowserCtrl, HistoryMgr& historyMgr, const MainWindowServices& services, float dpiScale)
+    : width{ width }
+    , height{ height }
+    , selectionController_(selectionCtrl)
+    , selectionModel_(selectionModel)
+    , toolController_(toolCtrl)
+    , gizmoController_(gizmoCtrl)
+    , cameraController_(cameraCtrl)
+    , propertyEditController_(propEditCtrl)
+    , sceneManipController_(sceneManipCtrl)
+    , projectController_(projectCtrl)
+    , sceneCtrl_(sceneCtrl)
+    , assetBrowserController_(assetBrowserCtrl)
+    , historyMgr_(historyMgr)
+    , services_(services)
+    , dpiScale_(dpiScale)
+    , _startView(new StartView(
+        [this]() { this->StartGame(); },
+        services.selectPath,
+        [this](const String& path) { projectController_.SetWorkSpace(path); },
+        historyMgr))
+    , _menuBar(new Menubar(projectCtrl, [this]() { _showDemo = !_showDemo; }))
+    , _toolBar(new Toolbar(toolCtrl, projectCtrl, [&assetBrowserCtrl](const String& path) { return assetBrowserCtrl.GetImguiTex(path); }))
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -60,14 +73,15 @@ MainWindow::MainWindow(int width, int height) : width{ width }, height{ height }
 #elif UNIX
 
 #endif
-    EditorApp::GetInstance()->SetDpi(dpi);
-    _toolBar->IntItemSize();
-    float dpiScale = dpi / 96.0f;
-    float fontSize = dpiScale * 16.0f;
-    EditorApp::GetInstance()->SetFontSize(fontSize);
-    this->width = width * dpiScale;
-    this->height = height * dpiScale;
+    services_.setDpi(dpi);
+    _toolBar->IntItemSize(dpi / 96.0f);
+    float localDpiScale = dpi / 96.0f;
+    float fontSize = localDpiScale * 16.0f;
+    services_.setFontSize(fontSize);
+    this->width = width * localDpiScale;
+    this->height = height * localDpiScale;
     window = glfwCreateWindow(this->width, this->height, "Urho3D", NULL, NULL);
+    glfwSetWindowUserPointer(window, this);
     GLFWimage images[4];
     //res/icons/urho64.png
     std::vector<std::string> imgPaths ={"urho64.png","urho48.png","urho32.png","urho16.png"};
@@ -119,23 +133,40 @@ GLFWwindow* MainWindow::GetRawWindow() {
 
 void MainWindow::StartGame() 
 {
-    _sceneView = new SceneView("renderWindow");
+    services_.startGame();
+    _sceneView = new SceneView(selectionController_, toolController_, gizmoController_, cameraController_, sceneManipController_, sceneCtrl_, services_.getFps, "renderWindow");
    AddWindow(std::unique_ptr<SceneView>(_sceneView));
-    _nodeTree = new NodeTree();
+    _nodeTree = new NodeTree(selectionController_, selectionModel_, sceneCtrl_, sceneManipController_, dpiScale_);
    AddWindow(std::unique_ptr<NodeTree>(_nodeTree));
-   _folderTree = new FolderTree();
+   _folderTree = new FolderTree(assetBrowserController_);
    AddWindow(std::unique_ptr<FolderTree>(_folderTree));
-   _inspector = new Inspector();
+   _inspector = new Inspector(selectionModel_, propertyEditController_, projectController_);
    AddWindow(std::unique_ptr<Inspector>(_inspector));
    //_cosoleView = new ConsoleView();
    //AddWindow(std::unique_ptr<ConsoleView>(_cosoleView));
    _resPreview = new ResPreview();
    AddWindow(std::unique_ptr<ResPreview>(_resPreview));
-   _folderFiles = new FolderFiles();
+   _folderFiles = new FolderFiles(projectController_, toolController_, assetBrowserController_, services_.getFontSize());
    AddWindow(std::unique_ptr<FolderFiles>(_folderFiles));
 
-   FileContextMenus::Init();
-   NodeContextMenus::Init();
+   FileContextMenus::Init(sceneCtrl_.GetContext(), &projectController_);
+   NodeContextMenus::Init(sceneCtrl_.GetContext(), &sceneManipController_);
+}
+
+void MainWindow::OnWindowSize(int width, int height)
+{
+    if (width == 0)
+    {
+        miniSize_ = true;
+    }
+    else
+    {
+        if (miniSize_)
+        {
+            MakeCurrent();
+        }
+        miniSize_ = false;
+    }
 }
 
 void MainWindow::MakeCurrent() {
@@ -167,7 +198,7 @@ void MainWindow::UpdateDockerSpace()
     ImGui::Begin("###DockSpace", &_showingDocker, window_flags);
     ImGui::PopStyleVar(1);
     //_menuBarUpdater->update();//todo
-    if (EditorApp::GetInstance()->_isStartView)
+    if (services_.isStartView())
     {
         _startView->Update();
     }
@@ -192,12 +223,12 @@ void MainWindow::Update()
 {
     if(ImGui::IsMouseDown(ImGuiMouseButton_Left) && !_lastLeftMouseDown)
     {
-        //Êó±êÇÐ»»×´Ì¬
-        EditorApp::GetInstance()->UpdateCmdGuid();
+        //ï¿½ï¿½ï¿½ï¿½Ð»ï¿½×´Ì¬
+        services_.updateCmdGuid();
     }
     _lastLeftMouseDown = ImGui::IsMouseDown(ImGuiMouseButton_Left);
     glfwMakeContextCurrent(glfwGetCurrentContext());
-    //¿ªÆôÈ«¾ÖÔ²½Ç
+    //ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½Ô²ï¿½ï¿½
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding
         ,4.0f);
     ImGui_ImplOpenGL3_NewFrame();

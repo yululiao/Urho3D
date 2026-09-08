@@ -3,11 +3,15 @@
 #include "Urho3D/Graphics/Material.h"
 
 namespace Urho3DEditor {
+class ProjectController;
+
 class AssetInspector {
 public:
-	AssetInspector();
+	AssetInspector(ProjectController& projectCtrl);
 	~AssetInspector();
 	void Update();
 
+private:
+	ProjectController& projectController_;
 };
 }

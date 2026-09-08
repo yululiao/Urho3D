@@ -7,6 +7,7 @@
 #include "Urho3D/Resource/Image.h"
 #include "Urho3D/Graphics/Texture2D.h"
 #include "Urho3D/Graphics/Viewport.h"
+#include "Urho3D/Resource/ResourceCache.h"
 
 using namespace Urho3D;
 
@@ -52,11 +53,10 @@ class AssetMgr : public Object
     URHO3D_OBJECT(AssetMgr, Object);
 
 public:
-    static AssetMgr* getInstance();
     AssetMgr(Context* ctx);
     ~AssetMgr();
     int getImguiTex(const String& path);
-    //»ñÈ¡ÎÄ±¾ÎÄ¼þÖÐµÄÄÚÈÝ
+    //ï¿½ï¿½È¡ï¿½Ä±ï¿½ï¿½Ä¼ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½
     String getTextFile(const String& path);
     String getBaseName(const String& path);
     String getFilePath(const String& path);
@@ -65,10 +65,6 @@ public:
     String GetExt(const String& path);
     void ImportFbx(const String& path);
     void ImportSingleFbx(const String& path);
-    void SaveScene(const String& path);
-    void SavePrefab(Node* node,const String& path);
-    void OpenScene(const String& path);
-    void OpenNewScene();
     void RefreshResCache(const String& path, bool recursive);
     String& GetWorkSpace();
     String& GetAssetRoot();
@@ -77,6 +73,8 @@ public:
     bool IsModelFile(const String& r_path);
     void UpdateFileShortCut(const String& path);
     void InitShortCutRtt();
+    ResourceCache* GetChche();
+
 public:
     HashMap<String, NodeCahce> nodeCache;
     HashSet<String> selectedFolders;
@@ -84,7 +82,6 @@ public:
     HashSet<String> selectedFiles;
     String lastSlectedFile;
 private:
-    static AssetMgr* _instance;
     //String _history_file = "res/editor_historys.json";
     std::map<String, SharedPtr<ImguiTexInfo>> _texMap;
     String _work_space;

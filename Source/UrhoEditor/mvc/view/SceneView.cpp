@@ -1,6 +1,4 @@
 #include "SceneView.h"
-#include "ctrl/scene/SceneCtrl.h"
-#include "EditorApp.h"
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "ctrl/res/AssetMgr.h"
@@ -13,70 +11,60 @@ SceneView::~SceneView() {
 }
 
 void SceneView::WheelEvent(float deta) {
-    EditorApp::GetInstance()->cam_ctrl_->onWheel(deta * 50);
+    cameraController_.onWheel(deta * 50);
 }
 
 void SceneView::MousePressEvent(Vector2 pos) {
-    auto _app = EditorApp::GetInstance();
     _is_mouse_pressed = true;
     _is_mouse_moved = false;
-    if (_app->_curent_tool == "camera") {
-        _app->cam_ctrl_->onPointerDown(pos.x_, pos.y_);
+    if (toolController_.GetCurrentTool() == "camera") {
+        cameraController_.onPointerDown(pos.x_, pos.y_);
     }
     else {
-        _app->gizmoCtrl_->onPointerDown(pos.x_ / winSize.x, pos.y_ / winSize.y);
-        if (!_app->gizmoCtrl_->isDraging()) {
-            _app->cam_ctrl_->onPointerDown(pos.x_, pos.y_);
+        gizmoController_.onPointerDown(pos.x_ / winSize.x, pos.y_ / winSize.y);
+        if (!gizmoController_.isDraging()) {
+            cameraController_.onPointerDown(pos.x_, pos.y_);
         }
     }
 }
 
 void SceneView::MouseHoverEvent(Vector2 pos) {
-    auto _app = EditorApp::GetInstance();
     if (!_is_mouse_pressed) {
-        if (_app->_curent_tool != "camera") {
-            _app->gizmoCtrl_->onPointerHover(pos.x_ / winSize.x, pos.y_ / winSize.y);
+        if (toolController_.GetCurrentTool() != "camera") {
+            gizmoController_.onPointerHover(pos.x_ / winSize.x, pos.y_ / winSize.y);
         }
     }
 }
 
 void SceneView::MouseMoveEvent(Vector2 pos) {
-    auto _app = EditorApp::GetInstance();
     if (!_is_mouse_pressed) {
         return;
     }
     _is_mouse_moved = true;
-    if (_app->_curent_tool == "camera") {
-        _app->cam_ctrl_->onPointerMove(pos.x_, pos.y_);
+    if (toolController_.GetCurrentTool() == "camera") {
+        cameraController_.onPointerMove(pos.x_, pos.y_);
     }
     else {
-        _app->gizmoCtrl_->onPointerMove(pos.x_ / winSize.x, pos.y_ / winSize.y);
-        if (!_app->gizmoCtrl_->isDraging()) {
-            _app->cam_ctrl_->onPointerMove(pos.x_, pos.y_);
+        gizmoController_.onPointerMove(pos.x_ / winSize.x, pos.y_ / winSize.y);
+        if (!gizmoController_.isDraging()) {
+            cameraController_.onPointerMove(pos.x_, pos.y_);
         }
     }
 }
 void SceneView::MouseReleaseEvent(Vector2 pos) {
-    auto _app = EditorApp::GetInstance();
     _is_mouse_pressed = false;
-    if (_app->_curent_tool == "camera") {
-        _app->cam_ctrl_->onPointerUp(pos.x_, pos.y_);
+    if (toolController_.GetCurrentTool() == "camera") {
+        cameraController_.onPointerUp(pos.x_, pos.y_);
     }
     else {
         if (!_is_mouse_moved) {
-            Node* hitNode = SceneCtrl::getInstance()->Select(pos.x_ / winSize.x, pos.y_ / winSize.y);
-            if (hitNode) {
-                _app->gizmoCtrl_->attach(hitNode);
-            }
-            else {
-                _app->gizmoCtrl_->detach();
-            }
+            selectionController_.OnSceneClicked(Vector2(pos.x_ / winSize.x, pos.y_ / winSize.y));
         }
 
-        if (!_app->gizmoCtrl_->isDraging()) {
-            _app->cam_ctrl_->onPointerUp(pos.x_, pos.y_);
+        if (!gizmoController_.isDraging()) {
+            cameraController_.onPointerUp(pos.x_, pos.y_);
         }
-        _app->gizmoCtrl_->onPointerUp(pos.x_ / winSize.x, pos.y_ / winSize.y);
+        gizmoController_.onPointerUp(pos.x_ / winSize.x, pos.y_ / winSize.y);
     }
 }
 
@@ -137,7 +125,7 @@ void SceneView::Update() {
         ImVec2 newSize(contentMax.x - contentMin.x, contentMax.y - contentMin.y);
         if (newSize.x != winSize.x || newSize.y != winSize.y) {
             winSize = newSize;
-            SceneCtrl::getInstance()->OnResizeView(winSize.x, winSize.y);
+            sceneCtrl_.OnResizeView(winSize.x, winSize.y);
         }
         GenGpuTex();
         ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
@@ -148,10 +136,7 @@ void SceneView::Update() {
                     String path;
                     path.Resize(data->DataSize);
                     memcpy((void*)path.CString(), data->Data, data->DataSize);
-                    if(AssetMgr::getInstance()->IsModelFile(path))
-                    {
-                        SceneCtrl::getInstance()->AddModel(path,nullptr,0);
-                    }
+                    sceneManipController_.ImportModel(path, nullptr, 0);
                     std::cout << "onDrop:drag_file" << std::endl;
                 }
 
@@ -161,7 +146,7 @@ void SceneView::Update() {
         }
         ImVec2 fpsPos(_winPos.x + 15, _winPos.y + winSize.y - 15);
         ImGui::SetCursorScreenPos(fpsPos);
-        ImGui::Text("Fps:%d", EditorApp::GetInstance()->GetFps());
+        ImGui::Text("Fps:%d", fpsProvider_ ? fpsProvider_() : 0);
         //ImGui::Image((ImTextureID)(intptr_t)rttTexID, ImVec2(winSize.x, winSize.y));
         ImGui::End();
     }
@@ -175,9 +160,9 @@ void SceneView::GenGpuTex() {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    Vector2 rttSize = SceneCtrl::getInstance()->constRttSize;
+    Vector2 rttSize = sceneCtrl_.constRttSize;
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, rttSize.x_, rttSize.y_, 0, GL_RGB, GL_UNSIGNED_BYTE,
-        SceneCtrl::getInstance()->GetRttData());
+        sceneCtrl_.GetRttData());
     //glGenerateMipmap(GL_TEXTURE_2D);
 
 }

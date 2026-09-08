@@ -1,17 +1,13 @@
 #include "MatInspector.h"
-#include "EditorApp.h"
-#include "ctrl/base/CmdDefines.h"
+#include "imgui.h"
+#include "ctrl/scene/PropertyEditController.h"
 #include <Urho3D/Graphics/AnimatedModel.h>
 #include "VariantDrawer.h"
 #include "Urho3D/Graphics/Material.h"
 #include "Urho3D/Graphics/Technique.h"
-#include "ctrl/scene/SceneCtrl.h"
 #include "Urho3D/Graphics/Texture2D.h"
 #include <Urho3D/Resource/ResourceCache.h>
-#include "Urho3D/Graphics/Graphics.h"
-#include "ctrl/base/CmdDefines.h"
 #include "Utils.h"
-#include "ctrl/res/AssetMgr.h"
 #include "Urho3D/Container/Vector.h"
 
 using namespace Urho3D;
@@ -19,7 +15,9 @@ using namespace Urho3D;
 namespace Urho3DEditor
 {
 
-MatInspector::MatInspector() 
+MatInspector::MatInspector(SelectionModel& selectionModel, PropertyEditController& propEditCtrl)
+	: selectionModel_(selectionModel)
+	, propertyEditController_(propEditCtrl)
 {
 }
 
@@ -60,10 +58,9 @@ Urho3D::String MatInspector::FillItemName(const Urho3D::String& oriName, int len
 
 void MatInspector::Update() 
 {
-	Node* selectedNode = EditorApp::GetInstance()->GetSelectNode();
+	Node* selectedNode = selectionModel_.GetSelectedNode();
 	if (!selectedNode || !selectedNode->HasComponent<AnimatedModel>())
 		return;
-	auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
 	AnimatedModel* aniModel = selectedNode->GetComponent<AnimatedModel>();
 	int flags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_DefaultOpen;
 	SharedPtr<Material> mat(aniModel->GetMaterial());
@@ -81,7 +78,7 @@ void MatInspector::Update()
             ImGui::SameLine();
             if (ImGui::Button("Save"))
             {
-                mat->SaveFile(AssetMgr::getInstance()->pathToFull(matPath));
+                propertyEditController_.SaveMaterial(mat, matPath);
             }
 		}
 		ImGui::SameLine();
@@ -89,10 +86,7 @@ void MatInspector::Update()
 		VariantDrawer::DrawPath("", matPath, { "Mat Files", "xml" }, false);
 		ImGui::PopID();
 		if (matPath != mat->GetName()) {
-			SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
-			auto cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
-			SharedPtr<Material> mat(cache->GetResource<Material>(matPath)->Clone());
-			DoModify(Utils::GenGuid().c_str(), aniModel,"Material", ResourceRefList(Material::GetTypeStatic(), { matPath }));
+			propertyEditController_.SetNodeMaterial(selectedNode, matPath);
 			ImGui::TreePop();
 			return;
 		}
@@ -110,7 +104,7 @@ void MatInspector::Update()
             VariantDrawer::DrawPath(displaName, path, {"Texture Files", "png,tga,jpg,dds"}, false);
 			if(path != item.second_->GetName())
 			{
-				DoMatTexModify(Utils::GenGuid().c_str(),mat, (uint16_t)item.first_, path);
+				propertyEditController_.SetMaterialTexture(mat, (uint16_t)item.first_, path);
 			}
 			
 		}
@@ -123,11 +117,12 @@ void MatInspector::Update()
 			VariantDrawer::DrawVariant(displaName,value);
 			if(value != item.second_.value_)
 			{
-				String cmdGuid = EditorApp::GetInstance()->GetLastCmdGuid();
+				String cmdGuid = _lastCmdGuid;
 				if (!ImGui::IsMouseDown(ImGuiMouseButton_Left)) {
 					cmdGuid = String(Utils::GenGuid().c_str());
+					_lastCmdGuid = cmdGuid;
 				}
-				DoMatModify(cmdGuid, mat, name, value);//鼠标拖拽弹起做为一次操作
+				propertyEditController_.SetMaterialParam(mat, name, value, cmdGuid);
 			}
 			
 		}

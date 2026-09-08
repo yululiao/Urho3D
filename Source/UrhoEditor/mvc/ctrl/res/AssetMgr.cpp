@@ -4,17 +4,14 @@
 #include "AssetMgr.h"
 #include "Urho3D/IO/File.h"
 #include "Urho3D/Resource/JSONFile.h"
-#include "EditorApp.h"
 #include "AssetImporter.h"
 #include "Urho3D/IO/FileSystem.h"
-#include "ctrl/scene/SceneCtrl.h"
 #include <Urho3D/Resource/ResourceCache.h>
+#include <Urho3D/Scene/Scene.h>
 #include "ctrl/res/EditorFileWatch.h"
-#include "Global.h"
 #include "Urho3D/Graphics/Octree.h"
 
 namespace Urho3DEditor {
-AssetMgr* AssetMgr::_instance = nullptr;
 Urho3D::HashSet<String> AssetMgr::SurportExtSet = {
    ".fbx",".xml",".json",".umaterial",
    ".png",".tga",".jpg",".uprefab",".uscene",
@@ -41,16 +38,6 @@ AssetMgr::AssetMgr(Context* ctx)
 AssetMgr::~AssetMgr()
 {
     EditorFileWatch::StopWatch();
-}
-
-AssetMgr* AssetMgr::getInstance() 
-{ 
-	if (!_instance)
-    {
-        _instance = new AssetMgr(Global::context);
-
-    }
-    return _instance;
 }
 
 String AssetMgr::getTextFile(const String& path)
@@ -100,7 +87,8 @@ String AssetMgr::GetExt(const String& path)
 void AssetMgr::ImportFbx(const String& path)
 {
     auto fileSys = GetSubsystem<FileSystem>();
-    if (fileSys->FileExists(path))
+    String fullPath = pathToFull(path);
+    if (fileSys->FileExists(fullPath))
     {
         String ext = GetExt(path).ToLower();
         if (ext == ".fbx")
@@ -123,13 +111,14 @@ void AssetMgr::ImportFbx(const String& path)
     
 }
 
-void AssetMgr::ImportSingleFbx(const String& fbxPath)
+void AssetMgr::ImportSingleFbx(const String& path)
 {
+    String fbxPath = pathToFull(path);
     String base = getBaseName(fbxPath);
     String fpath = getFilePath(fbxPath);
     // std::string cmd = "tool/AssetImporter";
     String args;
-    if (base.Contains("@")) //¶¯»­
+    if (base.Contains("@")) //ï¿½ï¿½ï¿½ï¿½
     {
         String outpath = fpath + "/" + base + ".ani";
         args = "anim " + fbxPath + " " + outpath;
@@ -152,8 +141,8 @@ int AssetMgr::getImguiTex(const String& path)
     
     if (_texMap.find(path) == _texMap.end())
     {
-        Image* img = new Image(Global::context);
-        File file(Global::context, path);
+        Image* img = new Image(context_);
+        File file(context_, path);
         img->BeginLoad(file);
         if(!img->GetData())
         {
@@ -179,46 +168,21 @@ int AssetMgr::getImguiTex(const String& path)
         if(!newTex)
             return texID;
         texID = newTex->GetGPUObjectName();*/
-        ImguiTexInfo* info = new ImguiTexInfo(Global::context);
+        ImguiTexInfo* info = new ImguiTexInfo(context_);
         info->id = texID;
         info->img = img;
-        _texMap[path] = info;//»º´æÎÆÀí
+        _texMap[path] = info;//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     }
     else
     {
-        texID = _texMap[path]->id;//Ö±½Ó´Ó»º´æÖÐÈ¡³ö
+        texID = _texMap[path]->id;//Ö±ï¿½Ó´Ó»ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½
     }
     
     return texID;
 }
 
-void AssetMgr::SaveScene(const String& path) 
-{ 
-    auto mainScene = SceneCtrl::getInstance()->GetScene();
-    File file(context_,path,FileMode::FILE_WRITE);
-    mainScene->SaveJSON(file);
-}
-
-void AssetMgr::SavePrefab(Node* node,const String& path) 
-{
-
-    File file(context_, path, FileMode::FILE_WRITE);
-    node->SaveJSON(file);
-}
-
-void AssetMgr::OpenScene(const String& path)
-{ 
-    if (GetExt(path) != ".uscene")
-        return;
-    SceneCtrl::getInstance()->OpenScene(path);
-}
-
-void AssetMgr::OpenNewScene() 
-{ 
-    SceneCtrl::getInstance()->OpenNewScene();
-}
 void AssetMgr::RefreshResCache(const String& path,bool recursive) {
-    auto fileSystem = EditorApp::GetInstance()->GetSubsystem<FileSystem>();
+    auto fileSystem = GetSubsystem<FileSystem>();
     bool isFile = fileSystem->FileExists(path);
     String relativePath = pathToRelative(path);
     nodeCache[relativePath].isFile = isFile;
@@ -286,6 +250,9 @@ void AssetMgr::InitShortCutRtt()
     shorCutRtt.scene = new Scene(context_);
     shorCutRtt.scene->SetName("ShotCutRttScene");
     shorCutRtt.scene->CreateComponent<Octree>();
+}
+ResourceCache* AssetMgr::GetChche() {
+    return GetSubsystem<ResourceCache>();
 }
 }
 

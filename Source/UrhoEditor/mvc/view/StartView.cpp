@@ -6,26 +6,25 @@
 #include "imgui_impl_glfw.h"
 #include "GLFW/glfw3.h"
 #include "imgui_impl_opengl3.h"
-#include "EditorApp.h"
-#include "ctrl/res/AssetMgr.h"
 
 namespace Urho3DEditor 
 {
 
-StartView::StartView() 
+StartView::StartView(StartGameHandler startGame, SelectPathHandler selectPath, SetWorkSpaceHandler setWorkSpace, HistoryMgr& historyMgr)
+	: startGame_(startGame)
+	, selectPath_(selectPath)
+	, setWorkSpace_(setWorkSpace)
+	, historyMgr_(historyMgr)
 {
-	_historyMgr = new HistoryMgr();
 }
 
 StartView::~StartView() 
 {
-	delete _historyMgr;
-	_historyMgr = nullptr;
 }
 
 void StartView::RenderHistoryList() 
 {
-	auto historys = _historyMgr->get_history_list();
+	auto historys = historyMgr_.get_history_list();
 	for(auto item: historys)
 	{
 		ImGui::Text("");
@@ -34,16 +33,18 @@ void StartView::RenderHistoryList()
 		ImGui::PushStyleVar(ImGuiStyleVar_ButtonTextAlign,ImVec2(0,0));
 		if(ImGui::Button(item.CString()))
 		{
-			AssetMgr::getInstance()->SetWorkSpace(item);
-			EditorApp::GetInstance()->StartGame();
+			if (setWorkSpace_)
+				setWorkSpace_(item);
+			if (startGame_)
+				startGame_();
 			_isShow = false;
 		}
 		ImGui::PopStyleVar(1);
 		ImGui::SameLine();
 		if( ImGui::Button("x"))
 		{
-			_historyMgr->delete_history(item);
-			_historyMgr->save();
+			historyMgr_.delete_history(item);
+			historyMgr_.save();
 		}
 		ImGui::PopStyleColor(1);
 	}
@@ -60,13 +61,15 @@ void StartView::Update()
 	ImGui::SameLine();
 	if (ImGui::Button("Open..."))
 	{
-		String path = EditorApp::GetInstance()->DialogSelectPath();
+		String path = selectPath_ ? selectPath_() : String();
 		if(path != "")
 		{
-			_historyMgr->add_project(path);
-			_historyMgr->save();
-			AssetMgr::getInstance()->SetWorkSpace(path);
-			EditorApp::GetInstance()->StartGame();
+			historyMgr_.add_project(path);
+			historyMgr_.save();
+			if (setWorkSpace_)
+				setWorkSpace_(path);
+			if (startGame_)
+				startGame_();
 			_isShow = false;
 		}
 		

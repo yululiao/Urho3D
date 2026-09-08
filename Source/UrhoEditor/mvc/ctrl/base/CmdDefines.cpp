@@ -1,6 +1,6 @@
 #include "CmdDefines.h"
+#include "Urho3D/Core/Context.h"
 #include "Urho3D/Scene/Node.h"
-#include "ctrl/scene/SceneCtrl.h"
 #include "Urho3D/Graphics/Texture2D.h"
 #include <Urho3D/Resource/ResourceCache.h>
 #include <Urho3D/Graphics/AnimatedModel.h>
@@ -98,9 +98,12 @@ void CmdModifyMat::ToDo() {
 	}
 	else if(_type == 1)
 	{
-		SceneCtrl::getInstance()->GetSubsystem<Graphics>()->MakeCurrent();
+		Context* ctx = _mat->GetContext();
+		auto* graphics = ctx->GetSubsystem<Graphics>();
+		if (graphics)
+			graphics->MakeCurrent();
 		String oldPath = _mat->GetTexture((TextureUnit)_texUnit)->GetName();
-		auto* cache = SceneCtrl::getInstance()->GetSubsystem<ResourceCache>();
+		auto* cache = ctx->GetSubsystem<ResourceCache>();
 		Urho3D::Texture2D* newTex = cache->GetResource<Urho3D::Texture2D>(_value.GetString());
 		_mat->SetTexture((TextureUnit)_texUnit, newTex);
 		_value = oldPath;
@@ -110,32 +113,5 @@ void CmdModifyMat::ToDo() {
 void CmdModifyMat::UnDo() {
 	ToDo();
 }
-
-void DoModify(const String& id, Serializable* obj, const String& attrName, Variant value) {
-	CmdModify* cmd = new CmdModify(id, obj, attrName, value);
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
-void DoAddNode(const String& id, Node* addNode, Node* parent, int idx, Node* oldParent, int oldIdx)
-{
-	CmdAddNode* cmd = new CmdAddNode(id,addNode,parent,idx,oldParent,oldIdx);
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
-void DoDeleteNode(const String& id, Node* deleteNode) {
-	CmdAddNode* cmd = new CmdAddNode(id, deleteNode, nullptr,0, deleteNode->GetParent(), deleteNode->GetParent()->GetNumChildren());
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
-void DoMatModify(const String& id, Material* mat, const String& attrName, Variant value) {
-	CmdModifyMat* cmd = new CmdModifyMat(id,mat,attrName,value);
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
-void DoMatTexModify(const String& id, Material* mat, uint16_t texUnit, Variant value) {
-	CmdModifyMat* cmd = new CmdModifyMat(id, mat, texUnit, value);
-	CmdMgr::Instance()->ToDo(cmd);
-}
-
 
 }

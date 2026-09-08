@@ -164,7 +164,7 @@ bool noOverwriteTexture_ = false;
 bool noOverwriteNewerTexture_ = false;
 bool checkUniqueModel_ = true;
 bool moveToBindPose_ = false;
-unsigned maxBones_ = 64;
+unsigned maxBones_ = 128;
 Vector<String> nonSkinningBoneIncludes_;
 Vector<String> nonSkinningBoneExcludes_;
 
@@ -509,7 +509,7 @@ void Run(const Vector<String>& arguments)
             Assimp::DefaultLogger::create("", Assimp::Logger::VERBOSE, aiDefaultLogStream_STDOUT);
 
         PrintLine("Reading file " + inFile);
-
+        suppressFbxPivotNodes_ = true;
         if (!inFile.EndsWith(".fbx", false))
             suppressFbxPivotNodes_ = false;
 

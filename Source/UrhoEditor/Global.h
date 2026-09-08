@@ -6,9 +6,9 @@ using namespace Urho3D;
 namespace Urho3DEditor {
 struct Global
 {
-	static Context* context;
+	/*static Context* context;
 	static void InitGlobal();
 	static String notShowTag;
-	static String curSelectType;
+	static String curSelectType;*/
 };
 }
