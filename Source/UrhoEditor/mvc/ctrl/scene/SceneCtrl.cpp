@@ -223,7 +223,8 @@ namespace Urho3DEditor
         rttCam_->SetAutoAspectRatio(false);
         rttCam_->SetAspectRatio(viewSize_.x_ / viewSize_.y_);
         renderTexture = new Texture2D(context_);
-        renderTexture->SetSize(constRttSize.x_, constRttSize.y_, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET);
+        //使用四重采样解决抗锯齿
+        renderTexture->SetSize(constRttSize.x_, constRttSize.y_, Graphics::GetRGBFormat(), TEXTURE_RENDERTARGET, 4, true);
         renderTexture->SetFilterMode(FILTER_BILINEAR);
         RenderSurface* surface = renderTexture->GetRenderSurface();
         surface->SetUpdateMode(SURFACE_UPDATEALWAYS);
